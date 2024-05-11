@@ -2,15 +2,9 @@
 
 function Card_Dashboard({ title, body }) {
     return (
-        <div className="card h-100">
-            <div className="card-body">
-                <h6 className="card-title p-1 text-primary fw-bold fs-4">
-                    {title}
-                </h6>
-                <div className="card-text p-1 fw-bold fs-10">
-                    {body}
-                </div>
-            </div>
+        <div className="bg-white shadow-md w-auto h-auto px-5 py-3 flex flex-col">
+            <h6 className="m-1 text-2xl text-blue-700">{title}</h6>
+            <p className="m-1 font-medium">{body}</p>
         </div>
     )
 }

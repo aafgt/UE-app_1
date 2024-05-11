@@ -16,22 +16,26 @@ function App(props) {
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row mt-2 h-100 min-vh-100">
+      <div className="">
+        <div className="min-h-screen">
           {props.isSidebarToggled && <>
-            <div className="col-2">
-              <Sidebar />
-            </div>
-            <div className="col-10 main_App">
-              <Outlet />
+            <div className="flex">
+              <div className="">
+                <Sidebar />
+              </div>
+              <div className="flex-auto bg-slate-100 min-h-screen">
+                <Outlet />
+              </div>
             </div>
           </>}
           {!props.isSidebarToggled && <>
-            <div className="col-1">
-              <Sidebar />
-            </div>
-            <div className="col-11 main_App">
-              <Outlet />
+            <div className="flex">
+              <div className="">
+                <Sidebar />
+              </div>
+              <div className="flex-auto">
+                <Outlet />
+              </div>
             </div>
           </>}
         </div>

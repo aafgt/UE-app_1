@@ -95,67 +95,37 @@ function Machines(props) {
 
     return (
         <>
-            <div className="container-fluid mb-2 pt-3">
-                <label className="fw-bold">Machines</label><br />
-                <label>Welcome !</label>
-            </div>
 
-            <hr />
+            <div className="bg-slate-100 w-full p-2">
+                <div className="border-b-2 mb-4 p-2 bg-gray-50">
+                    <label className="font-medium">Machines</label><br />
+                    <label>Welcome !</label>
+                </div>
 
-            <div className="container">
-                <div className="card text-bg-light mb-3 h-100">
-                    <div className="card-header fw-bold">Machines State</div>
-                    <div className="card-body">
-                        <div className="row g-3">
-                            <div className="col-2">
-                                <Card_Machines machine="M1" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M2" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M3" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M4" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M5" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M6" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M7" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M8" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M9" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M10" state="success" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M11" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M12" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M13" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M14" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                            <div className="col-2">
-                                <Card_Machines machine="M15" state="danger" temp="25°C" vibration="12 IPS" />
-                            </div>
-                        </div>
+                <div className="bg-white rounded-md shadow-md pb-5">
+                    <div className="border-b-2 p-2">Machines State</div>
+                    <div className="grid grid-cols-6 gap-5 mt-5 mx-3">
+                        <Card_Machines machine="M1" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M2" state="danger" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M3" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M4" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M5" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M6" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M7" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M8" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M9" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M10" state="success" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M11" state="danger" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M12" state="danger" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M13" state="danger" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M14" state="danger" temp="25°C" vibration="12 IPS" />
+                        <Card_Machines machine="M15" state="danger" temp="25°C" vibration="12 IPS" />
                     </div>
                 </div>
             </div>
+
+
+    
 
             {props.machines && <div className="container">
                 <div className="card text-bg-light mb-3 h-100">

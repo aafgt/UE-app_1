@@ -204,57 +204,45 @@ function Power() {
 
     return (
         <>
-            <div className="container-fluid mb-2 pt-3">
-                <label className="fw-bold">Power</label><br />
-                <label>Welcome !</label>
-            </div>
+            <div className="bg-slate-100 w-full p-2">
+                <div className="border-b-2 mb-4 p-2 bg-gray-50">
+                    <label className="font-medium">Power</label><br />
+                    <label>Welcome !</label>
+                </div>
 
-            <hr />
-
-            <div className="container">
-                <div className="row g-3">
-                    <div className="col">
-                        <div className="row g-2">
-                            <div className="col-4">
-                                <Card_Power title="Current Voltage 1" body="223 V" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="Current Voltage 2" body="223 V" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="Current Voltage 3" body="223 V" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="CT1 Current" body="8.5875 A" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="CT2 Current" body="8.5875 A" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="CT3 Current" body="9.5875 A" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="Current Power 1" body="1.7 KW" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="Current Power 2" body="1.7 KW" />
-                            </div>
-                            <div className="col-4">
-                                <Card_Power title="Current Power 3" body="1.7 KW" />
-                            </div>
-                        </div>
+                <div className="flex">
+                    <div className="grid grid-cols-3 gap-5 w-2/3">
+                        <Card_Power title="Current Voltage 1" body="223 V" />
+                        <Card_Power title="Current Voltage 2" body="223 V" />
+                        <Card_Power title="Current Voltage 3" body="223 V" />
+                        <Card_Power title="CT1 Current" body="8.5875 A" />
+                        <Card_Power title="CT2 Current" body="8.5875 A" />
+                        <Card_Power title="CT3 Current" body="9.5875 A" />
+                        <Card_Power title="Current Power 1" body="1.7 KW" />
+                        <Card_Power title="Current Power 2" body="1.7 KW" />
+                        <Card_Power title="Current Power 3" body="1.7 KW" />
                     </div>
-                    <div className="col">
+                    <div className="ml-5 w-1/3">
                         <Card_Power title="Power Factor" body={<ReactApexChart options={powerFactorChartData.options} series={powerFactorChartData.series} type="radialBar" height={350} />} />
                     </div>
                 </div>
 
-                <div className="row g-1 my-2">
-                    <Card_Power title="Power" body={<ReactApexChart options={powerChartData.options} series={powerChartData.series} type="area" height={190} />} />
-                    <Card_Power title="Average Frequency" body={<ReactApexChart options={frequencyChartData.options} series={frequencyChartData.series} type="area" height={190} />} />
-                    <Card_Power title="Voltage" body={<ReactApexChart options={voltageChartData.options} series={voltageChartData.series} type="area" height={190} />} />
-                    <Card_Power title="Current" body={<ReactApexChart options={currentChartData.options} series={currentChartData.series} type="area" height={190} />} />
-                    <Card_Power title="Harmonic" body={<ReactApexChart options={harmonicChartData.options} series={harmonicChartData.series} type="area" height={190} />} />
+                <div className="">
+                    <div className="mt-5">
+                        <Card_Power title="Power" body={<ReactApexChart options={powerChartData.options} series={powerChartData.series} type="area" height={190} />} />
+                    </div>
+                    <div className="mt-5">
+                        <Card_Power title="Average Frequency" body={<ReactApexChart options={frequencyChartData.options} series={frequencyChartData.series} type="area" height={190} />} />
+                    </div>
+                    <div className="mt-5">
+                        <Card_Power title="Voltage" body={<ReactApexChart options={voltageChartData.options} series={voltageChartData.series} type="area" height={190} />} />
+                    </div>
+                    <div className="mt-5">
+                        <Card_Power title="Current" body={<ReactApexChart options={currentChartData.options} series={currentChartData.series} type="area" height={190} />} />
+                    </div>
+                    <div className="mt-5">
+                        <Card_Power title="Harmonic" body={<ReactApexChart options={harmonicChartData.options} series={harmonicChartData.series} type="area" height={190} />} />
+                    </div>
                 </div>
             </div>
         </>

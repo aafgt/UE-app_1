@@ -25,61 +25,30 @@ function Inventory() {
 
     return (
         <>
-            <div className="container-fluid mb-2 pt-3">
-                <label className="fw-bold">Inventory</label><br />
-                <label>Welcome !</label>
-            </div>
+            <div className="bg-slate-100 w-full p-2">
+                <div className="border-b-2 mb-4 p-2 bg-gray-50">
+                    <label className="font-medium">Inventory</label><br />
+                    <label>Welcome !</label>
+                </div>
 
-            <hr />
-
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <div className="card h-100">
-                            <div className="card-body">
-                                <h6 className="card-title p-1 fw-bold">
-                                    Product Inventory
-                                </h6>
-                            </div>
-                        </div>
+                <div className="flex">
+                    <div className="bg-white rounded-md shadow-md w-1/2">
+                        <div className="pl-5 py-5 font-semibold">Product Inventory</div>
                     </div>
-                    <div className="col">
-                        <div className="card h-100">
-                            <div className="card-body">
-                                <h6 className="card-title p-1 fw-bold">
-                                    Raw Material
-                                </h6>
-                            </div>
-                        </div>
+                    <div className="bg-white rounded-md shadow-md w-1/2 ml-5">
+                        <div className="pl-5 py-5 font-semibold">Raw Material</div>
                     </div>
                 </div>
 
-                <div className="row">
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Feed 15 %" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Feed 65 %" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Main Corn" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Material 1" data={chartData} />
-                    </div>
-
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Liquid Starch" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Oil" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Material 2" data={chartData} />
-                    </div>
-                    <div className="col-3 my-1">
-                        <Card_Inventory title="Material 3" data={chartData} />
-                    </div>
+                <div className="grid grid-cols-4 gap-5 mt-5">
+                    <Card_Inventory title="Feed 15 %" data={chartData} />
+                    <Card_Inventory title="Feed 65 %" data={chartData} />
+                    <Card_Inventory title="Main Corn" data={chartData} />
+                    <Card_Inventory title="Material 1" data={chartData} />
+                    <Card_Inventory title="Liquid Starch" data={chartData} />
+                    <Card_Inventory title="Oil" data={chartData} />
+                    <Card_Inventory title="Material 2" data={chartData} />
+                    <Card_Inventory title="Material 3" data={chartData} />
                 </div>
             </div>
         </>

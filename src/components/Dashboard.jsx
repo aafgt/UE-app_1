@@ -41,7 +41,7 @@ function Dashboard() {
 
     const [oeeChartData, setOeeChartData] = useState({
         series: [70],
-        options : {
+        options: {
             chart: {
                 height: 350,
                 type: 'radialBar',
@@ -59,7 +59,7 @@ function Dashboard() {
 
     const [uptimeChartData, setUptimeChartData] = useState({
         series: [70],
-        options : {
+        options: {
             chart: {
                 height: 350,
                 type: 'radialBar',
@@ -97,192 +97,167 @@ function Dashboard() {
 
     return (
         <>
-            <div className="container-fluid mb-2 pt-3">
-                <label className="fw-bold">Dashboard</label><br />
-                <label>Welcome !</label>
-            </div>
-
-            <hr />
-
-            <div className="container">
-                <div className="row g-3">
-                    <div className="col-3">
-                        <Card_Dashboard title="123,45 T" body="Feed 15 %" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="234,56 T" body="Feed 65 %" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="123,45 T" body="Raw Material 1" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="234,56 T" body="Raw Material 2" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="458,7 L" body="Oil" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="456 L" body={<div>Liquid Starch <i className="bi bi-info-circle" type="button"></i></div>} />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="458,7 L" body="Raw Material 3" />
-                    </div>
-                    <div className="col-3">
-                        <Card_Dashboard title="456 L" body="Raw Material 4" />
-                    </div>
+            <div className="bg-slate-100 w-full p-2">
+                <div className="border-b-2 mb-4 p-2 bg-gray-50">
+                    <label className="font-medium">Dashboard</label><br />
+                    <label>Welcome !</label>
                 </div>
 
-                <div className="row my-2">
-                    <div className="col-9">
-                        <div className="card text-bg-light mb-3">
-                            <div className="card-header">Production</div>
-                            <div className="card-body">
-                                <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={350} />
-                            </div>
+                <div className="grid grid-cols-4 gap-5">
+                    <Card_Dashboard title="123,45 T" body="Feed 15 %" />
+                    <Card_Dashboard title="234,56 T" body="Feed 65 %" />
+                    <Card_Dashboard title="123,45 T" body="Raw Material 1" />
+                    <Card_Dashboard title="234,56 T" body="Raw Material 2" />
+                    <Card_Dashboard title="458,7 L" body="Oil" />
+                    <Card_Dashboard title="456 L" body={<div>Liquid Starch <i className="bi bi-info-circle hover:cursor-pointer"></i></div>} />
+                    <Card_Dashboard title="458,7 L" body="Raw Material 3" />
+                    <Card_Dashboard title="456 L" body="Raw Material 4" />
+                </div>
+
+                <div className="mt-5 flex">
+                    <div className="bg-white rounded-md shadow-md w-3/4">
+                        <div className="border-b-2 p-2">Production</div>
+                        <div className="">
+                            <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={350} />
                         </div>
                     </div>
-                    <div className="col-3">
-                        <div className="row g-1 mb-1">
-                            <div className="card text-bg-light mb-3">
-                                <div className="card-header">OEE</div>
-                                <div className="card-body">
-                                    <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="radialBar" height={157} />
-                                </div>
+
+                    <div className="w-1/4 flex flex-col ml-5">
+                        <div className="bg-white rounded-md shadow-md h-1/2">
+                            <div className="border-b-2 p-2">OEE</div>
+                            <div className="">
+                                <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="radialBar" height={157} />
                             </div>
                         </div>
-                        <div className="row g-1">
-                            <div className="card text-bg-light">
-                                <div className="card-header">Up-Time</div>
-                                <div className="card-body">
-                                    <ReactApexChart options={uptimeChartData.options} series={uptimeChartData.series} type="radialBar" height={157} />
-                                </div>
+
+                        <div className="bg-white rounded-md shadow-md h-1/2 mt-3">
+                            <div className="border-b-2 p-2">Up-Time</div>
+                            <div className="">
+                                <ReactApexChart options={uptimeChartData.options} series={uptimeChartData.series} type="radialBar" height={157} />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="row my-2">
-                    <div className="col-4">
-                        <div className="card text-bg-light mb-3 ">
-                            <div className="card-header">Corn Components</div>
-                            <div className="card-body">
-                                <ReactApexChart options={cornChartData.responsive[0].options} series={cornChartData.series} type="pie" height={350} />
-                            </div>
+                <div className="mt-5 flex">
+                    <div className="bg-white rounded-md shadow-md w-1/4">
+                        <div className="border-b-2 p-2">Corn Components</div>
+                        <div className="">
+                            <ReactApexChart options={cornChartData.responsive[0].options} series={cornChartData.series} type="pie" height={350} />
                         </div>
                     </div>
-                    <div className="col-8">
-                        <div className="card text-bg-light mb-3 ">
-                            <div className="card-header">Stage Summary</div>
-                            <div className="card-body">
-                                <table className="table">
-                                    <thead className="table-secondary">
-                                        <tr>
-                                            <td scope="col">
-                                                <input type="checkbox" className="btn-check" id="btncheckall" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheckall"></label>
-                                            </td>
-                                            <th scope="col">Stage</th>
-                                            <th scope="col">Input</th>
-                                            <th scope="col">Production</th>
-                                            <th scope="col">Waste</th>
-                                            <th scope="col">Stops</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">ROP</th>
-                                            <th scope="col">Time Stamp</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="table-group-divider">
-                                        <tr>
-                                            <td scope="row">
-                                                <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheck1"></label>
-                                            </td>
-                                            <td>Stage 0</td>
-                                            <td scope="row">1000 kg</td>
-                                            <td>980 kg</td>
-                                            <td scope="row">20 kg. 0</td>
-                                            <td>0</td>
-                                            <td scope="row">.Off</td>
-                                            <td>400 kg/h</td>
-                                            <td scope="row">1/21/2024, 11:06:07 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td scope="row">
-                                                <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheck2"></label>
-                                            </td>
-                                            <td>Stage 1</td>
-                                            <td scope="row">1000 kg</td>
-                                            <td>980 kg</td>
-                                            <td scope="row">20 kg. 0</td>
-                                            <td>1</td>
-                                            <td scope="row">.Off</td>
-                                            <td>400 kg/h</td>
-                                            <td scope="row">1/21/2024, 11:06:07 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td scope="row">
-                                                <input type="checkbox" className="btn-check" id="btncheck3" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheck3"></label>
-                                            </td>
-                                            <td>Stage 2</td>
-                                            <td scope="row">1000 kg</td>
-                                            <td>980 kg</td>
-                                            <td scope="row">20 kg. 0</td>
-                                            <td>2</td>
-                                            <td scope="row">.Off</td>
-                                            <td>400 kg/h</td>
-                                            <td scope="row">1/21/2024, 11:06:07 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td scope="row">
-                                                <input type="checkbox" className="btn-check" id="btncheck4" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheck4"></label>
-                                            </td>
-                                            <td>Stage 3</td>
-                                            <td scope="row">1000 kg</td>
-                                            <td>980 kg</td>
-                                            <td scope="row">20 kg. 0</td>
-                                            <td>3</td>
-                                            <td scope="row">.On</td>
-                                            <td>400 kg/h</td>
-                                            <td scope="row">1/21/2024, 11:06:07 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td scope="row">
-                                                <input type="checkbox" className="btn-check" id="btncheck5" autoComplete="off" />
-                                                <label className="btn btn-outline-primary p-2" htmlFor="btncheck5"></label>
-                                            </td>
-                                            <td>Stage 4</td>
-                                            <td scope="row">1000 kg</td>
-                                            <td>980 kg</td>
-                                            <td scope="row">20 kg. 0</td>
-                                            <td>4</td>
-                                            <td scope="row">.On</td>
-                                            <td>400 kg/h</td>
-                                            <td scope="row">1/21/2024, 11:06:07 AM</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
 
-                                <nav aria-label="Page navigation">
-                                    <ul className="pagination justify-content-end">
-                                        <li className="page-item">
-                                            <a className="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                        <li className="page-item">
-                                            <a className="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                    <div className="bg-white rounded-md shadow-md w-3/4 ml-3">
+                        <div className="border-b-2 p-2">Stage Summary</div>
+                        <div className="">
+                            <table className="table-auto w-full border-collapse border border-slate-100">
+                                <thead className="border-b-2">
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheckall" autoComplete="off" />
+                                            <label className="" htmlFor="btncheckall"></label>
+                                        </td>
+                                        <th scope="border border-slate-300">Stage</th>
+                                        <th scope="">Input</th>
+                                        <th scope="">Production</th>
+                                        <th scope="">Waste</th>
+                                        <th scope="">Stops</th>
+                                        <th scope="">Status</th>
+                                        <th scope="">ROP</th>
+                                        <th scope="">Time Stamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="">
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheck1" autoComplete="off" />
+                                            <label className="" htmlFor="btncheck1"></label>
+                                        </td>
+                                        <td>Stage 0</td>
+                                        <td scope="">1000 kg</td>
+                                        <td>980 kg</td>
+                                        <td scope="">20 kg. 0</td>
+                                        <td>0</td>
+                                        <td scope="">.Off</td>
+                                        <td>400 kg/h</td>
+                                        <td scope="">1/21/2024, 11:06:07 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheck2" autoComplete="off" />
+                                            <label className="" htmlFor="btncheck2"></label>
+                                        </td>
+                                        <td>Stage 1</td>
+                                        <td scope="">1000 kg</td>
+                                        <td>980 kg</td>
+                                        <td scope="">20 kg. 0</td>
+                                        <td>1</td>
+                                        <td scope="">.Off</td>
+                                        <td>400 kg/h</td>
+                                        <td scope="">1/21/2024, 11:06:07 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheck3" autoComplete="off" />
+                                            <label className="" htmlFor="btncheck3"></label>
+                                        </td>
+                                        <td>Stage 2</td>
+                                        <td scope="">1000 kg</td>
+                                        <td>980 kg</td>
+                                        <td scope="">20 kg. 0</td>
+                                        <td>2</td>
+                                        <td scope="">.Off</td>
+                                        <td>400 kg/h</td>
+                                        <td scope="">1/21/2024, 11:06:07 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheck4" autoComplete="off" />
+                                            <label className="" htmlFor="btncheck4"></label>
+                                        </td>
+                                        <td>Stage 3</td>
+                                        <td scope="">1000 kg</td>
+                                        <td>980 kg</td>
+                                        <td scope="">20 kg. 0</td>
+                                        <td>3</td>
+                                        <td scope="">.On</td>
+                                        <td>400 kg/h</td>
+                                        <td scope="">1/21/2024, 11:06:07 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="">
+                                            <input type="checkbox" className="" id="btncheck5" autoComplete="off" />
+                                            <label className="" htmlFor="btncheck5"></label>
+                                        </td>
+                                        <td>Stage 4</td>
+                                        <td scope="">1000 kg</td>
+                                        <td>980 kg</td>
+                                        <td scope="">20 kg. 0</td>
+                                        <td>4</td>
+                                        <td scope="">.On</td>
+                                        <td>400 kg/h</td>
+                                        <td scope="">1/21/2024, 11:06:07 AM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <nav className="" aria-label="Page navigation">
+                                <ul className="flex justify-end">
+                                    <li className="">
+                                        <a className="" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li className=""><a className="" href="#">1</a></li>
+                                    <li className=""><a className="" href="#">2</a></li>
+                                    <li className=""><a className="" href="#">3</a></li>
+                                    <li className="">
+                                        <a className="" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
