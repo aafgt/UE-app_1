@@ -34,7 +34,7 @@ function Dashboard() {
                 enabled: false
             },
             stroke: {
-                curve: 'smooth'
+                curve: 'straight'
             },
             xaxis: {
                 type: 'datetime',
@@ -349,7 +349,7 @@ function Dashboard() {
 
                     <div className="bg-white rounded-lg shadow-md m-3 mt-7">
                         <div className="p-3">
-                            <table className="w-full text-center">
+                            <table className="w-full text-center table-fixed">
                                 <thead className="text-green-700 font-semibold">
                                     <tr>
                                         <td>Zone</td>

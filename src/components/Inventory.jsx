@@ -37,7 +37,140 @@ function Inventory() {
                     }
                 },
             },
-            labels: [''],
+            labels: ['Feed 15 %'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData2, setChartData2] = useState({
+        series: [89],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Feed 65 %'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData3, setChartData3] = useState({
+        series: [55],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Main Corn'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData4, setChartData4] = useState({
+        series: [67],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Material 1'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData5, setChartData5] = useState({
+        series: [37],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Liquid Starch'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData6, setChartData6] = useState({
+        series: [24],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Oil'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData7, setChartData7] = useState({
+        series: [89],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Material 2'],
+            colors: ['#FF5733']
+        }
+    });
+
+    const [chartData8, setChartData8] = useState({
+        series: [35],
+        options: {
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '70%',
+                    }
+                },
+            },
+            labels: ['Material 3'],
             colors: ['#FF5733']
         }
     });
@@ -61,18 +194,18 @@ function Inventory() {
 
                 <div className="grid grid-cols-4 gap-5 mt-5">
                     <Card_Inventory title="Feed 15 %" data={chartData} />
-                    <Card_Inventory title="Feed 65 %" data={chartData} />
-                    <Card_Inventory title="Main Corn" data={chartData} />
-                    <Card_Inventory title="Material 1" data={chartData} />
-                    <Card_Inventory title="Liquid Starch" data={chartData} />
-                    <Card_Inventory title="Oil" data={chartData} />
-                    <Card_Inventory title="Material 2" data={chartData} />
-                    <Card_Inventory title="Material 3" data={chartData} />
+                    <Card_Inventory title="Feed 65 %" data={chartData2} />
+                    <Card_Inventory title="Main Corn" data={chartData3} />
+                    <Card_Inventory title="Material 1" data={chartData4} />
+                    <Card_Inventory title="Liquid Starch" data={chartData5} />
+                    <Card_Inventory title="Oil" data={chartData6} />
+                    <Card_Inventory title="Material 2" data={chartData7} />
+                    <Card_Inventory title="Material 3" data={chartData8} />
                 </div>
 
                 <div className="bg-white rounded-lg shadow-md m-3 mt-7">
                     <div className="p-3">
-                        <table className="w-full text-center">
+                        <table className="w-full text-center table-fixed">
                             <thead className="text-green-700 font-semibold">
                                 <tr>
                                     <td>Name</td>

@@ -14,24 +14,88 @@ function SupplyChain() {
         setDropDown(!dropDown);
     };
 
-    const [oeeChartData, setOeeChartData] = useState({
-        series: [70],
+    const [prodChartData, setProdChartData] = useState({
+          
+        series: [{
+          name: 'Inflation',
+          data: [50, 61, 50, 45, 50, 80, 50, 36, 23, 70, 50, 100]
+        }],
         options: {
-            chart: {
-                height: 350,
-                type: 'radialBar',
+          chart: {
+            height: 350,
+            type: 'bar',
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 10,
+              dataLabels: {
+                position: 'top', // top, center, bottom
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return val + "T";
             },
-            plotOptions: {
-                radialBar: {
-                    hollow: {
-                        size: '70%',
-                    }
-                },
+            offsetY: -20,
+            style: {
+              fontSize: '12px',
+              colors: ["#304758"] 
+            }
+          },
+          
+          xaxis: {
+            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            position: 'top',
+            axisBorder: {
+              show: false
             },
-            labels: ['Material 1'],
-            colors: ['#FF5733']
-        }
-    });
+            axisTicks: {
+              show: false
+            },
+            crosshairs: {
+              fill: {
+                type: 'gradient',
+                gradient: {
+                  colorFrom: '#D8E3F0',
+                  colorTo: '#BED1E6',
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          yaxis: {
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              show: false,
+              formatter: function (val) {
+                return val + "%";
+              }
+            }
+          
+          },
+          title: {
+            text: 'Monthly Inflation in Argentina, 2002',
+            floating: true,
+            offsetY: 330,
+            align: 'center',
+            style: {
+              color: '#444'
+            }
+          }
+        },
+      });
 
     return (
         <>
@@ -53,7 +117,7 @@ function SupplyChain() {
                 {toggle && <div className="bg-white rounded-lg shadow-md mt-7">
                     <div className="border-b-2 p-2">Material Stock</div>
                     <div className="p-3">
-                        <table className="w-full text-center">
+                        <table className="w-full text-center table-fixed">
                             <thead className="text-green-700 font-semibold">
                                 <tr>
                                     <td>Supplier</td>
@@ -106,8 +170,15 @@ function SupplyChain() {
                     </div>
                 </div>}
 
+                {toggle && <div className="bg-white rounded-md shadow-md w-full mt-5">
+                        <h6 className="border-b-2 p-2">Material Consumption</h6>
+                        <div className="">
+                            <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="bar" height={300} />
+                        </div>
+                </div>}
+
                 <div className="flex mt-5">
-                    <div className={`bg-white rounded-md shadow-md ${toggle ? 'w-1/2' : 'w-full'}`}>
+                    <div className={`bg-white rounded-md shadow-md ${toggle ? 'w-full' : 'w-full'}`}>
                         <div className="border-b-2 p-2">Messages</div>
                         <div className="mx-3 py-5">
                             <div className="bg-white rounded-sm shadow-md">
@@ -124,12 +195,7 @@ function SupplyChain() {
                             </div>
                         </div>
                     </div>
-                    {toggle && <div className="bg-white rounded-md shadow-md w-1/2 ml-5">
-                        <h6 className="border-b-2 p-2">Material Consumption</h6>
-                        <div className="">
-                            <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="radialBar" height={200} />
-                        </div>
-                    </div>}
+
                 </div>
             </div>
         </>

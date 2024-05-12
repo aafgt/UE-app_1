@@ -352,7 +352,7 @@ function Maintenance() {
                 <div className="bg-white rounded-lg shadow-md m-3 mt-7">
                     <div className="border-b-2 p-2">Machine Details</div>
                     <div className="p-3">
-                        <table className="w-full text-center">
+                        <table className="w-full text-center table-fixed">
                             <thead className="text-green-700 font-semibold">
                                 <tr>
                                     <th scope="">Machine</th>
