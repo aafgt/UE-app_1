@@ -13,7 +13,7 @@ function Card_Inventory({ title, data }) {
         <div className="bg-white rounded-md shadow-md">
             <h6 className="border-b-2 p-2">{title}</h6>
             <div className="">
-                <ReactApexChart options={data.responsive[0].options} series={data.series} type="pie" height={350} />
+                <ReactApexChart options={data.options} series={data.series} type="radialBar" height={200} />
                 <p className="text-center">Max = 100/T</p>
             </div>
         </div>

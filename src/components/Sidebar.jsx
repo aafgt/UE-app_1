@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { ActiveSidebarTabs } from "../redux/ActionCreators";
+import { ActiveSidebarTabs, toggleSidebar } from "../redux/ActionCreators";
 import { useState } from "react";
 
 const mapStateToProps = (state) => {
@@ -11,14 +11,19 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    toggleSidebar: () => { dispatch(toggleSidebar()) },
     ActiveSidebarTabs: (new_isActive) => { dispatch(ActiveSidebarTabs(new_isActive)) }
 })
 
 function Sidebar(props) {
 
+    const handleSidebarToggle = () => {
+        props.toggleSidebar();
+    };
+
     const handleIsActive = (tab) => {
         let new_isActive = props.sidebarTabsActive.map((t, index) => {
-            return index === tab ? t = "bg-slate-100 text-blue-700 border-l-2 border-blue-700 w-full" : t = "";
+            return index === tab ? t = "bg-slate-100 text-black w-full rounded-l-full" : t = "";
         })
         props.ActiveSidebarTabs(new_isActive);
     };
@@ -155,25 +160,22 @@ function Sidebar(props) {
         // </>
 
         <>
-            {props.isSidebarToggled && <nav className="w-fit h-screen pl-3 pr-7 pt-3 flex flex-col">
-                <h6 className="font-semibold">Ahmed</h6>
-                <p className="pb-3">Ahmed@corn.com</p>
-                <hr />
+            {props.isSidebarToggled && <nav className="w-full min-h-screen  pt-3 flex flex-col bg-[#73C088] rounded-r-2xl text-white font-semibold">
+                <div className="flex justify-end">
+                    <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
+                </div>
 
-                <label className="font-semibold pt-3">Main</label>
-
-                <Link to="/dashboard" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
+                <Link to="/dashboard" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
                     <i className="bi bi-grid"></i>
                     <span className="ml-2">Dashboard</span>
                 </Link>
 
-                <label className="font-semibold pt-3">Pages</label>
 
-                <Link to="/maintenance" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[1]}`} onClick={() => { handleIsActive(1) }}>
+                <Link to="/maintenance" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[1]}`} onClick={() => { handleIsActive(1) }}>
                     <i className="bi bi-nvme"></i>
                     <span className="ml-2">Maintenance</span>
                 </Link>
-                <Link to="/power" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
+                {/* <Link to="/power" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
                     <i className="bi bi-lightning"></i>
                     <span className="ml-2">Power</span>
                 </Link>
@@ -184,57 +186,44 @@ function Sidebar(props) {
                 <Link to="/machines" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-speedometer2"></i>
                     <span className="ml-2">Machines</span>
-                </Link>
-                <Link to="/inventory" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
+                </Link> */}
+                <Link to="/inventory" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
                     <i className="bi bi-suitcase2"></i>
                     <span className="ml-2">Inventory</span>
                 </Link>
-                <Link to="/supplyChain" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[6]}`} onClick={() => { handleIsActive(6) }}>
+                <Link to="/supplyChain" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[6]}`} onClick={() => { handleIsActive(6) }}>
                     <i className="bi bi-plug"></i>
                     <span className="ml-2">Supply-Chain</span>
                 </Link>
-                <Link to="/ai" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[7]}`} onClick={() => { handleIsActive(7) }}>
+                <Link to="/ai" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[7]}`} onClick={() => { handleIsActive(7) }}>
                     <i className="bi bi-cloud"></i>
                     <span className="ml-2">AI</span>
                 </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
+                <Link className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                     <span className="ml-2">Reports</span>
                 </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/orders" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
                     <i className="bi bi-file-earmark-break"></i>
                     <span className="ml-2">Orders</span>
-                </Link>
-
-                <label className="font-semibold mt-3">Live</label>
-
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[10]}`} onClick={() => { handleIsActive(10) }}>
-                    <i className="bi bi-funnel"></i>
-                    <span className="ml-2">Clean Corn</span>
-                </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[11]}`} onClick={() => { handleIsActive(11) }}>
-                    <i className="bi bi-filter"></i>
-                    <span className="ml-2">Semi Clean Corn</span>
                 </Link>
             </nav>}
 
 
-            {!props.isSidebarToggled && <nav className="w-fit h-screen pl-3 pr-7 pt-3 flex flex-col">
-                <h6 className="font-semibold">Ahmed</h6>
-                <hr />
-
-                <label className="font-semibold pt-3">Main</label>
+            {!props.isSidebarToggled && <nav className="w-fit h-screen pl-3 pr-7 pt-3 flex flex-col bg-[#73C088] rounded-r-2xl text-white font-semibold">
+                <div className="flex justify-end">
+                    <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
+                </div>
 
                 <Link to="/dashboard" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
                     <i className="bi bi-grid"></i>
                 </Link>
 
-                <label className="font-semibold pt-3">Pages</label>
 
                 <Link to="/maintenance" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[1]}`} onClick={() => { handleIsActive(1) }}>
                     <i className="bi bi-nvme"></i>
                 </Link>
-                <Link to="/power" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
+                {/* <Link to="/power" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
                     <i className="bi bi-lightning"></i>
 
                 </Link>
@@ -243,7 +232,7 @@ function Sidebar(props) {
                 </Link>
                 <Link to="/machines" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-speedometer2"></i>
-                </Link>
+                </Link> */}
                 <Link to="/inventory" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
                     <i className="bi bi-suitcase2"></i>
                 </Link>
@@ -256,17 +245,8 @@ function Sidebar(props) {
                 <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                 </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/orders" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
                     <i className="bi bi-file-earmark-break"></i>
-                </Link>
-
-                <label className="font-semibold mt-3">Live</label>
-
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[10]}`} onClick={() => { handleIsActive(10) }}>
-                    <i className="bi bi-funnel"></i>
-                </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 ${props.sidebarTabsActive[11]}`} onClick={() => { handleIsActive(11) }}>
-                    <i className="bi bi-filter"></i>
                 </Link>
             </nav>}
         </>

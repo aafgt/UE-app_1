@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard";
 import Inventory from "./components/Inventory";
 import Machines from "./components/Machines";
 import Maintenance from "./components/Maintenance";
+import Orders from "./components/Orders";
 import Power from "./components/Power";
 import SupplyChain from "./components/SupplyChain";
 import Vehicles from "./components/Vehicles";
@@ -23,18 +24,18 @@ const routes = [
                 path: "/maintenance",
                 element: <Maintenance />
             },
-            {
-                path: "/power",
-                element: <Power />
-            },
-            {
-                path: "/vehicles",
-                element: <Vehicles />
-            },
-            {
-                path: "/machines",
-                element: <Machines />
-            },
+            // {
+            //     path: "/power",
+            //     element: <Power />
+            // },
+            // {
+            //     path: "/vehicles",
+            //     element: <Vehicles />
+            // },
+            // {
+            //     path: "/machines",
+            //     element: <Machines />
+            // },
             {
                 path: "/inventory",
                 element: <Inventory />
@@ -46,6 +47,10 @@ const routes = [
             {
                 path: "/ai",
                 element: <Ai />
+            },
+            {
+                path: "/orders",
+                element: <Orders />
             }
         ]
     }

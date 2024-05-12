@@ -57,9 +57,6 @@ function Maintenance() {
 
     const [prodChartData, setProdChartData] = useState({
         series: [{
-            name: 'production',
-            data: [31, 40, 28, 51, 42, 109, 100]
-        }, {
             name: 'cost',
             data: [11, 32, 45, 32, 34, 52, 41]
         }],
@@ -315,19 +312,19 @@ function Maintenance() {
                     <label>Welcome !</label>
                 </div>
 
-                <div className="flex">
+                {/* <div className="flex">
                     <button onClick={handleStageToggle}>Stage</button>
                     <button>Machines</button>
-                </div>
+                </div> */}
 
-                {stageToggle && <div className="bg-white rounded-md shadow-md mt-5">
+                {true && <div className="bg-white rounded-md shadow-md mt-5">
                     <div className="border-b-2 p-2">Production - Cost</div>
                     <div className="">
                         <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={350} />
                     </div>
                 </div>}
 
-                {stageToggle && <div className="bg-white rounded-md shadow-md mt-5">
+                {true && <div className="bg-white rounded-md shadow-md mt-5">
                     <div className="border-b-2 p-2">Consumption</div>
                     <div className="">
                         <ul className="flex ml-5 my-3">
@@ -352,17 +349,12 @@ function Maintenance() {
                     </div>
                 </div>}
 
-                {stageToggle && <div className="bg-white rounded-md shadow-md mt-5">
+                <div className="bg-white rounded-lg shadow-md m-3 mt-7">
                     <div className="border-b-2 p-2">Machine Details</div>
-                    <div className="">
-                        <table className="w-full">
-                            <thead className="border-b-2">
+                    <div className="p-3">
+                        <table className="w-full text-center">
+                            <thead className="text-green-700 font-semibold">
                                 <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheckall" autoComplete="off" />
-                                        <label className="" htmlFor="btncheckall"></label>
-                                    </td>
-                                    <th scope="">Stage</th>
                                     <th scope="">Machine</th>
                                     <th scope="">Last Maintenance</th>
                                     <th scope="">Next Maintenance</th>
@@ -372,93 +364,36 @@ function Maintenance() {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheck1" autoComplete="off" />
-                                        <label className="" htmlFor="btncheck1"></label>
-                                    </td>
-                                    <td>Stage 1</td>
+                                <tr className="border-b-2">
                                     <td scope="">Machine 1</td>
                                     <td>1/21/2024, 11:05:18 AM</td>
                                     <td scope="">1/21/2024, 11:05:18 AM</td>
                                     <td>36%</td>
                                     <td scope="">A</td>
-                                    <td>.To be Replaced</td>
+                                    <td><i className="bi bi-dot text-green-700 text-xl"></i> No replacement needed</td>
                                 </tr>
-                                <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheck2" autoComplete="off" />
-                                        <label className="" htmlFor="btncheck2"></label>
-                                    </td>
-                                    <td>Stage 2</td>
+                                <tr className="border-b-2">
                                     <td scope="">Machine 1</td>
                                     <td>1/21/2024, 11:05:18 AM</td>
                                     <td scope="">1/21/2024, 11:05:18 AM</td>
                                     <td>36%</td>
                                     <td scope="">A</td>
-                                    <td>.To be Replaced</td>
+                                    <td><i className="bi bi-dot text-red-700 text-xl"></i> To be Replaced</td>
                                 </tr>
-                                <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheck3" autoComplete="off" />
-                                        <label className="" htmlFor="btncheck3"></label>
-                                    </td>
-                                    <td>Stage 3</td>
+                                <tr className="border-b-2">
+
                                     <td scope="">Machine 1</td>
                                     <td>1/21/2024, 11:05:18 AM</td>
                                     <td scope="">1/21/2024, 11:05:18 AM</td>
                                     <td>36%</td>
                                     <td scope="">A</td>
-                                    <td>.No replacement needed</td>
-                                </tr>
-                                <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheck4" autoComplete="off" />
-                                        <label className="" htmlFor="btncheck4"></label>
-                                    </td>
-                                    <td>Stage 4</td>
-                                    <td scope="">Machine 1</td>
-                                    <td>1/21/2024, 11:05:18 AM</td>
-                                    <td scope="">1/21/2024, 11:05:18 AM</td>
-                                    <td>36%</td>
-                                    <td scope="">A</td>
-                                    <td>.No replacement needed</td>
-                                </tr>
-                                <tr>
-                                    <td scope="">
-                                        <input type="checkbox" className="" id="btncheck5" autoComplete="off" />
-                                        <label className="" htmlFor="btncheck5"></label>
-                                    </td>
-                                    <td>Stage 5</td>
-                                    <td scope="">Machine 1</td>
-                                    <td>1/21/2024, 11:05:18 AM</td>
-                                    <td scope="">1/21/2024, 11:05:18 AM</td>
-                                    <td>36%</td>
-                                    <td scope="">A</td>
-                                    <td>.No replacement needed</td>
+                                    <td><i className="bi bi-dot text-red-700 text-xl"></i> To be Replaced</td>
                                 </tr>
                             </tbody>
                         </table>
-
-                        <nav className="" aria-label="Page navigation">
-                                <ul className="flex justify-end">
-                                    <li className="">
-                                        <a className="" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li className=""><a className="" href="#">1</a></li>
-                                    <li className=""><a className="" href="#">2</a></li>
-                                    <li className=""><a className="" href="#">3</a></li>
-                                    <li className="">
-                                        <a className="" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
                     </div>
-                </div>}
+                </div>
+
             </div>
         </>
     )
