@@ -5,7 +5,31 @@ import ReactApexChart from "react-apexcharts";
 function Dashboard() {
 
     // const handleDemo = () => {
-    //     setOeeChartData({...oeeChartData, series:[10]});
+    //     setOeeChartData({...oeeChartData, series:[40,60]});
+
+    //     setTimeout(() => {
+    //         setOeeChartData({...oeeChartData, series:[90,10]});
+    //     }, 3000);
+
+    //     setProdChartData({...prodChartData, series: [{
+    //         name: 'series1',
+    //         data: [31, 40, 28, 51, 42, 109, 100, 20]
+    //     }],  
+    //     xaxis: {
+    //         type: 'datetime',
+    //         categories: ["2023-01-19T00:00:00.000Z", "2023-02-19T01:30:00.000Z", "2023-03-19T02:30:00.000Z", "2023-04-19T03:30:00.000Z", "2023-05-19T04:30:00.000Z", "2023-06-19T05:30:00.000Z", "2023-07-19T06:30:00.000Z", "2023-08-19T06:30:00.000Z"]
+    //     },})
+
+    //     setTimeout(() => {
+    //         setProdChartData({...prodChartData, series: [{
+    //             name: 'series1',
+    //             data: [31, 40, 28, 51, 42, 109, 100, 20, 60]
+    //         }],  
+    //         xaxis: {
+    //             type: 'datetime',
+    //             categories: ["2023-01-19T00:00:00.000Z", "2023-02-19T01:30:00.000Z", "2023-03-19T02:30:00.000Z", "2023-04-19T03:30:00.000Z", "2023-05-19T04:30:00.000Z", "2023-06-19T05:30:00.000Z", "2023-07-19T06:30:00.000Z", "2023-08-19T06:30:00.000Z", "2023-09-19T06:30:00.000Z"]
+    //         },})
+    //     }, 3000);
     // };
 
     const [toggleModal, setToggleModal] = useState(false);
@@ -51,42 +75,120 @@ function Dashboard() {
     });
 
     const [oeeChartData, setOeeChartData] = useState({
-        series: [70],
+        series: [70, 30],
         options: {
             chart: {
                 height: 350,
-                type: 'radialBar',
+                type: 'donut',
             },
             plotOptions: {
-                radialBar: {
-                    hollow: {
-                        size: '70%',
+                pie: {
+                    donut: {
+                        size: '80%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                showAlways: true,
+                                label: 'OEE',
+                                color: '#FF5733',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return 100 - b
+                                    }, 0)
+                                }
+                            }
+                        }
                     }
-                },
+                }
             },
-            labels: ['OEE'],
-            colors: ['#FF5733']
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                show: false
+            },
+            labels: ['OEE', ''],
+            colors: ['#FF5733', '#043912']
         }
     });
 
     const [uptimeChartData, setUptimeChartData] = useState({
-        series: [70],
+        series: [40, 60],
         options: {
             chart: {
                 height: 350,
-                type: 'radialBar',
+                type: 'donut',
             },
             plotOptions: {
-                radialBar: {
-                    hollow: {
-                        size: '70%',
+                pie: {
+                    donut: {
+                        size: '80%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                showAlways: true,
+                                label: 'Up-Time',
+                                color: '#043912',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return 100 - b
+                                    }, 0)
+                                }
+                            }
+                        }
                     }
-                },
+                }
             },
-            labels: ['Up-Time'],
-            colors: ['#73C088']
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                show: false
+            },
+            labels: ['Up-Time', ''],
+            colors: ['#043912', '#FF5733']
         }
     });
+
+    // const [oeeChartData, setOeeChartData] = useState({
+    //     series: [70],
+    //     options: {
+    //         chart: {
+    //             height: 350,
+    //             type: 'radialBar',
+    //         },
+    //         plotOptions: {
+    //             radialBar: {
+    //                 hollow: {
+    //                     size: '70%',
+    //                 }
+    //             },
+    //         },
+    //         labels: ['OEE'],
+    //         colors: ['#FF5733']
+    //     }
+    // });
+
+    // const [uptimeChartData, setUptimeChartData] = useState({
+    //     series: [70],
+    //     options: {
+    //         chart: {
+    //             height: 350,
+    //             type: 'radialBar',
+    //         },
+    //         plotOptions: {
+    //             radialBar: {
+    //                 hollow: {
+    //                     size: '70%',
+    //                 }
+    //             },
+    //         },
+    //         labels: ['Up-Time'],
+    //         colors: ['#73C088']
+    //     }
+    // });
 
     const [cornChartData, setCornChartData] = useState({
         series: [44, 55, 13, 43, 22],
@@ -393,8 +495,8 @@ function Dashboard() {
                         <div className="text-center text-green-700 font-semibold">
                             <i className="bi bi-arrow-bar-left"></i> March 2023 <i className="bi bi-arrow-bar-right"></i>
                         </div>
-                        <div>
-                            <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="radialBar" height={200} />
+                        <div className="my-5">
+                            <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="donut" height={200} />
                         </div>
                         <div className="pl-2 border-t-2 pt-3">
                             <p><span className="bg-slate-300 rounded-full p-1"><i className="bi bi-emoji-smile text-blue-800"></i></span> You're doing good!</p>
@@ -408,8 +510,8 @@ function Dashboard() {
                         <div className="text-center text-green-700 font-semibold">
                             <i className="bi bi-arrow-bar-left"></i> March 2023 <i className="bi bi-arrow-bar-right"></i>
                         </div>
-                        <div>
-                            <ReactApexChart options={uptimeChartData.options} series={uptimeChartData.series} type="radialBar" height={200} />
+                        <div className="my-5">
+                            <ReactApexChart options={uptimeChartData.options} series={uptimeChartData.series} type="donut" height={200} />
                         </div>
                         <div className="pl-2 border-t-2 pt-3">
                             <p><span className="bg-slate-300 rounded-full p-1"><i className="bi bi-emoji-smile text-blue-800"></i></span> You're doing good!</p>

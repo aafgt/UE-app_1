@@ -2,7 +2,7 @@ import * as ActionTypes from '../ActionTypes';
 
 export const IsSidebarToggled = (state = {
     isSidebarToggled: true,
-    sidebarTabsActive: ["", "", "", "", "", "", "", "", "", "", "", ""]
+    sidebarTabsActive: ["", "", "", "", "", "", "", "", "", "", ""]
     }, action) => {
     switch(action.type) {
         case ActionTypes.TOGGLE_SIDEBAR:

@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ActiveSidebarTabs, toggleSidebar } from "../redux/ActionCreators";
-import { useState } from "react";
 
 const mapStateToProps = (state) => {
     return {
@@ -207,7 +206,7 @@ function Sidebar(props) {
                     <i className="bi bi-file-earmark-break"></i>
                     <span className="ml-2">Orders</span>
                 </Link>
-                <Link to="/" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[10]}`} onClick={() => { handleIsActive(10) }}>
                     <i className="bi bi-cloud-minus"></i>
                     <span className="ml-2">Tracing</span>
                 </Link>
@@ -252,7 +251,7 @@ function Sidebar(props) {
                 <Link to="/orders" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
                     <i className="bi bi-file-earmark-break"></i>
                 </Link>
-                <Link to="/" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[10]}`} onClick={() => { handleIsActive(10) }}>
                     <i className="bi bi-cloud-minus"></i>
                 </Link>
             </nav>}
