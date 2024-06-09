@@ -1,64 +1,12 @@
 import { useState } from "react";
+import { ORDERS } from "../Data/orders";
 
-
-function Orders() {
+function OrderRow({ order }) {
 
     const [subTableOpen, setSubTableOpen] = useState(false);
 
     const toggleSubTable = () => {
         setSubTableOpen(!subTableOpen);
-    };
-
-    const subTableRows = () => {
-        return (
-            <>
-                <div className="border-l-4 border-green-800 w-full">
-                    <div className="border-b-2 w-full flex">
-                        <img src="/vite.svg" alt="" />
-                        <table className="w-full text-center text-green-700">
-                            <thead className="mb-7">
-                                <tr>
-                                    <th className="px-5">Name</th>
-                                    <th className="px-5">Material Code</th>
-                                    <th className="px-5">Quantity</th>
-                                    <th className="px-5">Order Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>Starch</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="border-b-2 w-full flex">
-                        <img src="/vite.svg" alt="" />
-                        <table className="w-full text-center text-green-700">
-                            <thead className="">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Material Code</th>
-                                    <th>Quantity</th>
-                                    <th>Order Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>Starch</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </>
-        )
     };
 
     const subTableRows2 = () => {
@@ -119,11 +67,123 @@ function Orders() {
 
     return (
         <>
+            <tr className="border-b-2 hover:cursor-pointer" onClick={toggleSubTable}>
+                <td className="py-3 text-green-500">{order.orderId}</td>
+                <td className="py-3">{order.deliveryDate}</td>
+                <td className="py-3">{order.customer}</td>
+                <td className="py-3">{order.shippingVia}</td>
+                <td className="py-3">{order.item}</td>
+                <td className="py-3">
+                    <div className="flex justify-center">
+                        {order.status === "Pending" && <div className="bg-yellow-400 rounded-xl w-fit px-2">
+                            <i className="bi bi-dot text-yellow-600"></i> <span className="">{order.status}</span>
+                        </div>}
+                        {order.status === "Failed" && <div className="bg-red-400 rounded-xl w-fit px-4">
+                            <i className="bi bi-dot text-red-600"></i> <span className="">{order.status}</span>
+                        </div>}
+                        {order.status === "Success" && <div className="bg-green-400 rounded-xl w-fit px-2">
+                            <i className="bi bi-dot text-green-600"></i> <span className="">{order.status}</span>
+                        </div>}
+                    </div>
+                </td>
+                {/* <td className="bg-slate-200 rounded-full"><i className="bi bi-arrow-down-short"></i></td> */}
+            </tr>
+            {subTableOpen && <tr>
+                <td colSpan={6}>
+                    {subTableRows2()}
+                </td>
+            </tr>}
+        </>
+    );
+};
+
+function Orders() {
+
+
+
+    const subTableRows = () => {
+        return (
+            <>
+                <div className="border-l-4 border-green-800 w-full">
+                    <div className="border-b-2 w-full flex">
+                        <img src="/vite.svg" alt="" />
+                        <table className="w-full text-center text-green-700">
+                            <thead className="mb-7">
+                                <tr>
+                                    <th className="px-5">Name</th>
+                                    <th className="px-5">Material Code</th>
+                                    <th className="px-5">Quantity</th>
+                                    <th className="px-5">Order Time</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-[20px] font-semibold">
+                                <tr>
+                                    <td>Starch</td>
+                                    <td>ST3</td>
+                                    <td>250Kwh</td>
+                                    <td>08/4/2022</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="border-b-2 w-full flex">
+                        <img src="/vite.svg" alt="" />
+                        <table className="w-full text-center text-green-700">
+                            <thead className="">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Material Code</th>
+                                    <th>Quantity</th>
+                                    <th>Order Time</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-[20px] font-semibold">
+                                <tr>
+                                    <td>Starch</td>
+                                    <td>ST3</td>
+                                    <td>250Kwh</td>
+                                    <td>08/4/2022</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </>
+        )
+    };
+
+
+
+    const handleExportToExcelCSV = () => {
+        let csv = "";
+
+        const headers = Object.keys(ORDERS[0]);
+        csv += headers.join(",") + "\n";
+
+        ORDERS.forEach(element => {
+            const values = headers.map(header => element[header]);
+            csv += values.join(",") + "\n";
+        });
+
+        //alert(csv);
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.download = "orders.csv";
+        link.href = url;
+        link.click();
+    };
+
+    return (
+        <>
             <div className="bg-white shadow-md rounded-lg min-h-screen m-2">
                 <div className="flex justify-between p-2">
                     <h6 className="text-2xl font-semibold">Orders</h6>
                     <div className="text-[#043912] font-semibold">
-                        <button className="mx-2 px-3 py-1 rounded-md border border-green-500">Export To Excel</button>
+                        <button className="mx-2 px-3 py-1 rounded-md border border-green-500" onClick={handleExportToExcelCSV}>Export To Excel</button>
                         <button className="mx-2 px-3 py-1 rounded-md border border-green-500">Import Order</button>
                         <button className="mx-2 px-3 py-1 rounded-md bg-[#73C088]"><i className="bi bi-plus text-white"></i> New Order</button>
                     </div>
@@ -157,96 +217,9 @@ function Orders() {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                <tr className="border-b-2 hover:cursor-pointer" onClick={toggleSubTable}>
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-yellow-400 rounded-xl w-fit px-2">
-                                                <i className="bi bi-dot text-yellow-600"></i> <span className="">Pending</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {/* <td className="bg-slate-200 rounded-full"><i className="bi bi-arrow-down-short"></i></td> */}
-                                </tr>
-                                {subTableOpen && <tr>
-                                    <td colSpan={6}>
-                                        {subTableRows2()}
-                                    </td>
-                                </tr>}
-                                <tr className="border-b-2 hover:cursor-pointer">
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-red-400 rounded-xl w-fit px-4">
-                                                <i className="bi bi-dot text-red-600"></i> <span className="">Failed</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="border-b-2 hover:cursor-pointer">
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-red-400 rounded-xl w-fit px-4">
-                                                <i className="bi bi-dot text-red-600"></i> <span className="">Failed</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="border-b-2 hover:cursor-pointer">
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-red-400 rounded-xl w-fit px-4">
-                                                <i className="bi bi-dot text-red-600"></i> <span className="">Failed</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="border-b-2 hover:cursor-pointer">
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-red-400 rounded-xl w-fit px-4">
-                                                <i className="bi bi-dot text-red-600"></i> <span className="">Failed</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="border-b-2 hover:cursor-pointer">
-                                    <td className="py-3 text-green-500">#6703</td>
-                                    <td className="py-3">08/4/2023</td>
-                                    <td className="py-3">Mahmoud Hassan</td>
-                                    <td className="py-3">UPS Ground</td>
-                                    <td className="py-3">2</td>
-                                    <td className="py-3">
-                                        <div className="flex justify-center">
-                                            <div className="bg-green-400 rounded-xl w-fit px-2">
-                                                <i className="bi bi-dot text-green-600"></i> <span className="">Success</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {ORDERS && ORDERS.map((order) => (
+                                    <OrderRow order={order} />
+                                ))}
                             </tbody>
                         </table>
                     </div>

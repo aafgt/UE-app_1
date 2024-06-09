@@ -198,7 +198,7 @@ function Sidebar(props) {
                     <i className="bi bi-cloud"></i>
                     <span className="ml-2">AI</span>
                 </Link>
-                <Link className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
+                <Link to="/reports" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                     <span className="ml-2">Reports</span>
                 </Link>
@@ -245,7 +245,7 @@ function Sidebar(props) {
                 <Link to="/ai" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[7]}`} onClick={() => { handleIsActive(7) }}>
                     <i className="bi bi-cloud"></i>
                 </Link>
-                <Link className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
+                <Link  to="/reports" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                 </Link>
                 <Link to="/orders" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>

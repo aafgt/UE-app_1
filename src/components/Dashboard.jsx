@@ -91,7 +91,7 @@ function Dashboard() {
                                 show: true,
                                 showAlways: true,
                                 label: 'OEE',
-                                color: '#FF5733',
+                                color: '#F99963',
                                 formatter: function (w) {
                                     return w.globals.seriesTotals.reduce((a, b) => {
                                         return 100 - b
@@ -108,8 +108,8 @@ function Dashboard() {
             legend: {
                 show: false
             },
-            labels: ['OEE', ''],
-            colors: ['#FF5733', '#043912']
+            labels: ['', ''],
+            colors: ['#F99963', '#76B18B']
         }
     });
 

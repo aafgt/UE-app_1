@@ -7,6 +7,7 @@ import Machines from "./components/Machines";
 import Maintenance from "./components/Maintenance";
 import Orders from "./components/Orders";
 import Power from "./components/Power";
+import Reports from "./components/Reports";
 import SupplyChain from "./components/SupplyChain";
 import Vehicles from "./components/Vehicles";
 
@@ -51,6 +52,10 @@ const routes = [
             {
                 path: "/orders",
                 element: <Orders />
+            },
+            {
+                path: "/reports",
+                element: <Reports />
             }
         ]
     }
