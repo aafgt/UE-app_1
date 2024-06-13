@@ -48,3 +48,78 @@ export const ORDERS = [
         status: "Success",
     },
 ];
+
+export const ORDERS2 = [
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    },    
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "Success"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "Failing"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    },
+    {
+        orderId: "#3122",
+        startDate: "6/10/2024",
+        supplier: "Ahmed Yzn",
+        deliveryDate: "6/10/2024",
+        quantity: 1000,
+        grade: "A",
+        shippingTracking: "On Road"
+    }
+];
