@@ -1,278 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/Business growth-amico.png";
-import ReactApexChart from "react-apexcharts";
-import { ORDERS2 } from "../Data/orders";
+import CommoditiesCard from "./supplyChain/CommoditiesCard";
+import CowsCard from "./supplyChain/CowsCard";
+import SpendingCard from "./supplyChain/SpendingCard";
+import SupplierCard from "./supplyChain/SupplierCard";
+import NewOrderModal from "./supplyChain/NewOrderModal";
+import NewSupplierModal from "./supplyChain/NewSupplierModal";
+import { fetchCommodities, fetchCows, fetchFeedInfoByType, fetchFeeds, fetchOrders, fetchTotalStoreFeedInfo, getScrapedData } from "../redux/ActionCreators";
+import { connect } from "react-redux";
+import AmountOfFeedCard from "./supplyChain/AmountOfFeedCard";
+import AmountOfFeedCard2 from "./supplyChain/AmountOfFeedCard2";
+import ScrapedData from "./supplyChain/ScrapedData";
 
-function Commodities() {
+const mapStateToProps = (state) => {
+  return {
+    orders: state.orders,
+    feeds: state.feeds
+  }
+}
 
-  const [commoditiesChartData, setCommoditiesChartData] = useState({
-    series: [{
-      data: [20000000, 8000000]
-    }],
-    options: {
-      chart: {
-        height: 350,
-        type: 'bar',
-        events: {
-          click: function (chart, w, e) {
-            // console.log(chart, w, e)
-          }
-        }
-      },
-      colors: ["#1CAD99", "#EEC35E"],
-      plotOptions: {
-        bar: {
-          columnWidth: '45%',
-          distributed: true,
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      legend: {
-        show: false
-      },
-      xaxis: {
-        categories: [
-          "Budget Saving",
-          "Project Saving"
-        ],
-        labels: {
-          style: {
-            colors: ["#1CAD99", "#EEC35E"],
-            fontSize: '12px'
-          }
-        }
-      }
-    },
+const mapDispatchToProps = (dispatch) => ({
+  fetchOrders: (feedType) => { dispatch(fetchOrders(feedType)) },
+  fetchFeeds: () => { dispatch(fetchFeeds()) },
+  fetchFeedInfoByType: (feedType) => { dispatch(fetchFeedInfoByType(feedType)) },
 
-  });
-
-  return (
-    <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex flex-col text-center gap-3 text-[#043912] font-normal">
-      <h3>Commmodities</h3>
-
-      <ReactApexChart options={commoditiesChartData.options} series={commoditiesChartData.series} type="bar" height={350} />
-    </div>
-  );
-};
-
-function Supplier() {
-
-  const [supplierData, setSupplierData] = useState({
-    series: [70, 30],
-    options: {
-      chart: {
-        height: 350,
-        type: 'donut',
-        // events: {
-        //   animationEnd: function(ctx) {
-        //      ctx.toggleDataPointSelection(2)
-        //   }
-        // }
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '80%',
-            labels: {
-              show: true,
-              total: {
-                show: true,
-                showAlways: true,
-                label: 'OEE',
-                color: '#F99963',
-                formatter: function (w) {
-                  return w.globals.seriesTotals.reduce((a, b) => {
-                    return 100 - b
-                  }, 0)
-                }
-              }
-            }
-          }
-        }
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        show: false
-      },
-      labels: ['', ''],
-      colors: ['#F99963', '#76B18B']
-    }
-  });
-
-  return (
-    <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex flex-col text-center gap-3 text-[#043912] font-normal h-3/5">
-      <h3>Supplier</h3>
-      <p>Monthly Income: $50,000,000</p>
-
-      <ReactApexChart options={supplierData.options} series={supplierData.series} type="donut" />
-
-      <p>Total award spend per month</p>
-    </div>
-  );
-};
-
-function Cows() {
-
-  const [cowsData, setCowsData] = useState({
-    series: [76],
-    options: {
-      chart: {
-        type: 'radialBar',
-        offsetY: -20,
-        sparkline: {
-          enabled: true
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          track: {
-            background: "#e7e7e7",
-            strokeWidth: '97%',
-            margin: 5, // margin is in pixels
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              color: '#999',
-              opacity: 1,
-              blur: 2
-            }
-          },
-          dataLabels: {
-            name: {
-              show: false
-            },
-            value: {
-              offsetY: -2,
-              fontSize: '22px'
-            }
-          }
-        }
-      },
-      grid: {
-        padding: {
-          top: -10
-        }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 50, 53, 91]
-        },
-      },
-      labels: ['Average Results'],
-    },
-
-  })
-
-  return (
-    <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex flex-col text-center gap-3 text-[#043912] font-normal justify-between h-3/5">
-      <div className="">
-        <h3>Cows</h3>
-        <p className="mt-3">Monthly Income: $16,5000</p>
-      </div>
-
-
-      <ReactApexChart options={cowsData.options} series={cowsData.series} type="radialBar" />
-      <div>
-        <p>$15,305,000</p>
-        <p>Saving Identified</p>
-      </div>
-
-    </div>
-  );
-};
-
-function Spending() {
-
-  const [spendingChartData, setSpendingChartData] = useState({
-    series: [{
-      data: [50, 100, 50, 70, 70]
-    }],
-    options: {
-      chart: {
-        height: 350,
-        type: 'bar',
-        events: {
-          click: function (chart, w, e) {
-            // console.log(chart, w, e)
-          }
-        }
-      },
-      colors: ["#1CAD99", "#EEC35E"],
-      plotOptions: {
-        bar: {
-          columnWidth: '45%',
-          distributed: true,
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      legend: {
-        show: false
-      },
-      xaxis: {
-        categories: [
-          "10",
-          "11",
-          "12",
-          "13",
-          "14"
-        ],
-        labels: {
-          style: {
-            colors: ["#1CAD99", "#EEC35E"],
-            fontSize: '12px'
-          }
-        }
-      }
-    },
-
-  });
-
-  return (
-    <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex flex-col text-center gap-3 text-[#043912] font-normal justify-between">
-      <div className="text-[#043912] font-normal">
-        <div className="flex justify-around">
-          <i className="bi bi-caret-left-fill hover:cursor-pointer"></i> March 2022 <i className="bi bi-caret-right-fill hover:cursor-pointer"></i>
-        </div>
-        <p>Your weekly average is <span className="font-semibold">$100</span></p>
-      </div>
-
-      <ReactApexChart options={spendingChartData.options} series={spendingChartData.series} type="bar" height={350} />
-
-      <div>
-        <div className="border-b-2 flex justify-between p-3 text-[#BA5F0B]">
-          <h6>Today</h6>
-          <p>$55.00</p>
-        </div>
-
-        <div className="border-b-2 flex justify-between p-3">
-          <h6>Yesterday</h6>
-          <p>$90.00</p>
-        </div>
-
-        <div className="border-b-2 flex justify-between p-3">
-          <h6>Average</h6>
-          <p>$65.00</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
+  fetchCows: () => { dispatch(fetchCows()) },
+  fetchTotalStoreFeedInfo: () => { dispatch(fetchTotalStoreFeedInfo()) },
+  fetchCommodities: () => { dispatch(fetchCommodities()) },
+  getScrapedData: () => { dispatch(getScrapedData()) }
+})
 
 function OrderRow({ order }) {
 
@@ -341,9 +97,9 @@ function OrderRow({ order }) {
   return (
     <>
       <tr className="border-b-2 hover:cursor-pointer" onClick={toggleSubTable}>
-        <td className="py-3 text-green-500">{order.orderId}</td>
+        <td className="py-3 text-green-500">{order.orderID}</td>
         <td className="py-3">{order.startDate}</td>
-        <td className="py-3">{order.supplier}</td>
+        <td className="py-3">{order.supplierName}</td>
         <td className="py-3">{order.deliveryDate}</td>
         <td className="py-3">{order.quantity} KG</td>
         <td className="py-3">{order.grade}</td>
@@ -372,59 +128,9 @@ function OrderRow({ order }) {
   );
 };
 
-function AmountOfFeed() {
-
-  const [supplierData, setSupplierData] = useState({
-    series: [70, 30],
-    options: {
-      chart: {
-        height: 350,
-        type: 'donut',
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '80%',
-            labels: {
-              show: true,
-              total: {
-                show: true,
-                showAlways: true,
-                label: 'feed in the store',
-                color: '#F99963',
-                formatter: function (w) {
-                  return w.globals.seriesTotals.reduce((a, b) => {
-                    return 100 - b
-                  }, 0)
-                }
-              }
-            }
-          }
-        }
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        show: false
-      },
-      labels: ['', ''],
-      colors: ['#F99963', '#76B18B']
-    }
-  });
-
-  return (
-    <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex flex-col text-center gap-3 text-[#043912] font-normal">
-      <ReactApexChart options={supplierData.options} series={supplierData.series} type="donut" />
-    </div>
-  );
-};
 
 
-
-
-
-function SupplyChain() {
+function SupplyChain(props) {
 
   const messages = [
     { message: "Lorem ipsum dolor sit amet consectetur.", color: "text-green-800" },
@@ -435,29 +141,47 @@ function SupplyChain() {
     { message: "Lorem ipsum dolor sit amet consectetur adip.", color: "text-green-800" },
   ];
 
-  const feedItems = [
-    "Feed1",
-    "Feed2",
-    "Feed3",
-    "Feed4",
-    "Feed5",
-    "Feed6",
-    "Feed7",
-    "Feed8",
-    "Feed9",
-    "Feed10"
-  ];
-
   const [isFeedItemsOpen, setIsFeedItemsOpen] = useState(false);
   const [feedItemText, setFeedItemText] = useState("Items");
 
+  const [toggleNewOrderModal, setToggleNewOrderModal] = useState(false);
+  const handleToggleNewOrderModal = () => {
+    setToggleNewOrderModal(prev => !prev);
+  };
+
+  const [toggleNewSupplierModal, setToggleNewSupplierModal] = useState(false);
+  const handleToggleNewSupplierModal = () => {
+    setToggleNewSupplierModal(prev => !prev);
+  };
+
+  useEffect(() => {
+    props.fetchFeeds();
+
+    props.fetchCows();
+    props.fetchTotalStoreFeedInfo();
+    props.fetchCommodities();
+    // props.getScrapedData();
+  }, []);
+
+  useEffect(() => {
+    if (feedItemText != "Items") {
+      props.fetchFeedInfoByType(feedItemText);
+      props.fetchOrders(feedItemText);
+
+      // const totalCurrentFeedWeightPercent = Math.floor((props.feeds.feedInfoByType?.totalCurrentFeedWeight / props.feeds.feedInfoByType?.totalFeedCapacity) * 100);
+
+      // setSupplierData((prev) => ({ ...prev, series: [totalCurrentFeedWeightPercent, (100 - totalCurrentFeedWeightPercent)] }));
+    }
+  }, [feedItemText]);
+
   return (
     <div className="flex flex-col">
-
-      <div className="flex">
-        <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-fit flex items-between h-fit">
+      {/* <button className="ml-5 mt-2 h-5 w-5 bg-black border border-white absolute rounded-full" onClick={() => { setFeedItemText("Items") }}></button> */}
+      {(feedItemText !== "Items") && <div className="ml-5 mt-2 text-3xl hover:cursor-pointer w-fit" onClick={() => { setFeedItemText("Items") }}><i className="bi bi-arrow-left"></i></div>}
+      <div className="flex justify-center">
+        <div className="bg-white rounded-lg shadow-md m-3 mt-7 p-3 w-8/12 flex items-between justify-between">
           <div className="w-fit">
-            <h3 className="text-3xl text-green-800">Welcome Ahmed !</h3>
+            <h3 className="text-3xl text-green-800 font-semibold">Welcome Ahmed !</h3>
             <div className="mt-3">
               {messages.map((message, index) => (
                 <div key={index} className="mt-2">
@@ -467,13 +191,13 @@ function SupplyChain() {
               ))}
             </div>
           </div>
-          <div className="ml-16 flex flex-col relative">
-            <button className="h-5 w-5 bg-black border border-white absolute rounded-full" onClick={() => { setFeedItemText("Items") }}></button>
+          <div className="ml-16 flex flex-col relative justify-between">
+
             <button className="py-1 border-2 rounded-lg text-2xl leading-none text-green-800 font-semibold" onClick={() => { setIsFeedItemsOpen(prev => !prev) }}>{feedItemText} <i className="bi bi-arrow-down-short"></i></button>
 
             {isFeedItemsOpen && <div className="border absolute bg-white rounded-lg text-2xl leading-none text-green-800 font-semibold top-10 w-full">
-              {feedItems.map((item) => (
-                <p key={item} className="text-center border-b-2 py-1 hover:cursor-pointer hover:bg-[#1CAD995E]  " onClick={() => { setIsFeedItemsOpen(prev => !prev); setFeedItemText(item) }}>{item}</p>
+              {props.feeds.feedItems.map((item) => (
+                <p key={item} className="text-center border-b-2 py-2 hover:cursor-pointer hover:bg-[#1CAD995E]  " onClick={() => { setIsFeedItemsOpen(prev => !prev); setFeedItemText(item); }}>{item}</p>
               ))}
             </div>}
 
@@ -484,28 +208,30 @@ function SupplyChain() {
           </div>
         </div>
 
-        {(feedItemText === "Items") ? <Commodities /> : <AmountOfFeed />}
+        {(feedItemText === "Items") ? <CommoditiesCard /> : <AmountOfFeedCard feedType={feedItemText} />}
       </div>
 
-      {(feedItemText === "Items") ? (<div className="flex">
-        <Spending />
+      {(feedItemText === "Items") ? (<div className="flex justify-center">
+        <SpendingCard />
         <div className="flex">
-          <Cows />
-          <Supplier />
+          <CowsCard />
+          <SupplierCard />
         </div>
       </div>) :
         (
           <>
             <div className="flex">
-              <div className="relative  m-3">
-                <input className="pl-10 pr-4 py-2 border rounded-2xl" type="text" placeholder="Search, Order ID" />
+              <div className="relative  m-3 flex-1">
+                <input className="pl-10 pr-4 py-2 border rounded-2xl w-full" type="text" placeholder="Search, Order ID" />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <i className="bi bi-search text-gray-400"></i>
                 </div>
               </div>
 
               <button className="bg-white px-7 my-3 mx-1 border rounded-2xl font-semibold text-[#043912]"><i className="bi bi-funnel"></i> Filter</button>
-              <button className="bg-[#7FC59296] px-2 my-3 mx-1 border rounded-2xl font-normal text-white"><i className="bi bi-plus-lg"></i> New Order</button>
+              <button className="bg-white px-7 my-3 mx-1 border rounded-2xl font-semibold text-[#043912]">Export To Excel</button>
+              <button className="bg-white px-7 my-3 mx-1 border rounded-2xl font-semibold text-[#043912]" onClick={handleToggleNewSupplierModal}>Add Supplier</button>
+              <button className="bg-[#76C18B] px-2 my-3 mx-1 border rounded-2xl font-normal text-white" onClick={handleToggleNewOrderModal}><i className="bi bi-plus-lg"></i> New Order</button>
             </div>
             <div className="bg-white rounded-lg shadow-md m-3">
               <div className="p-3">
@@ -522,8 +248,8 @@ function SupplyChain() {
                     </tr>
                   </thead>
                   <tbody className="">
-                    {ORDERS2 && ORDERS2.map((order) => (
-                      <OrderRow order={order} />
+                    {props.orders.orders.map((order, index) => (
+                      <OrderRow key={index} order={order} />
                     ))}
                   </tbody>
                 </table>
@@ -532,8 +258,13 @@ function SupplyChain() {
           </>
         )}
 
+
+      {toggleNewOrderModal && <NewOrderModal handleToggleNewOrderModal={handleToggleNewOrderModal} feedType={feedItemText} />}
+      {toggleNewSupplierModal && <NewSupplierModal handleToggleNewSupplierModal={handleToggleNewSupplierModal} />}
+
+      {/* <ScrapedData /> */}
     </div>
   );
 };
 
-export default SupplyChain;
+export default connect(mapStateToProps, mapDispatchToProps)(SupplyChain);

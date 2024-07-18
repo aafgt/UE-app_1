@@ -16,7 +16,7 @@ function App(props) {
         <div className="min-h-screen bg-[#E7E7E7]">
           {props.isSidebarToggled && <>
             <div className="flex">
-              <div className="w-2/12 sticky">
+              <div className="w-2/12 sticky top-0 h-screen">
                 <Sidebar />
               </div>
               <div className="flex-auto w-10/12 bg-[#E7E7E7] min-h-screen">
@@ -26,7 +26,7 @@ function App(props) {
           </>}
           {!props.isSidebarToggled && <>
             <div className="flex">
-              <div className="">
+              <div className="sticky top-0 h-screen">
                 <Sidebar />
               </div>
               <div className="flex-auto">

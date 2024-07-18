@@ -99,62 +99,6 @@ function OrderRow({ order }) {
 
 function Orders() {
 
-
-
-    const subTableRows = () => {
-        return (
-            <>
-                <div className="border-l-4 border-green-800 w-full">
-                    <div className="border-b-2 w-full flex">
-                        <img src="/vite.svg" alt="" />
-                        <table className="w-full text-center text-green-700">
-                            <thead className="mb-7">
-                                <tr>
-                                    <th className="px-5">Name</th>
-                                    <th className="px-5">Material Code</th>
-                                    <th className="px-5">Quantity</th>
-                                    <th className="px-5">Order Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>Starch</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="border-b-2 w-full flex">
-                        <img src="/vite.svg" alt="" />
-                        <table className="w-full text-center text-green-700">
-                            <thead className="">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Material Code</th>
-                                    <th>Quantity</th>
-                                    <th>Order Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>Starch</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </>
-        )
-    };
-
-
-
     const handleExportToExcelCSV = () => {
         let csv = "";
 
@@ -217,14 +161,19 @@ function Orders() {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                {ORDERS && ORDERS.map((order) => (
-                                    <OrderRow order={order} />
+                                {ORDERS && ORDERS.map((order, index) => (
+                                    <OrderRow key={index} order={order} />
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <audio controls>
+                <source src="/sample3.m4a" type="audio/mp4" />
+                Your browser does not support the audio element.
+            </audio>
         </>
     )
 }

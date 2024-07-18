@@ -34,25 +34,30 @@ function Sidebar(props) {
                     <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
                 </div>
 
-                <Link to="/dashboard" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
+                <Link to="/dashboard" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
                     <i className="bi bi-grid"></i>
                     <span className="ml-2">Dashboard</span>
                 </Link>
 
 
-                <Link to="/supplyChain" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[6]}`} onClick={() => { handleIsActive(6) }}>
+                <Link to="/supplyChain" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[1]}`} onClick={() => { handleIsActive(1) }}>
                     <i className="bi bi-plug"></i>
                     <span className="ml-2">Supply-Chain</span>
                 </Link>
 
-                {/* <Link to="/reports" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
+                {/* <Link to="/reports" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                     <span className="ml-2">Reports</span>
                 </Link> */}
 
-                <Link to="/orders" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/orders" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
                     <i className="bi bi-file-earmark-break"></i>
                     <span className="ml-2">Orders</span>
+                </Link>
+
+                <Link to="/speciesOfCows" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[3]}`} onClick={() => { handleIsActive(3) }}>
+                    <i className="bi bi-diagram-3"></i>
+                    <span className="ml-2">Species of Cows</span>
                 </Link>
             </nav>}
 
@@ -62,21 +67,25 @@ function Sidebar(props) {
                     <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
                 </div>
 
-                <Link to="/dashboard" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
+                <Link to="/dashboard" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
                     <i className="bi bi-grid"></i>
                 </Link>
 
 
-                <Link to="/supplyChain" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[6]}`} onClick={() => { handleIsActive(6) }}>
+                <Link to="/supplyChain" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[1]}`} onClick={() => { handleIsActive(1) }}>
                     <i className="bi bi-plug"></i>
                 </Link>
 
-                {/* <Link  to="/reports" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
+                {/* <Link  to="/reports" className={`ml-5 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[8]}`} onClick={() => { handleIsActive(8) }}>
                     <i className="bi bi-file-earmark"></i>
                 </Link> */}
 
-                <Link to="/orders" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[9]}`} onClick={() => { handleIsActive(9) }}>
+                <Link to="/orders" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[2]}`} onClick={() => { handleIsActive(2) }}>
                     <i className="bi bi-file-earmark-break"></i>
+                </Link>
+
+                <Link to="/speciesOfCows" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[3]}`} onClick={() => { handleIsActive(3) }}>
+                    <i className="bi bi-diagram-3"></i>
                 </Link>
             </nav>}
         </>
