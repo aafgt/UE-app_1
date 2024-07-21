@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pie Chart</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chart {
+            /* max-width: none; */
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart"></div>
+    <script>
+        var data = [{
+            values: [500, 300, 150, 50],
+            labels: ['Species A', 'Species B', 'Species C', 'Species D'],
+            type: 'pie',
+            hole: .3,
+            marker: {
+                colors: ['#1CAD99', '#2FB995', '#45C491', '#5DCF8D', '#75D98A', '#8CE387', '#A4EC84', '#BCEC81', '#D4F57E', '#EEC35E']
+            }
+        }];
+
+        var layout = {
+            title: 'Total Production and Percentage of Each Species',
+            showlegend: true
+        };
+
+        var config = {responsive: true, displaylogo: false};
+
+        Plotly.newPlot('chart', data, layout, config);
+    </script>
+</body>
+</html>

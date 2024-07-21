@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed Cost vs. Total Value of Calves</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #chart {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Feed Cost vs. Total Value of Calves</h1>
+    <div id="chart"></div>
+
+    <script>
+
+        // async function gett() {
+        //     const res = await fetch("http://localhost:8080/operations");
+        //     const d = await res.json();
+        //     alert(d[0].id);
+        // }
+
+        // const interval = setInterval(() => {
+        //     gett();
+        // }, 3000);
+
+        // setTimeout(() => {
+        //     clearInterval(interval);
+        // }, 30000);
+
+        // async function getSummaryChart() {
+        //     const response = await fetch("http://192.168.1.120:5107/api/Cows/GetSummaryChart");
+        //     const data = await response.json();
+        //     console.log(data);
+        //     data.map((item) => {
+        //         feedCost.push(item.cost);
+        //         totalWeight.push(item.production);
+        //         dates.push(item.lastUpdated);
+        //     });
+        // }
+
+        // Sample data
+        // const dates = [
+        //     '2023-01-01', '2023-02-01', '2023-03-01', '2023-04-01',
+        //     '2023-05-01', '2023-06-01', '2023-07-01', '2023-08-01',
+        //     '2023-09-01', '2023-10-01', '2023-11-01'
+        // ];
+        // const feedCost = [200, 220, 1210, 2300, 1040, 2050, 260, 1270, 280, 1290, 0];
+        // const totalWeight = [1000, 1050, 500, 1150, 1100, 1250, 1300, 1350, 1400, 50, 0];
+        // const pricePerKg = 5;
+
+        async function go() {
+            let dates = [];
+            let feedCost = [];
+            let totalValue = [];
+
+            const response = await fetch("http://192.168.1.120:5107/api/Cows/GetSummaryChart");
+            const data2 = await response.json();
+
+            data2.map((item) => {
+                feedCost.push(item.cost);
+                totalValue.push(item.production);
+                dates.push(item.lastUpdated);
+            });
+
+
+            // const pricePerKg = 5;
+
+            // getSummaryChart();
+
+            // Calculate the total value of the calves
+            // const totalValue = totalWeight.map(weight => weight * pricePerKg);
+
+            // Data for the plot
+            const feedCostTrace = {
+                x: dates,
+                y: feedCost,
+                mode: 'lines+markers',
+                name: 'Feed Cost',
+                line: { color: 'orange' },
+                fill: 'tozeroy'
+            };
+
+            const totalValueTrace = {
+                x: dates,
+                y: totalValue,
+                mode: 'lines+markers',
+                name: 'Total Value of Calves',
+                line: { color: 'green' },
+                fill: 'tozeroy'
+            };
+
+            const data = [feedCostTrace, totalValueTrace];
+
+            const layout = {
+                title: 'Feed Cost vs. Total Value of Calves',
+                xaxis: {
+                    title: 'Date'
+                },
+                yaxis: {
+                    title: 'Cost / Value'
+                },
+                legend: {
+                    title: { text: 'Legend' }
+                },
+                template: 'plotly_white'
+            };
+
+            const config = {
+                displaylogo: false,
+                modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d', 'zoom2d']
+            };
+
+            // Render the plot
+            Plotly.newPlot('chart', data, layout, config);
+        }
+
+        go();
+    </script>
+</body>
+
+</html>
