@@ -161,6 +161,7 @@ function SupplyChain(props) {
     props.fetchTotalStoreFeedInfo();
     props.fetchCommodities();
     // props.getScrapedData();
+    fetchScrapedData();
   }, []);
 
   useEffect(() => {
@@ -173,6 +174,31 @@ function SupplyChain(props) {
       // setSupplierData((prev) => ({ ...prev, series: [totalCurrentFeedWeightPercent, (100 - totalCurrentFeedWeightPercent)] }));
     }
   }, [feedItemText]);
+
+
+  const [scrappedData, setScrappedData] = useState(null);
+
+  const fetchScrapedData = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/getScrapedData");
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      setScrappedData(data);
+
+      return data;
+    }
+    catch (error) {
+      return error.message;
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -189,6 +215,27 @@ function SupplyChain(props) {
                   <label className={`ml-2 ${message.color}`}>{message.message}</label>
                 </div>
               ))}
+
+
+
+              <table className="w-full text-center text-green-700 font-semibold">
+                <thead className="text-[20px] font-extralight">
+                  <tr>
+                    {scrappedData && scrappedData.header?.map((header, index) => (
+                      <th key={index}>{header}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="">
+                  {scrappedData && scrappedData.data?.map((data, index) => (
+                    <tr key={index} className="border-b-2 hover:cursor-pointer">
+                      <td className="py-3">{data[0]}</td>
+                      <td className="py-3">{data[1]}</td>
+                      <td className="py-3">{data[2]} EGP</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
           <div className="ml-16 flex flex-col relative justify-between">
