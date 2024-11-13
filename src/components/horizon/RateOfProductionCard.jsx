@@ -1,0 +1,102 @@
+import { useEffect, useState } from "react";
+import ReactApexChart from "react-apexcharts";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state) => {
+    return {
+        horizon: state.horizon
+    }
+}
+
+const RateOfProductionCard = (props) => {
+
+    const [prodChartData, setProdChartData] = useState({
+        series: [{
+            name: 'rate',
+            data: [31, 40, 28, 51, 42, 109, 100, 31, 40, 28, 51, 42]
+        }],
+        options: {
+            chart: {
+                height: 350,
+                type: 'area'
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: ["2023-01-01T00:00:00.000Z", "2023-02-01T01:30:00.000Z", "2023-03-01T02:30:00.000Z", "2023-04-01T03:30:00.000Z", "2023-05-01T04:30:00.000Z", "2023-06-01T05:30:00.000Z", "2023-07-01T06:30:00.000Z", "2023-08-01T06:30:00.000Z", "2023-09-01T06:30:00.000Z", "2023-10-01T06:30:00.000Z", "2023-11-01T06:30:00.000Z", "2023-12-01T06:30:00.000Z"]
+                // categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+            },
+            tooltip: {
+                x: {
+                    format: 'MM'
+                },
+            },
+            colors: ['#73C088']
+        },
+    });
+
+    const updateChartData = () => {
+        let res = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+        const data_len = props.horizon?.cowsKilledMetrics?.rateOfProduction.length;
+        for(let i=0; i < data_len; i++) {
+            let current_month = props.horizon?.cowsKilledMetrics?.rateOfProduction[i][0];
+            let current_weight = props.horizon?.cowsKilledMetrics?.rateOfProduction[i][1];
+
+            res[current_month-1] = current_weight;
+        }
+
+        setProdChartData({
+            series: [{
+                name: 'rate',
+                data: res
+            }],
+            options: {
+                chart: {
+                    height: 350,
+                    type: 'area'
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                xaxis: {
+                    type: 'datetime',
+                    categories: ["2023-01-01T00:00:00.000Z", "2023-02-01T01:30:00.000Z", "2023-03-01T02:30:00.000Z", "2023-04-01T03:30:00.000Z", "2023-05-01T04:30:00.000Z", "2023-06-01T05:30:00.000Z", "2023-07-01T06:30:00.000Z", "2023-08-01T06:30:00.000Z", "2023-09-01T06:30:00.000Z", "2023-10-01T06:30:00.000Z", "2023-11-01T06:30:00.000Z", "2023-12-01T06:30:00.000Z"]
+                    // categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                },
+                tooltip: {
+                    x: {
+                        format: 'MM'
+                    },
+                },
+                colors: ['#73C088']
+            },
+        });
+    };
+
+    useEffect(() => {
+        updateChartData();
+    }, [props.horizon?.cowsKilledMetrics?.rateOfProduction])
+
+    return (
+        <div className="bg-white rounded-lg shadow-md">
+            <div className="px-5 py-4 flex justify-between">
+                <p className="font-semibold text-xl">Rate of Production</p>
+                <button className="border border-gray-500 text-gray-500 px-2 rounded-md">2024 <i className="bi bi-arrow-down-short"></i></button>
+            </div>
+            <div className="">
+                <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={350} />
+            </div>
+        </div>
+    )
+}
+
+export default connect(mapStateToProps, null)(RateOfProductionCard);

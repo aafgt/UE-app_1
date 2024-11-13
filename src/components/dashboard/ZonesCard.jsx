@@ -63,6 +63,7 @@ const ZonesCard = (props) => {
                                 <td>Issues</td>
                                 <td>Grade</td>
                                 <td>Type</td>
+                                <td>3alaf</td>
                             </tr>
                         </thead>
                         <tbody className="">

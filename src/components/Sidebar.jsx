@@ -59,6 +59,11 @@ function Sidebar(props) {
                     <i className="bi bi-diagram-3"></i>
                     <span className="ml-2">Species of Cows</span>
                 </Link>
+
+                <Link to="/horizon" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
+                    <i className="bi bi-diagram-3"></i>
+                    <span className="ml-2">Horizon</span>
+                </Link>
             </nav>}
 
 
@@ -85,6 +90,10 @@ function Sidebar(props) {
                 </Link>
 
                 <Link to="/speciesOfCows" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[3]}`} onClick={() => { handleIsActive(3) }}>
+                    <i className="bi bi-diagram-3"></i>
+                </Link>
+
+                <Link to="/horizon" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-diagram-3"></i>
                 </Link>
             </nav>}

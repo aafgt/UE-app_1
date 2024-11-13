@@ -713,3 +713,45 @@ export const getScrapedData = () => async (dispatch) => {
 };
 
 // ********************************** SCRAPED DATA **********************************
+
+
+
+
+
+
+// ********************************** HORIZON METRICS **********************************
+
+export const horizonMetricsLoading = () => ({
+    type: ActionTypes.HORIZON_METRICS_LOADING
+});
+
+export const horizonMetricsFailed = (errMess) => ({
+    type: ActionTypes.HORIZON_METRICS_FAILED,
+    payload: errMess
+});
+
+export const addHorionMetrics = (metrics) => ({
+    type: ActionTypes.ADD_HORIZON_METRICS,
+    payload: metrics
+});
+
+export const fetchHorizonMetrics = () => async (dispatch) => {
+    dispatch(horizonMetricsLoading());
+
+    try {
+        const response = await fetch("http://localhost:8080/api/killed-cows-metrics");
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        return dispatch(addHorionMetrics(data));
+    }
+    catch (error) {
+        return dispatch(horizonMetricsFailed(error.message));
+    }
+};
+
+// ********************************** HORIZON METRICS **********************************

@@ -1,6 +1,7 @@
 import App from "./App";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./components/Dashboard";
+import Horizon from "./components/Horizon";
 import Orders from "./components/Orders";
 import SpeciesOfCows from "./components/SpeciesOfCows";
 // import Reports from "./components/Reports";
@@ -27,6 +28,10 @@ const routes = [
             {
                 path: "/speciesOfCows",
                 element: <SpeciesOfCows />
+            },
+            {
+                path: "/horizon",
+                element: <Horizon />
             },
             // {
             //     path: "/reports",

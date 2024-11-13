@@ -9,6 +9,7 @@ import { Orders } from './reducers/ordersReducer';
 import { Feeds } from './reducers/FeedsReducer';
 import { Cows } from './reducers/cowsReducer';
 import { Metrics } from './reducers/metricsReducer';
+import { Horizon } from './reducers/horizonReducer';
 
 const store = configureStore({
     reducer: combineReducers({
@@ -20,7 +21,8 @@ const store = configureStore({
         orders: Orders,
         feeds: Feeds,
         cows: Cows,
-        metrics: Metrics
+        metrics: Metrics,
+        horizon: Horizon
     }),
 });
 
