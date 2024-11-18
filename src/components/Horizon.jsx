@@ -6,10 +6,10 @@ import CowsModal from "./dashboard/CowsModal";
 import CowDetailsModal from "./horizon/CowDetailsModal";
 import OeeCard from "./horizon/OeeCard";
 import UptimeCard from "./horizon/UptimeCard";
-import ReactApexChart from "react-apexcharts";
 import { connect } from "react-redux";
 import { fetchHorizonMetrics } from "../redux/ActionCreators";
 import RateOfProductionCard from "./horizon/RateOfProductionCard";
+import DatePickerCard from "./horizon/DatePickerCard";
 
 const mapStateToProps = (state) => {
     return {
@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchHorizonMetrics: () => { dispatch(fetchHorizonMetrics()) }
+    fetchHorizonMetrics: ({ date, year }) => { dispatch(fetchHorizonMetrics({ date, year })) }
 })
 
 const Horizon = (props) => {
@@ -26,6 +26,7 @@ const Horizon = (props) => {
     const [toggleModal, setToggleModal] = useState(false);
 
     const handleToggleModal = () => {
+        // takes the cow, to get details...
         setToggleModal(!toggleModal);
     };
 
@@ -36,11 +37,15 @@ const Horizon = (props) => {
     };
 
     useEffect(() => {
-        props.fetchHorizonMetrics();
+        props.fetchHorizonMetrics({});
     }, []);
 
     return (
         <>
+            <div className="flex justify-end m-2">
+                <DatePickerCard />
+            </div>
+
             <div className="flex">
                 <div className="w-4/5 m-3 px-5">
                     <div className="flex gap-10 justify-around mb-5">
@@ -74,7 +79,7 @@ const Horizon = (props) => {
 
             <HorizonTable handleToggleModal2={handleToggleModal2} />
 
-            {toggleModal2 && <CowsModal cows={["123","456"]} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+            {toggleModal2 && <CowsModal cows={["123", "456"]} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
 
             {toggleModal && <CowDetailsModal handleToggleModal={handleToggleModal} />}
         </>

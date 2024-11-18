@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import * as ActionTypes from "./ActionTypes";
 import axios from 'axios';
+import { format } from 'date-fns';
 
 // import https from "https";
 
@@ -735,11 +736,11 @@ export const addHorionMetrics = (metrics) => ({
     payload: metrics
 });
 
-export const fetchHorizonMetrics = () => async (dispatch) => {
+export const fetchHorizonMetrics = ({date = format(new Date(), 'yyyy-MM-dd'), year = new Date().getFullYear()}) => async (dispatch) => {
     dispatch(horizonMetricsLoading());
 
     try {
-        const response = await fetch("http://localhost:8080/api/killed-cows-metrics");
+        const response = await fetch(`http://localhost:8080/api/killed-cows-metrics?date=${date}&&year=${year}`);
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;

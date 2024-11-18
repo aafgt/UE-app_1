@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { connect } from "react-redux";
+import { fetchHorizonMetrics } from "../../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
     return {
@@ -8,7 +9,14 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    fetchHorizonMetrics: ({date, year}) => { dispatch(fetchHorizonMetrics({date, year})) }
+})
+
 const RateOfProductionCard = (props) => {
+
+    const [isRateOfProdOpen, setIsRateOfProdOpen] = useState(false);
+    const [selectedRateOfProdYear, setSelectedRateOfProdYear] = useState(new Date().getFullYear() + "");
 
     const [prodChartData, setProdChartData] = useState({
         series: [{
@@ -41,14 +49,14 @@ const RateOfProductionCard = (props) => {
     });
 
     const updateChartData = () => {
-        let res = [0,0,0,0,0,0,0,0,0,0,0,0];
+        let res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         const data_len = props.horizon?.cowsKilledMetrics?.rateOfProduction.length;
-        for(let i=0; i < data_len; i++) {
+        for (let i = 0; i < data_len; i++) {
             let current_month = props.horizon?.cowsKilledMetrics?.rateOfProduction[i][0];
             let current_weight = props.horizon?.cowsKilledMetrics?.rateOfProduction[i][1];
 
-            res[current_month-1] = current_weight;
+            res[current_month - 1] = current_weight;
         }
 
         setProdChartData({
@@ -84,19 +92,33 @@ const RateOfProductionCard = (props) => {
 
     useEffect(() => {
         updateChartData();
-    }, [props.horizon?.cowsKilledMetrics?.rateOfProduction])
+    }, [props.horizon?.cowsKilledMetrics?.rateOfProduction]);
+
+    useEffect(() => {
+          props.fetchHorizonMetrics({year: selectedRateOfProdYear});
+      }, [selectedRateOfProdYear]);
+
+    // Get from backend the array of years available in the DB...
+    const rateOfProdYears = ["2022","2023","2024"];
 
     return (
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="bg-white rounded-lg shadow-md relative">
             <div className="px-5 py-4 flex justify-between">
                 <p className="font-semibold text-xl">Rate of Production</p>
-                <button className="border border-gray-500 text-gray-500 px-2 rounded-md">2024 <i className="bi bi-arrow-down-short"></i></button>
+                <button className="border border-gray-500 text-gray-500 px-2 rounded-md" onClick={() => { setIsRateOfProdOpen(prev => !prev) }}>{selectedRateOfProdYear} <i className="bi bi-arrow-down-short"></i></button>
+
+                {isRateOfProdOpen && <div className="border absolute bg-white rounded-lg text-2xl leading-none text-green-800 font-semibold top-4 -right-14 w-fit">
+                    {rateOfProdYears.map((item) => (
+                        <p key={item} className="text-center border-b-2 py-2 hover:cursor-pointer hover:bg-[#1CAD995E] px-3" onClick={() => { setIsRateOfProdOpen(prev => !prev); setSelectedRateOfProdYear(item); }}>{item}</p>
+                    ))}
+                </div>}
+
             </div>
             <div className="">
-                <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={350} />
+                <ReactApexChart options={prodChartData.options} series={prodChartData.series} type="area" height={473} />
             </div>
         </div>
     )
 }
 
-export default connect(mapStateToProps, null)(RateOfProductionCard);
+export default connect(mapStateToProps, mapDispatchToProps)(RateOfProductionCard);
