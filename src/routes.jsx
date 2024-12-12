@@ -1,5 +1,6 @@
 import App from "./App";
 import ErrorPage from "./ErrorPage";
+import Client from "./components/Client";
 import Dashboard from "./components/Dashboard";
 import Horizon from "./components/Horizon";
 import Orders from "./components/Orders";
@@ -33,6 +34,10 @@ const routes = [
                 path: "/horizon",
                 element: <Horizon />
             },
+            {
+                path: "/client",
+                element: <Client />
+            }
             // {
             //     path: "/reports",
             //     element: <Reports />

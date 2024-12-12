@@ -60,7 +60,7 @@ const DatePickerCard = (props) => {
                 // minDate={new Date()}
                 // maxDate={new Date(2025, 11, 31)}                  
                 dateFormat="yyyy-MM-dd"
-                className="mt-7 block w-full px-2 text-gray-700 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="block w-9/12 px-2 text-gray-700 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 placeholderText="Select a date"
             />
         </div>

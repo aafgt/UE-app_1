@@ -20,7 +20,7 @@ const WebSocketService = () => {
             onConnect: () => {
                 console.log('WebSocket Connected');
                 setIsConnected(true);   // Update state when connected
-                stompClient.subscribe('', onMessageReceived);
+                stompClient.subscribe('/topic/killedCowMetrics', onMessageReceived);
             },
             onStompError: (frame) => {
                 console.error('Error connecting to WebSocket:', frame);

@@ -755,4 +755,15 @@ export const fetchHorizonMetrics = ({date = format(new Date(), 'yyyy-MM-dd'), ye
     }
 };
 
+export const addHorizonMetricsWS = (data) => async (dispatch) => {
+    dispatch(horizonMetricsLoading());
+
+    try {
+        return dispatch(addHorionMetrics(data));
+    }
+    catch (error) {
+        return dispatch(horizonMetricsFailed(error.message));
+    }
+};
+
 // ********************************** HORIZON METRICS **********************************

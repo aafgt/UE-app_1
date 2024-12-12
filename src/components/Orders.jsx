@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { ORDERS } from "../Data/orders";
+import NewOrderModal from "./orders/NewOrderModal";
+import NewPieceModal from "./orders/NewPieceModal";
+import NewOrderModal1 from "./orders/NewOrderModal1";
 
 function OrderRow({ order }) {
 
     const [subTableOpen, setSubTableOpen] = useState(false);
 
     const toggleSubTable = () => {
-        setSubTableOpen(!subTableOpen);
+        setSubTableOpen(prev => !prev);
     };
 
     const subTableRows2 = () => {
@@ -20,17 +23,19 @@ function OrderRow({ order }) {
                         <table className="w-full text-center text-green-700">
                             <thead className="mb-7">
                                 <tr>
-                                    <th className="px-5">Name</th>
-                                    <th className="px-5">Material Code</th>
+                                    <th className="px-5">Batch</th>
+                                    <th className="px-5">No. Of Cows</th>
                                     <th className="px-5">Quantity</th>
-                                    <th className="px-5">Order Time</th>
+                                    <th className="px-5">Start Date</th>
+                                    <th className="px-5">End Date</th>
                                 </tr>
                             </thead>
                             <tbody className="text-[20px] font-semibold">
                                 <tr>
-                                    <td>Starch</td>
+                                    <td>30</td>
                                     <td>ST3</td>
                                     <td>250Kwh</td>
+                                    <td>08/4/2022</td>
                                     <td>08/4/2022</td>
                                 </tr>
                             </tbody>
@@ -44,17 +49,19 @@ function OrderRow({ order }) {
                         <table className="w-full text-center text-green-700">
                             <thead className="mb-7">
                                 <tr>
-                                    <th className="px-5">Name</th>
-                                    <th className="px-5">Material Code</th>
+                                    <th className="px-5">Batch</th>
+                                    <th className="px-5">No. Of Cows</th>
                                     <th className="px-5">Quantity</th>
-                                    <th className="px-5">Order Time</th>
+                                    <th className="px-5">Start Date</th>
+                                    <th className="px-5">End Date</th>
                                 </tr>
                             </thead>
                             <tbody className="text-[20px] font-semibold">
                                 <tr>
-                                    <td>Starch</td>
+                                    <td>30</td>
                                     <td>ST3</td>
                                     <td>250Kwh</td>
+                                    <td>08/4/2022</td>
                                     <td>08/4/2022</td>
                                 </tr>
                             </tbody>
@@ -121,6 +128,16 @@ function Orders() {
         link.click();
     };
 
+    const [toggleNewOrderModal, setToggleNewOrderModal] = useState(false);
+    const handleToggleNewOrderModal = () => {
+        setToggleNewOrderModal(prev => !prev);
+    };
+
+    const [toggleNewPieceModal, setToggleNewPieceModal] = useState(false);
+    const handleToggleNewPieceModal = () => {
+        setToggleNewPieceModal(prev => !prev);
+    };
+
     return (
         <>
             <div className="bg-white shadow-md rounded-lg min-h-screen m-2">
@@ -128,8 +145,8 @@ function Orders() {
                     <h6 className="text-2xl font-semibold">Orders</h6>
                     <div className="text-[#043912] font-semibold">
                         <button className="mx-2 px-3 py-1 rounded-md border border-green-500" onClick={handleExportToExcelCSV}>Export To Excel</button>
-                        <button className="mx-2 px-3 py-1 rounded-md border border-green-500">Import Order</button>
-                        <button className="mx-2 px-3 py-1 rounded-md bg-[#73C088]"><i className="bi bi-plus text-white"></i> New Order</button>
+                        <button className="mx-2 px-3 py-1 rounded-md border border-green-500" onClick={handleToggleNewPieceModal}>New Piece</button>
+                        <button className="mx-2 px-3 py-1 rounded-md bg-[#73C088]" onClick={handleToggleNewOrderModal}><i className="bi bi-plus text-white"></i> New Order</button>
                     </div>
                 </div>
 
@@ -141,9 +158,9 @@ function Orders() {
                         </div>
                     </div>
                     <div className="text-[#043912] font-semibold">
-                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Date <i className="bi bi-arrow-down-short"></i></button>
-                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Active Order <i className="bi bi-arrow-down-short"></i></button>
-                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Closed Order <i className="bi bi-arrow-down-short"></i></button>
+                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Date <i className="bi bi-calendar3"></i></button>
+                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Active Order</button>
+                        <button className="mx-2 px-3 py-1 rounded-md bg-slate-100">Closed Order</button>
                     </div>
                 </div>
 
@@ -153,10 +170,10 @@ function Orders() {
                             <thead className="text-[20px] font-extralight">
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>Delivery Date</th>
+                                    <th>No. Of Cows</th>
                                     <th>Customer</th>
-                                    <th>Shipping Via</th>
-                                    <th>Item</th>
+                                    <th>Type Of Cow</th>
+                                    <th>Delivery Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -170,10 +187,13 @@ function Orders() {
                 </div>
             </div>
 
-            <audio controls>
+            {toggleNewOrderModal && <NewOrderModal1 handleToggleNewOrderModal={handleToggleNewOrderModal} />}
+            {toggleNewPieceModal && <NewPieceModal handleToggleNewPieceModal={handleToggleNewPieceModal} />}
+
+            {/* <audio controls>
                 <source src="/sample3.m4a" type="audio/mp4" />
                 Your browser does not support the audio element.
-            </audio>
+            </audio> */}
         </>
     )
 }
