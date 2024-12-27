@@ -1,52 +1,235 @@
-import { useState } from "react";
+// import { useState } from "react";
+// import { connect } from "react-redux";
+// import { fetchOrders } from "../../redux/ActionCreators";
+// import CowsModal from "./CowsModal";
+
+// const mapDispatchToProps = (dispatch) => ({
+//     fetchOrders: (feedType) => { dispatch(fetchOrders(feedType)) }
+// })
+
+// const Batch = ({ index }) => {
+//     return (
+//         <div className="flex gap-5 border-b-2 py-2 items-center justify-center">
+//             <p className="text-[#043912] font-medium">Weight: <span className="text-[#098329]">32Tn</span></p>
+//             <p className="text-[#043912] font-medium">Type: <span className="text-[#098329]">Baldi</span></p>
+//             <p className="text-[#043912] font-medium">Quantity: <span className="text-[#098329]">3</span></p>
+//             <button className="text-sm text-white bg-[#73C088] rounded-md px-2 py-1">Import</button>
+//         </div>
+//     );
+// };
+
+// const SellModalOption2 = (props) => {
+
+//     const [newOrderForm, setNewOrderForm] = useState({
+//         code: "",
+//         client: "",
+//         numberOfPiece: ""
+//     });
+
+//     const handleOrderSubmit = async () => {
+//         const response = await fetch(`http://192.168.1.120:5107/api/Orders/AddOrder?orderID=${newOrderForm.orderId}&deliveryDate=${newOrderForm.deliveryDate}&quantity=${newOrderForm.quantity}&supplier_Name=${newOrderForm.supplier}&feedTypeName=${props.feedType}`, {
+//             method: "POST"
+//         });
+
+//         if (!response.ok) {
+//             return;
+//         }
+
+//         props.fetchOrders();
+
+//         setNewOrderForm({
+//             orderId: "",
+//             customer: "",
+//             deliveryDate: "",
+//             quantity: ""
+//         });
+
+//         props.handleToggleNewOrderModal();
+
+//         props.fetchOrders(props.feedType);
+//     };
+
+//     const [toggleModal, setToggleModal] = useState(false);
+
+//     const handleToggleModal = () => {
+//         // takes the cow, to add to list... (or selects the cow and ADD adds to list)
+//         setToggleModal(!toggleModal);
+//     };
+
+//     const [toggleModal2, setToggleModal2] = useState(false);
+
+//     const handleToggleModal2 = () => {
+//         setToggleModal2(!toggleModal2);
+//     };
+
+
+//     const batchesTable = Array.from({ length: newOrderForm.numberOfPiece }, (_, index) => (
+//         <Batch key={index} index={index} />
+//     ));
+
+//     return (
+//         <>
+//             <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
+//                 <div className="bg-white max-w-xl w-full rounded-md">
+//                     <div className="p-3 flex items-center justify-end">
+//                         <span className="modal-close cursor-pointer" onClick={props.handleToggleSellModalOption2}>×</span>
+//                     </div>
+//                     <h3 className="font-semibold text-xl text-[#043912] text-center">لحم مشفي</h3>
+
+//                     <form className="m-5 mx-24 max-h-96 overflow-y-auto">
+//                         <div className="flex justify-between">
+//                             <label className="mr-10 text-[#043912] font-medium text-lg">Code</label>
+//                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, code: e.target.value }) }} />
+//                         </div>
+//                         <div className="flex justify-between mt-3">
+//                             <label className="mr-10 text-[#043912] font-medium text-lg">Client</label>
+//                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, client: e.target.value }) }} />
+//                         </div>
+//                         <div className="flex justify-between mt-3">
+//                             <label className="mr-10 text-[#043912] font-medium text-lg w-full">No. Of Piece</label>
+//                             <div className="flex justify-end w-full">
+//                                 <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, numberOfPiece: e.target.value }) }} />
+//                                 <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleToggleModal2}>Enter</button>
+//                             </div>
+//                         </div>
+
+//                         <div className="mt-3 border rounded-md">
+//                             {batchesTable}
+//                         </div>
+//                     </form>
+//                     <div className="p-3 flex items-center justify-end">
+//                         <div>
+//                             <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1">Confirm</button>
+//                             <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleSellModalOption2}>Cancel</button>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {toggleModal2 && <CowsModal cows={["123", "456"]} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+//         </>
+//     );
+// }
+
+// export default connect(null, mapDispatchToProps)(SellModalOption2);
+
+
+
+
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { fetchOrders } from "../../redux/ActionCreators";
-import CowsModal from "./CowsModal";
+import ImportModal from "./ImportModal";
+import ImportPieceModal from "./ImportPieceModal";
 
-const mapDispatchToProps = (dispatch) => ({
-    fetchOrders: (feedType) => { dispatch(fetchOrders(feedType)) }
-})
+import { SERVER_URL } from "../../MetaData";
+import ImportPieceModal2 from "./ImportPieceModal2";
 
-const Batch = ({ index }) => {
+const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatches }) => {
+
+    const [toggleModal, setToggleModal] = useState(false);
+
+    const handleToggleModal = () => {
+        // takes the cow, to add to list... (or selects the cow and ADD adds to list)
+        setToggleModal(!toggleModal);
+    };
+
+    const [toggleModal22, setToggleModal22] = useState(false);
+
+    const handleToggleModal22 = () => {
+        setToggleModal22(!toggleModal22);
+    };
+
+    const [selectedCowType, setSelectedCowType] = useState("");
+    const [selectedCowsList, setSelectedCowsList] = useState([]);
+
+    const handleSelectedCowType = (selectedCowType) => {
+        setSelectedCowType(selectedCowType);
+    };
+
+    const handleSelectedCowsList = (selectedCowsList, cowType) => {
+        setSelectedCowsList(selectedCowsList);
+
+        const cowBatch = {
+            "batchCode": batch.batchCode,
+            "cowType": cowType,
+            "quntity": selectedCowsList.length,
+            "pieces": selectedCowsList
+        };
+
+        handleCowBatches(cowBatch);
+    };
+
+    // useEffect(() => {
+    //     const cowBatch = {
+    //         "batchCode": batch.batchCode,
+    //         "cows": selectedCowsList
+    //     };
+
+    //     handleCowBatches(cowBatch);
+    // }, [selectedCowsList]);
+    
+
     return (
-        <div className="flex gap-5 border-b-2 py-2 items-center justify-center">
-            <p className="text-[#043912] font-medium">Weight: <span className="text-[#098329]">32Tn</span></p>
-            <p className="text-[#043912] font-medium">Type: <span className="text-[#098329]">Baldi</span></p>
-            <p className="text-[#043912] font-medium">Quantity: <span className="text-[#098329]">3</span></p>
-            <button className="text-sm text-white bg-[#73C088] rounded-md px-2 py-1">Import</button>
-        </div>
+        <>
+            <div className="flex gap-5 border-b-2 py-2 items-center justify-center">
+                <p className="text-[#043912] font-medium">Code: <span className="text-[#098329]">{batch.batchCode}</span></p>
+                <p className="text-[#043912] font-medium">Type: <span className="text-[#098329]">{selectedCowType}</span></p>
+                <p className="text-[#043912] font-medium">Quantity: <span className="text-[#098329]">{selectedCowsList.length}</span></p>
+                <button className="text-sm text-white bg-[#73C088] rounded-md px-2 py-1" type="button" onClick={handleToggleModal22}>Import</button>
+            </div>
+
+            {toggleModal22 && <ImportPieceModal2 cows={["123", "456"]} handleToggleModal={handleToggleModal} handleToggleModal22={handleToggleModal22} batchCode={batch.batchCode} createOrderRes={createOrderRes} handleSelectedCowType={handleSelectedCowType} handleSelectedCowsListParent={handleSelectedCowsList} />}
+        </>
     );
 };
 
 const SellModalOption2 = (props) => {
 
     const [newOrderForm, setNewOrderForm] = useState({
+        orderType: "بيع لحم مشفي",
         code: "",
-        client: "",
-        numberOfPiece: ""
+        clientName: "",
+        noOfBatches: ""
     });
 
+    const [createOrderRes, setCreateOrderRes] = useState(null);
+
     const handleOrderSubmit = async () => {
-        const response = await fetch(`http://192.168.1.120:5107/api/Orders/AddOrder?orderID=${newOrderForm.orderId}&deliveryDate=${newOrderForm.deliveryDate}&quantity=${newOrderForm.quantity}&supplier_Name=${newOrderForm.supplier}&feedTypeName=${props.feedType}`, {
-            method: "POST"
+        console.log(newOrderForm);
+
+        const response = await fetch(SERVER_URL+"/api/Front/create-order", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newOrderForm)
         });
 
         if (!response.ok) {
+            alert("Order Code Already Exists.");
             return;
         }
 
-        props.fetchOrders();
+        const res = await response.json();
+        console.log(res);
+        setCreateOrderRes(res);
+
+        // props.fetchOrders();
 
         setNewOrderForm({
-            orderId: "",
-            customer: "",
-            deliveryDate: "",
-            quantity: ""
+            orderType: "بيع لحم مشفي",
+            code: "",
+            clientName: "",
+            noOfBatches: ""
         });
 
-        props.handleToggleNewOrderModal();
+        console.log(createOrderRes);
 
-        props.fetchOrders(props.feedType);
+        // props.handleToggleSellModalOption2();
+
+        // props.handleToggleSlaughterModal();
+
+        // props.fetchOrders(props.feedType);
     };
 
     const [toggleModal, setToggleModal] = useState(false);
@@ -62,10 +245,49 @@ const SellModalOption2 = (props) => {
         setToggleModal2(!toggleModal2);
     };
 
+    const [cowBatches, setCowBatches] = useState([]);
+    const handleCowBatches = (cowBatch) => {
+        setCowBatches(prevItems => [...prevItems, cowBatch]);
+    };
 
-    const batchesTable = Array.from({ length: newOrderForm.numberOfPiece }, (_, index) => (
-        <Batch key={index} index={index} />
+    // const batchesTable = Array.from({ length: newOrderForm.numberOfBatches }, (_, index) => (
+    //     <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} />
+    // ));
+    let batchesTable = createOrderRes && Array.from({ length: createOrderRes.batches.length }, (_, index) => (
+        <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} />
     ));
+
+    useEffect(() => {
+        batchesTable = createOrderRes && Array.from({ length: createOrderRes.batches.length }, (_, index) => (
+            <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} />
+        ));
+    }, [createOrderRes]);
+
+    const handleFinalOrderSubmit = async () => {
+        const reqBody = {
+            "orderCode": createOrderRes.orderCode,
+            "batches": cowBatches
+        };
+
+        console.log("reqBody", reqBody);
+
+        const response = await fetch(SERVER_URL+"/api/Front/AssignBatchesToPieces2", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqBody)
+        });
+
+        if (!response.ok) {
+            console.log(response);
+            return;
+        }
+
+        props.handleToggleSellModalOption2();
+
+        setCowBatches([]);
+    };
 
     return (
         <>
@@ -83,32 +305,30 @@ const SellModalOption2 = (props) => {
                         </div>
                         <div className="flex justify-between mt-3">
                             <label className="mr-10 text-[#043912] font-medium text-lg">Client</label>
-                            <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, client: e.target.value }) }} />
+                            <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, clientName: e.target.value }) }} />
                         </div>
                         <div className="flex justify-between mt-3">
-                            <label className="mr-10 text-[#043912] font-medium text-lg w-full">No. Of Piece</label>
+                            <label className="mr-10 text-[#043912] font-medium text-lg w-full">No. Of Batches</label>
                             <div className="flex justify-end w-full">
-                                <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, numberOfPiece: e.target.value }) }} />
-                                <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleToggleModal2}>Enter</button>
+                                <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, noOfBatches: e.target.value }) }} />
+                                <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleOrderSubmit}>Enter</button>
                             </div>
                         </div>
 
                         <div className="mt-3 border rounded-md">
-                            {batchesTable}
+                            {createOrderRes && batchesTable}
                         </div>
                     </form>
                     <div className="p-3 flex items-center justify-end">
                         <div>
-                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1">Confirm</button>
-                            <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleSellModalOption2}>Cancel</button>
+                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleFinalOrderSubmit}>Confirm</button>
+                            <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleSlaughterModal}>Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {toggleModal2 && <CowsModal cows={["123", "456"]} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
         </>
     );
 }
 
-export default connect(null, mapDispatchToProps)(SellModalOption2);
+export default SellModalOption2;

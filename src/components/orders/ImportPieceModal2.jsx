@@ -2,29 +2,30 @@ import { useEffect, useState } from "react";
 
 import { SERVER_URL } from "../../MetaData";
 
-const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, createOrderRes, handleSelectedCowType, handleSelectedCowsListParent }) => {
+const ImportPieceModal2 = ({ cows, handleToggleModal, handleToggleModal22, batchCode, createOrderRes, handleSelectedCowType, handleSelectedCowsListParent }) => {
 
-    const [selectedCowType, setSelectedCowType] = useState("");
-    const [selectedCowsList, setSelectedCowsList] = useState([]);
+    const [selectedPieceType, setSelectedPieceType] = useState("");
+    const [piecesTypesList, setPiecesTypesList] = useState([]);
 
-    const [cowTypesList, setCowTypesList] = useState([]);
-    const [cowsList, setCowsList] = useState([]);
+    const [selectedPiecesList, setSelectedPiecesList] = useState([]);
 
-    const isCowInList = (cow) => {
-        return selectedCowsList.includes(cow);
+    const [piecesList, setPiecesList] = useState([]);
+
+    const isPieceInList = (piece) => {
+        return selectedPiecesList.includes(piece);
     };
 
-    const handleSelectedCowsList = (cow) => {
-        if (selectedCowsList.includes(cow)) {
-            setSelectedCowsList(prevItems => prevItems.filter(item => item !== cow));
+    const handleSelectedPiecesList = (piece) => {
+        if (selectedPiecesList.includes(piece)) {
+            setSelectedPiecesList(prevItems => prevItems.filter(item => item !== piece));
         }
         else {
-            setSelectedCowsList(prevItems => [...prevItems, cow]);
+            setSelectedPiecesList(prevItems => [...prevItems, piece]);
         }
     };
 
-    const getCowTypes = async () => {
-        const response = await fetch(SERVER_URL+"/api/Front/GetTypesWithCows");
+    const getCowPieces = async () => {
+        const response = await fetch(SERVER_URL+"/api/Front/GetCowPieces2Numbers");
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;
@@ -32,17 +33,21 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
         }
 
         const data = await response.json();
-        setCowTypesList(data);
+        // setCowPiecesList(data.piecesIds.map(piece => ({"pieceId":piece})));
+        setPiecesTypesList(data.map(item => ({...item, pieceNumbers: item.pieceNumbers.map(piece => ({"pieceId":piece}))})));
+
+
+        // setCowPiecesList(data.piecesNumbers);
     }
 
     useEffect(() => {
-        getCowTypes();
+        getCowPieces();
     }, []);
     
     const handleAdd = () => {
-        // handleSelectedCowType(selectedCowType);
-        handleSelectedCowType(cowTypesList[selectedCowType-1].typeName);
-        handleSelectedCowsListParent(selectedCowsList, cowTypesList[selectedCowType-1].typeName);
+        handleSelectedCowType(selectedPieceType)
+
+        handleSelectedCowsListParent(selectedPiecesList, selectedPieceType);
 
         handleToggleModal22();
     };
@@ -52,14 +57,14 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
             {/* <div className="bg-white max-w-xl w-full rounded-md absolute top-1/2 -translate-y-1/2 translate-x-1/2"> */}
             <div className="bg-white max-w-xl w-full rounded-md">
                 <div className="p-3 flex items-center justify-between">
-                    <h3 className="font-semibold text-xl text-green-600">Number Of Cows</h3>
+                    <h3 className="font-semibold text-xl text-green-600">Number Of Pieces</h3>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal22}>×</span>
                 </div>
 
                 <div className="grid grid-cols-5 gap-3 mx-3 border-b-4 pb-3">
 
-                    {cowTypesList && cowTypesList.map((cowType, index) => (
-                        <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedCowType === cowType.typeId ? "bg-[#76C18B] text-white" : ""}`} onClick={() => {setSelectedCowType(cowType.typeId); setCowsList(cowType.cows);}}>{cowType.typeName}</button>
+                    {piecesTypesList && piecesTypesList.map((pieceType, index) => (
+                        <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedPieceType === pieceType.typeName ? "bg-[#76C18B] text-white" : ""}`} onClick={() => {setSelectedPieceType(pieceType.typeName); setPiecesList(pieceType.pieceNumbers);}}>{pieceType.typeName}</button>
                     ))}
 
                     {/* <button className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedCowType === "Type 1" ? "bg-[#76C18B] text-white" : ""}`} onClick={() => setSelectedCowType("Type 1")}>Type 1</button>
@@ -72,8 +77,8 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
                         {/* {cows.map((cow, index) => (
                             <button key={index} className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${isCowInList(cow) ? "bg-[#76C18B] text-white" : ""}`} onClick={() => { handleSelectedCowsList(cow) }}>{cow}</button>
                         ))} */}
-                        {cowsList && cowsList.map((cow, index) => (
-                            <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${isCowInList(cow) ? "bg-[#76C18B] text-white" : ""}`} onClick={() => { handleSelectedCowsList(cow) }}>{cow.cowId}</button>
+                        {piecesList && piecesList.map((piece, index) => (
+                            <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${isPieceInList(piece) ? "bg-[#76C18B] text-white" : ""}`} onClick={() => { handleSelectedPiecesList(piece) }}>{piece.pieceId}</button>
                         ))}
                     </div>
                 </div>
@@ -93,4 +98,4 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
     )
 }
 
-export default ImportModal;
+export default ImportPieceModal2;

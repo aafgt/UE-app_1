@@ -7,21 +7,21 @@ const mapStateToProps = (state) => {
 }
 
 const MetricCard = (props) => {
-    if (props.horizon.isLoading) {
-        return (
-            <div className="bg-white shadow-md rounded-lg w-full px-2 pb-1">
-                <p className="text-green-700 text-xl p-7">Loading...</p>
-            </div>
-        );
-    }
-    else if (props.horizon.errMess) {
-        return (
-            <div className="bg-white shadow-md rounded-lg w-full px-2 pb-1">
-                <p className="text-red-700 text-xl p-7">{props.horizon.errMess}</p>
-            </div>
-        );
-    }
-    else {
+    // if (props.horizon.isLoading) {
+    //     return (
+    //         <div className="bg-white shadow-md rounded-lg w-full px-2 pb-1">
+    //             <p className="text-green-700 text-xl p-7">Loading...</p>
+    //         </div>
+    //     );
+    // }
+    // else if (props.horizon.errMess) {
+    //     return (
+    //         <div className="bg-white shadow-md rounded-lg w-full px-2 pb-1">
+    //             <p className="text-red-700 text-xl p-7">{props.horizon.errMess}</p>
+    //         </div>
+    //     );
+    // }
+    // else {
         return (
             <div className="w-full bg-white shadow-md rounded-lg text-center py-5">
                 <div className="flex justify-around">
@@ -43,7 +43,7 @@ const MetricCard = (props) => {
                 </div>
             </div>
         )
-    }
+    // }
 }
 
 export default connect(mapStateToProps, null)(MetricCard);

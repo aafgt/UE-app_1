@@ -4,6 +4,8 @@ import CowsModal from "./CowsModal";
 import SlaughterModal from "./SlaughterModal";
 import SellModal from "./SellModal";
 import TransferModal from "./TransferModal";
+import SellModalOption1 from "./SellModalOption1";
+import CuttingModal from "./CuttingModal";
 
 const NewOrderModal1 = (props) => {
 
@@ -35,6 +37,11 @@ const NewOrderModal1 = (props) => {
         setToggleTransferModal(prev => !prev);
     };
 
+    const [toggleCuttingModal, setToggleCuttingModal] = useState(false);
+    const handleToggleCuttingModal = () => {
+        setToggleCuttingModal(prev => !prev);
+    };
+
     return (
         <>
             <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
@@ -47,7 +54,7 @@ const NewOrderModal1 = (props) => {
                         <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-2" onClick={handleToggleSlaughterModal}>ذبح</button>
                         <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-2" onClick={handleToggleSellModal}>بيع</button>
                         <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-2" onClick={handleToggleTransferModal}>تحويل</button>
-                        <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-2">تشافي</button>
+                        <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-2" onClick={handleToggleCuttingModal}>تشافي</button>
                     </div>
 
                 </div>
@@ -58,6 +65,7 @@ const NewOrderModal1 = (props) => {
             {toggleSlaughterModal && <SlaughterModal handleToggleSlaughterModal={handleToggleSlaughterModal} />}
             {toggleSellModal && <SellModal handleToggleSellModal={handleToggleSellModal} />}
             {toggleTransferModal && <TransferModal handleToggleTransferModal={handleToggleTransferModal} />}
+            {toggleCuttingModal && <CuttingModal handleToggleCuttingModal={handleToggleCuttingModal} />}
         </>
     );
 }

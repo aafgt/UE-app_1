@@ -7,24 +7,25 @@ const CowDetailsModal = ({ cow, handleToggleModal }) => {
             <div className="bg-white max-w-xl w-full rounded-md">
                 <div className="p-3 flex items-center justify-between border-b border-b-gray-300">
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal}>-</span>
-                    <h3 className="font-semibold text-xl">Details Of Cow 123458</h3>
+                    <h3 className="font-semibold text-xl">Details Of Cow {cow.cowId}</h3>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal}>×</span>
                 </div>
                 <div className="p-3 flex text-[#043912] justify-center">
                     <div className="">
                         <p>Order Id: </p>
                         <p>Batch: </p>
-                        <p>Supervisor Doctor: </p>
+                        <p>Type Of Cow: </p>
                         <p>Supplier: </p>
                         <p>Worker: </p>
                         <p>Client: </p>
                         <p>Production Date: </p>
                         <p>Expire Date: </p>
-                        <p>Time Of Production: </p>
+                        <p>Weight: </p>
+                        <p>Supervisor Doctor: </p>
                     </div>
 
                     <div className="ml-20 text-center">
-                        <p>#204</p>
+                        {/* <p>#204</p>
                         <p>100</p>
                         <p>Mahmoud</p>
                         <p>Magdy</p>
@@ -32,7 +33,17 @@ const CowDetailsModal = ({ cow, handleToggleModal }) => {
                         <p>Omar</p>
                         <p>4/8/2023</p>
                         <p>20/8/2023</p>
-                        <p>4:55</p>
+                        <p>4:55</p> */}
+                        <p>{cow.orderId}</p>
+                        <p>{cow.batchCode}</p>
+                        <p>{cow.typeOfCow}</p>
+                        <p>-</p>
+                        <p>{cow.worker}</p>
+                        <p>{cow.client}</p>
+                        <p>{cow.productionDate}</p>
+                        <p>-</p>
+                        <p>{cow.weight}</p>
+                        <p>{cow.doctor}</p>
                     </div>
                 </div>
                 <div className="p-3 flex items-center justify-center border-t border-t-gray-300">

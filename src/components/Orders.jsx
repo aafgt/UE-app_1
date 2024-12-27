@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ORDERS } from "../Data/orders";
 import NewOrderModal from "./orders/NewOrderModal";
 import NewPieceModal from "./orders/NewPieceModal";
 import NewOrderModal1 from "./orders/NewOrderModal1";
+
+import { SERVER_URL } from "../MetaData";
 
 function OrderRow({ order }) {
 
@@ -16,57 +18,33 @@ function OrderRow({ order }) {
         return (
             <>
                 <div className="border-l-4 border-green-800 w-full">
-                    <div className="border-b-2 w-full flex">
-                        <div className="bg-black border border-green-400 ml-[31px] my-1 w-28 h-16 flex justify-center items-center">
-                            <img src="/vite.svg" alt="" />
+                    {order.batches && order.batches?.map((row, index) => (
+                        <div key={index} className="border-b-2 w-full flex">
+                            {/* <div className="bg-black border border-green-400 ml-[31px] my-1 w-28 h-16 flex justify-center items-center">
+                                <img src="/vite.svg" alt="" />
+                            </div> */}
+                            <table className="w-full text-center text-green-700">
+                                <thead className="mb-7">
+                                    <tr>
+                                        <th className="px-5">Batch</th>
+                                        <th className="px-5">No. Of Cows/Pieces</th>
+                                        <th className="px-5">Type</th>
+                                        <th className="px-5">Start Date</th>
+                                        <th className="px-5">End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-[20px] font-semibold">
+                                    <tr>
+                                        <td>{row.batchNumber}</td>
+                                        <td>{row.count}</td>
+                                        <td>{row.batchType}</td>
+                                        <td>{row.startDate}</td>
+                                        <td>{row.endDate}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table className="w-full text-center text-green-700">
-                            <thead className="mb-7">
-                                <tr>
-                                    <th className="px-5">Batch</th>
-                                    <th className="px-5">No. Of Cows</th>
-                                    <th className="px-5">Quantity</th>
-                                    <th className="px-5">Start Date</th>
-                                    <th className="px-5">End Date</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>30</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="border-b-2 w-full flex">
-                        <div className="bg-black border border-green-400 ml-[31px] my-1 w-28 h-16 flex justify-center items-center">
-                            <img src="/vite.svg" alt="" />
-                        </div>
-                        <table className="w-full text-center text-green-700">
-                            <thead className="mb-7">
-                                <tr>
-                                    <th className="px-5">Batch</th>
-                                    <th className="px-5">No. Of Cows</th>
-                                    <th className="px-5">Quantity</th>
-                                    <th className="px-5">Start Date</th>
-                                    <th className="px-5">End Date</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[20px] font-semibold">
-                                <tr>
-                                    <td>30</td>
-                                    <td>ST3</td>
-                                    <td>250Kwh</td>
-                                    <td>08/4/2022</td>
-                                    <td>08/4/2022</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    ))}
                 </div>
             </>
         )
@@ -75,11 +53,11 @@ function OrderRow({ order }) {
     return (
         <>
             <tr className="border-b-2 hover:cursor-pointer" onClick={toggleSubTable}>
-                <td className="py-3 text-green-500">{order.orderId}</td>
-                <td className="py-3">{order.deliveryDate}</td>
+                <td className="py-3 text-green-500">{order.orderNumber}</td>
+                <td className="py-3">{order.totalCount}</td>
                 <td className="py-3">{order.customer}</td>
-                <td className="py-3">{order.shippingVia}</td>
-                <td className="py-3">{order.item}</td>
+                <td className="py-3">{order.orderType}</td>
+                <td className="py-3">{order.deliverDate}</td>
                 <td className="py-3">
                     <div className="flex justify-center">
                         {order.status === "Pending" && <div className="bg-yellow-400 rounded-xl w-fit px-2">
@@ -109,10 +87,10 @@ function Orders() {
     const handleExportToExcelCSV = () => {
         let csv = "";
 
-        const headers = Object.keys(ORDERS[0]);
+        const headers = Object.keys(orders[0]);
         csv += headers.join(",") + "\n";
 
-        ORDERS.forEach(element => {
+        orders.forEach(element => {
             const values = headers.map(header => element[header]);
             csv += values.join(",") + "\n";
         });
@@ -137,6 +115,23 @@ function Orders() {
     const handleToggleNewPieceModal = () => {
         setToggleNewPieceModal(prev => !prev);
     };
+
+    const [orders, setOrders] = useState([]);
+    const fetchOrders = async () => {
+        const response = await fetch(SERVER_URL + `/api/Front/GetAllOrders`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setOrders(data);
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
 
     return (
         <>
@@ -170,7 +165,7 @@ function Orders() {
                             <thead className="text-[20px] font-extralight">
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>No. Of Cows</th>
+                                    <th>No. Of Cows/Pieces</th>
                                     <th>Customer</th>
                                     <th>Type Of Cow</th>
                                     <th>Delivery Date</th>
@@ -178,7 +173,7 @@ function Orders() {
                                 </tr>
                             </thead>
                             <tbody className="">
-                                {ORDERS && ORDERS.map((order, index) => (
+                                {orders && orders.map((order, index) => (
                                     <OrderRow key={index} order={order} />
                                 ))}
                             </tbody>

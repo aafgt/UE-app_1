@@ -49,11 +49,15 @@ const UptimeCard = (props) => {
         }
     });
 
+    // useEffect(() => {
+    //     if (!props.metrics.isLoading && !props.metrics.errMess) {
+    //         setUptimeChartData({ ...uptimeChartData, series: [parseInt(props.metrics.performanceMetrics?.upTime), (100 - parseInt(props.metrics.performanceMetrics?.upTime))] });
+    //     }
+    // }, [props.metrics.performanceMetrics?.upTime])
+
     useEffect(() => {
-        if (!props.metrics.isLoading && !props.metrics.errMess) {
-            setUptimeChartData({ ...uptimeChartData, series: [parseInt(props.metrics.performanceMetrics?.upTime), (100 - parseInt(props.metrics.performanceMetrics?.upTime))] });
-        }
-    }, [props.metrics.performanceMetrics?.upTime])
+        setUptimeChartData({ ...uptimeChartData, series: [parseInt(props.upTime), (100 - parseInt(props.upTime))] });
+    }, [props.upTime])
 
     // if (props.metrics.isLoading) {
     //     return (

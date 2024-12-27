@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { fetchOrders } from "../../redux/ActionCreators";
 import CowsModal from "./CowsModal";
 
+import { SERVER_URL } from "../../MetaData";
+
 const mapDispatchToProps = (dispatch) => ({
     fetchOrders: (feedType) => { dispatch(fetchOrders(feedType)) }
 })
@@ -17,7 +19,7 @@ const NewOrderModal = (props) => {
     });
 
     const handleOrderSubmit = async () => {
-        const response = await fetch(`http://192.168.1.120:5107/api/Orders/AddOrder?orderID=${newOrderForm.orderId}&deliveryDate=${newOrderForm.deliveryDate}&quantity=${newOrderForm.quantity}&supplier_Name=${newOrderForm.supplier}&feedTypeName=${props.feedType}`, {
+        const response = await fetch(SERVER_URL+`/api/Orders/AddOrder?orderID=${newOrderForm.orderId}&deliveryDate=${newOrderForm.deliveryDate}&quantity=${newOrderForm.quantity}&supplier_Name=${newOrderForm.supplier}&feedTypeName=${props.feedType}`, {
             method: "POST"
         });
 

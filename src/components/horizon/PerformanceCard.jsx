@@ -111,7 +111,8 @@ const PerformanceCard = (props) => {
 
     const updateChartData = () => {
         setSupplierData({
-            series: [(props.horizon.cowsKilledMetrics?.performance)?.toFixed(2)],
+            // series: [(props.horizon.cowsKilledMetrics?.performance)?.toFixed(2)],
+            series: [props.performance],
             options: {
                 chart: {
                     height: '100%',
@@ -160,25 +161,29 @@ const PerformanceCard = (props) => {
         });
     };
 
+    // useEffect(() => {
+    //     updateChartData();
+    // }, [props.horizon.cowsKilledMetrics?.performance])
+
     useEffect(() => {
         updateChartData();
-    }, [props.horizon.cowsKilledMetrics?.performance])
+    }, [props.performance])
 
-    if (props.horizon.isLoading) {
-        return (
-            <div className="bg-white rounded-lg shadow-md m-3 mt-7">
-                <p className="text-green-700 text-xl p-7">Loading...</p>
-            </div>
-        );
-    }
-    else if (props.horizon.errMess) {
-        return (
-            <div className="bg-white rounded-lg shadow-md m-3 mt-7">
-                <p className="text-red-700 text-xl p-7">{props.horizon.errMess}</p>
-            </div>
-        );
-    }
-    else {
+    // if (props.horizon.isLoading) {
+    //     return (
+    //         <div className="bg-white rounded-lg shadow-md m-3 mt-7">
+    //             <p className="text-green-700 text-xl p-7">Loading...</p>
+    //         </div>
+    //     );
+    // }
+    // else if (props.horizon.errMess) {
+    //     return (
+    //         <div className="bg-white rounded-lg shadow-md m-3 mt-7">
+    //             <p className="text-red-700 text-xl p-7">{props.horizon.errMess}</p>
+    //         </div>
+    //     );
+    // }
+    // else {
         return (
             // <div className="bg-white rounded-lg shadow-md w-fit h-full flex flex-col justify-center text-center gap-3 text-[#043912] font-normal">
             //     {/* {props.feeds.feedInfoByType && <ReactApexChart options={supplierData.options} series={supplierData.series} type="donut" />} */}
@@ -192,7 +197,7 @@ const PerformanceCard = (props) => {
                 <ReactApexChart options={supplierData.options} series={supplierData.series} type="radialBar" height={250} />
             </div>
         );
-    }
+    // }
 }
 
 export default connect(mapStateToProps, null)(PerformanceCard);

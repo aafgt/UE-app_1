@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import ImportModal from "./ImportModal";
 
+import { SERVER_URL } from "../../MetaData";
+
 const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatches }) => {
 
     const [toggleModal, setToggleModal] = useState(false);
@@ -24,11 +26,13 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
         setSelectedCowType(selectedCowType);
     };
 
-    const handleSelectedCowsList = (selectedCowsList) => {
+    const handleSelectedCowsList = (selectedCowsList, cowType) => {
         setSelectedCowsList(selectedCowsList);
 
         const cowBatch = {
             "batchCode": batch.batchCode,
+            "cowType": cowType,
+            "quntity": selectedCowsList.length,
             "cows": selectedCowsList
         };
 
@@ -73,7 +77,7 @@ const SlaughterModal = (props) => {
     const handleOrderSubmit = async () => {
         console.log(newOrderForm);
 
-        const response = await fetch("http://192.168.1.120:5188/api/Front/create-order", {
+        const response = await fetch(SERVER_URL+"/api/Front/create-order", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -82,6 +86,7 @@ const SlaughterModal = (props) => {
         });
 
         if (!response.ok) {
+            alert("Order Code Already Exists.");
             return;
         }
 
@@ -144,7 +149,7 @@ const SlaughterModal = (props) => {
 
         console.log("reqBody", reqBody);
 
-        const response = await fetch("http://192.168.1.120:5188/api/Front/AssignBatchesToCows", {
+        const response = await fetch(SERVER_URL+"/api/Front/AssignBatchesToCows", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -154,6 +159,7 @@ const SlaughterModal = (props) => {
 
         if (!response.ok) {
             console.log(response);
+            console.log(response.text());
             return;
         }
 
