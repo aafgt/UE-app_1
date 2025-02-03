@@ -85,11 +85,13 @@ const DatePickerCard = (props) => {
     const handleDateChange = (date) => {
         setSelectedDate(date);
         props.setDate(format(date, 'MM-dd-yyyy'));
+        props.setGraphDate(format(date, 'MM-dd-yyyy'));
     };
 
     const handleLive = () => {
         setSelectedDate(null);
         props.setDate("");
+        props.setGraphDate("");
     };
 
     return (

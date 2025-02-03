@@ -130,12 +130,12 @@ const StoreCard = (props) => {
         <div className="bg-white shadow-md rounded-sm h-fit w-fit hover:cursor-pointer">
             <h5 className="bg-[#09832959] px-16 py-3 text-white text-2xl rounded-sm text-center">{props.store.storeName}</h5>
             <div className="mx-3 space-y-0">
-                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Total Weight: <span className="text-[#098329]">{props.store.totalWeight}Tn</span></p>
-                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Total Piece: <span className="text-[#098329]">{props.store.totalPieces} Piece</span></p>
-                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Height Capacity: <span className="text-[#098329]">{props.store.heightCapacity} Piece</span></p>
+                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Total Weight: <span className="text-[#098329]">{props.store.totalWeight} KG</span></p>
+                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Total Piece: <span className="text-[#098329]">{props.store.totalPieces} Piece(s)</span></p>
+                <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Height Capacity: <span className="text-[#098329]">{props.store.heightCapacity} Piece(s)</span></p>
             </div>
-            <div className="mt-5 flex flex-col items-center justify-center">
-                <p>Store Filled about %</p>
+            <div className="flex flex-col items-center justify-center">
+                {/* <p>Store Filled about %</p> */}
                 <div className="h-fit w-fit">
                     <ReactApexChart options={supplierData.options} series={supplierData.series} type="radialBar" height={250} />
                 </div>

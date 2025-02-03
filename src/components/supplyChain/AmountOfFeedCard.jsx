@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { connect } from "react-redux";
-import { fetchFeedInfoByType } from "../../redux/ActionCreators";
+// import { fetchFeedInfoByType } from "../../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
     return {

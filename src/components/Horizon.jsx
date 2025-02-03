@@ -267,7 +267,6 @@ import PerformanceCard from "./horizon/PerformanceCard";
 import CowDetailsModal from "./horizon/CowDetailsModal";
 import OeeCard from "./horizon/OeeCard";
 import UptimeCard from "./horizon/UptimeCard";
-import { connect } from "react-redux";
 import RateOfProductionCard from "./horizon/RateOfProductionCard";
 import DatePickerCard from "./horizon/DatePickerCard";
 import CowsModal from "./horizon/CowsModal";
@@ -275,6 +274,7 @@ import CowsModal from "./horizon/CowsModal";
 import * as signalR from '@microsoft/signalr';
 
 import { SERVER_URL } from "../MetaData";
+import HorizonTableForSales from "./horizon/HorizonTableForSales";
 
 const Horizon = (props) => {
 
@@ -322,6 +322,8 @@ const Horizon = (props) => {
     };
 
     const [horizonStats, setHorizonStats] = useState(null);
+    const [horizonStatsForSales, setHorizonStatsForSales] = useState(null);
+    const [horizonStatsForCutting, setHorizonStatsForCutting] = useState(null);
     // const handleHorizonStats = async () => {
     //     const response = await fetch(SERVER_URL + `/api/Front/GetCowStatistics`);
 
@@ -362,11 +364,96 @@ const Horizon = (props) => {
         setHorizonStats(data);
     };
 
+    const handleHorizonStatsForSales = async () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        if (graphDate === "") {
+            setGraphDate(formattedDate);
+        }
+
+        if (date === "") {
+            setDate(formattedDate);
+        }
+
+        const response = await fetch(SERVER_URL + `/api/Front/GetHorizonDetailsForSeals?graphtime=${graphDate}&date=${date}`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status} | ${await response.text()}`;
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setHorizonStatsForSales(data);
+    };
+
+    const handleHorizonStatsForCutting = async () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        if (graphDate === "") {
+            setGraphDate(formattedDate);
+        }
+
+        if (date === "") {
+            setDate(formattedDate);
+        }
+
+        const response = await fetch(SERVER_URL + `/api/Front/GetHorizonDetailsForRecvory?graphtime=${graphDate}&date=${date}`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status} | ${await response.text()}`;
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setHorizonStatsForCutting(data);
+    };
+
     const [selectedToTrack, setSelectedToTrack] = useState("ذبح");
 
     useEffect(() => {
-        handleHorizonStats();
+        if (selectedToTrack === "ذبح") {
+            handleHorizonStats();
+        }
+        else if (selectedToTrack === "بيع") {
+            handleHorizonStatsForSales();
+        }
+        else if (selectedToTrack === "تشافي") {
+            handleHorizonStatsForCutting();
+        }
 
+        // // إنشاء اتصال
+        // const connection = new signalR.HubConnectionBuilder()
+        //     .withUrl(SERVER_URL + `/cowHub`) // رابط الـ Hub
+        //     .build();
+
+        // // التعامل مع الرسائل القادمة
+        // connection.on("CowScanned", (data) => {
+        //     console.log("Cow Scanned:", data);
+        //     // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
+        //     setHorizonStats(data.value);
+        // });
+
+        // // بدء الاتصال
+        // connection.start()
+        //     .then(() => console.log("SignalR Connected"))
+        //     .catch(err => console.error("Error connecting to SignalR:", err));
+
+        // return () => {
+        //     connection.stop().then(() => {
+        //         console.log("Disconnected from SignalR hub");
+        //     }).catch(err => console.error("Error Disconnecting from SignalR hub: ", err));
+        // }
+    }, [graphDate, date, selectedToTrack]);
+
+    useEffect(() => {
         // إنشاء اتصال
         const connection = new signalR.HubConnectionBuilder()
             .withUrl(SERVER_URL + `/cowHub`) // رابط الـ Hub
@@ -374,9 +461,42 @@ const Horizon = (props) => {
 
         // التعامل مع الرسائل القادمة
         connection.on("CowScanned", (data) => {
-            console.log("Cow Scanned:", data);
+            // console.log("Cow Scanned:", data);
             // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
-            setHorizonStats(data.value);
+            const today = new Date().toLocaleDateString();
+            const currDate = new Date(date).toLocaleDateString();
+            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            if (currDate === today && currGraphDate === today) {
+                setHorizonStats(data.value);
+            }
+            
+            // setHorizonStats(data.value);
+        });
+
+        connection.on("Seals", (data) => {
+            // console.log("Sale Scanned:", data);
+            // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
+            const today = new Date().toLocaleDateString();
+            const currDate = new Date(date).toLocaleDateString();
+            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            if (currDate === today && currGraphDate === today) {
+                setHorizonStatsForSales(data.value);
+            }
+
+            // setHorizonStatsForSales(data.value);
+        });
+
+        connection.on("Recvory", (data) => {
+            // console.log("Cutting Scanned:", data);
+            // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
+            const today = new Date().toLocaleDateString();
+            const currDate = new Date(date).toLocaleDateString();
+            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            if (currDate === today && currGraphDate === today) {
+                setHorizonStatsForCutting(data.value);
+            }
+
+            // setHorizonStatsForCutting(data.value);
         });
 
         // بدء الاتصال
@@ -389,56 +509,160 @@ const Horizon = (props) => {
                 console.log("Disconnected from SignalR hub");
             }).catch(err => console.error("Error Disconnecting from SignalR hub: ", err));
         }
-    }, [graphDate, date]);
+    }, []);
+
 
     return (
         <>
-            <div className="flex justify-between m-2">
-                <div className="ml-5 space-x-5">
-                    <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "ذبح" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("ذبح"); }}>ذبح</button>
-                    <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "بيع" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("بيع"); }}>بيع</button>
-                    <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "تشافي" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("تشافي"); }}>تشافي</button>
-                </div>
-
-                <DatePickerCard setDate={setDate} />
-            </div>
-
-            <div className="flex">
-                <div className="w-4/5 m-3 px-5">
-                    <div className="flex gap-10 justify-around mb-5">
-                        <MetricCard title={"Cows Request"} value={horizonStats?.cowRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
-                        <MetricCard title={"Killed Cow"} value={horizonStats?.killedCow} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
-                        <MetricCard title={"Remainder"} value={horizonStats?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+        {console.log("today", new Date().toLocaleDateString())}
+        {console.log("date", new Date(date).toLocaleDateString())}
+        {console.log("graphDate", new Date(graphDate).toLocaleDateString())}
+            {selectedToTrack === "ذبح" && <>
+                <div className="flex justify-between m-2">
+                    <div className="ml-5 space-x-5">
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "ذبح" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("ذبح"); }}>ذبح</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "بيع" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("بيع"); }}>بيع</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "تشافي" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("تشافي"); }}>تشافي</button>
                     </div>
 
-                    <div className="flex gap-10 justify-around">
-                        <MetricCard title={"Weight Of Killed Cow"} value={horizonStats?.weightOfKilledCows + " KG"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
-                        <MetricCard title={"Total Waste"} value={horizonStats?.totalWaste + " KG"} arrow={"down"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
-                        <MetricCard title={"Miscarriage"} value={horizonStats?.totalMiscarage + " Tn"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                    <DatePickerCard setDate={setDate} setGraphDate={setGraphDate} />
+                </div>
+
+                <div className="flex">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="flex gap-10 justify-around mb-5">
+                            <MetricCard title={"Cows Request"} value={horizonStats?.cowRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            <MetricCard title={"Slaughtered Cows"} value={horizonStats?.killedCow} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Remainder"} value={horizonStats?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                        </div>
+
+                        <div className="flex gap-10 justify-around">
+                            <MetricCard title={"Weight Of Slaughtered Cows"} value={horizonStats?.weightOfKilledCows + " KG"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            <MetricCard title={"Total Waste"} value={horizonStats?.totalWaste + " KG"} arrow={"down"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Miscarriage"} value={horizonStats?.totalMiscarage + " KG"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3">
+                        <PerformanceCard performance={horizonStats?.performance} />
                     </div>
                 </div>
-                <div className="w-1/5 m-3">
-                    <PerformanceCard performance={horizonStats?.performance} />
-                </div>
-            </div>
 
-            <div className="flex justify-end">
-                <div className="w-4/5 m-3 px-5">
-                    <div className="m-3">
-                        <RateOfProductionCard graph={horizonStats?.graph} setGraphDate={setGraphDate} />
+                <div className="flex justify-end">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="m-3">
+                            <RateOfProductionCard graph={horizonStats?.graph} setGraphDate={setGraphDate} graphDate={graphDate} />
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3 flex flex-col justify-around">
+                        <OeeCard />
+                        <UptimeCard upTime={horizonStats?.upTime} />
                     </div>
                 </div>
-                <div className="w-1/5 m-3">
-                    <OeeCard />
-                    <UptimeCard upTime={horizonStats?.upTime} />
+
+                <HorizonTable tableData={horizonStats?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+
+                {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+
+                {toggleModal && <CowDetailsModal cow={cowDetails} handleToggleModal={handleToggleModalExit} />}
+            </>}
+
+            {selectedToTrack === "بيع" && <>
+                <div className="flex justify-between m-2">
+                    <div className="ml-5 space-x-5">
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "ذبح" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("ذبح"); }}>ذبح</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "بيع" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("بيع"); }}>بيع</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "تشافي" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("تشافي"); }}>تشافي</button>
+                    </div>
+
+                    <DatePickerCard setDate={setDate} setGraphDate={setGraphDate} />
                 </div>
-            </div>
 
-            <HorizonTable tableData={horizonStats?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+                <div className="flex">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="flex gap-10 justify-around mb-5">
+                            <MetricCard title={"Sales Request"} value={horizonStatsForSales?.piecesRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            <MetricCard title={"Sold"} value={horizonStatsForSales?.soldPieces} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Remainder"} value={horizonStatsForSales?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                        </div>
 
-            {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+                        <div className="flex gap-10 justify-around">
+                            <MetricCard title={"Weight Of Sold Pieces"} value={horizonStatsForSales?.weightOfSoldPieces + " KG"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            {/* <MetricCard title={"Total Waste"} value={horizonStats?.totalWaste + " KG"} arrow={"down"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Miscarriage"} value={horizonStats?.totalMiscarage + " KG"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} /> */}
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3">
+                        <PerformanceCard performance={horizonStatsForSales?.performance} />
+                    </div>
+                </div>
 
-            {toggleModal && <CowDetailsModal cow={cowDetails} handleToggleModal={handleToggleModalExit} />}
+                <div className="flex justify-end">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="m-3">
+                            <RateOfProductionCard graph={horizonStatsForSales?.graph} setGraphDate={setGraphDate} graphDate={graphDate} />
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3 flex flex-col justify-around">
+                        <OeeCard />
+                        <UptimeCard upTime={horizonStatsForSales?.upTime} />
+                    </div>
+                </div>
+
+                <HorizonTableForSales tableData={horizonStatsForSales?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+
+                {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+
+                {toggleModal && <CowDetailsModal cow={cowDetails} handleToggleModal={handleToggleModalExit} />}
+            </>}
+
+            {selectedToTrack === "تشافي" && <>
+                <div className="flex justify-between m-2">
+                    <div className="ml-5 space-x-5">
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "ذبح" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("ذبح"); }}>ذبح</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "بيع" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("بيع"); }}>بيع</button>
+                        <button className={`border-2 px-5 py-2 rounded-md shadow-md text-green-600 hover:bg-[#76C18B] hover:text-white ${selectedToTrack === "تشافي" ? "bg-[#76C18B] text-white" : "bg-white"}`} onClick={() => { setSelectedToTrack("تشافي"); }}>تشافي</button>
+                    </div>
+
+                    <DatePickerCard setDate={setDate} setGraphDate={setGraphDate} />
+                </div>
+
+                <div className="flex">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="flex gap-10 justify-around mb-5">
+                            <MetricCard title={"Cutting Request"} value={horizonStatsForCutting?.piecesRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            <MetricCard title={"Cut Pieces"} value={horizonStatsForCutting?.soldPieces} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Remainder"} value={horizonStatsForCutting?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                        </div>
+
+                        <div className="flex gap-10 justify-around">
+                            <MetricCard title={"Weight Of Cut Pieces"} value={horizonStatsForCutting?.weightOfSoldPieces + " KG"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
+                            {/* <MetricCard title={"Total Waste"} value={horizonStats?.totalWaste + " KG"} arrow={"down"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
+                            <MetricCard title={"Miscarriage"} value={horizonStats?.totalMiscarage + " KG"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} /> */}
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3">
+                        <PerformanceCard performance={horizonStatsForCutting?.performance} />
+                    </div>
+                </div>
+
+                <div className="flex justify-end">
+                    <div className="w-4/5 m-3 px-5">
+                        <div className="m-3">
+                            <RateOfProductionCard graph={horizonStatsForCutting?.graph} setGraphDate={setGraphDate} graphDate={graphDate} />
+                        </div>
+                    </div>
+                    <div className="w-1/5 m-3 flex flex-col justify-around">
+                        <OeeCard />
+                        <UptimeCard upTime={horizonStatsForCutting?.upTime} />
+                    </div>
+                </div>
+
+                <HorizonTableForSales tableData={horizonStatsForCutting?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+
+                {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
+
+                {toggleModal && <CowDetailsModal cow={cowDetails} handleToggleModal={handleToggleModalExit} />}
+            </>}
         </>
     );
 }

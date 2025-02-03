@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { connect } from "react-redux";
-import { fetchCows, fetchWatchlist } from "../../redux/ActionCreators";
+import { fetchCows } from "../../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
     return {

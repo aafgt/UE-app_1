@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SERVER_URL } from "../../MetaData";
 
@@ -9,13 +9,29 @@ const NewClientModal = (props) => {
         name: ""
     });
 
+    const [createOrderValid, setCreateOrderValid] = useState("");
+    const isCreateOrderValid = () => {
+        if (newOrderForm.code === "" || newOrderForm.name === "") {
+            setCreateOrderValid("All fields are required.");
+            return false;
+        }
+
+        setCreateOrderValid("valid");
+        return true;
+    };
+
+    useEffect(() => {
+        isCreateOrderValid();
+    }, [newOrderForm]);
+
     const handleOrderSubmit = async () => {
         const response = await fetch(SERVER_URL + `/api/Front/add-client?name=${newOrderForm.name}&code=${newOrderForm.code}`, {
             method: "POST"
         });
 
         if (!response.ok) {
-            alert("Code Already Exists.");
+            // alert("Code Already Exists.");
+            alert(`${await response.text()}`);
             return;
         }
 
@@ -45,9 +61,10 @@ const NewClientModal = (props) => {
                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, name: e.target.value }) }} />
                         </div>
                     </form>
+                    <p className="text-red-600">{createOrderValid !== "valid" && createOrderValid}</p>
                     <div className="p-3 flex items-center justify-end">
                         <div>
-                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" onClick={handleOrderSubmit}>Confirm</button>
+                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" onClick={handleOrderSubmit} disabled={createOrderValid !== "valid"}>Confirm</button>
                             <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleNewOrderModal}>Cancel</button>
                         </div>
                     </div>

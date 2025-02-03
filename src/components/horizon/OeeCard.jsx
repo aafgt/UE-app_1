@@ -72,12 +72,12 @@ const OeeCard = (props) => {
     // else {
         return (
             <div className="bg-white rounded-lg shadow-md m-3 p-2 pt-5 relative  flex flex-col justify-around">
-                <div className="absolute top-0 right-0 pr-2 pt-2">
+                {/* <div className="absolute top-0 right-0 pr-2 pt-2">
                     <i className="bi bi-calendar3 text-green-700 hover:cursor-pointer"></i>
                 </div>
                 <div className="text-center text-green-700 font-semibold">
                     <i className="bi bi-caret-left-fill hover:cursor-pointer"></i> March 2023 <i className="bi bi-caret-right-fill hover:cursor-pointer"></i>
-                </div>
+                </div> */}
                 <div className="my-2">
                     <p className="text-center text-2xl text-[#043912]">OEE</p>
                     <ReactApexChart options={oeeChartData.options} series={oeeChartData.series} type="donut" height={180} />

@@ -74,6 +74,11 @@ function Sidebar(props) {
                     <i className="bi bi-box-seam"></i>
                     <span className="ml-2">Inventory</span>
                 </Link>
+
+                <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
+                    <i className="bi bi-shield-lock"></i>
+                    <span className="ml-2">Admin</span>
+                </Link>
             </nav>}
 
 
@@ -113,6 +118,10 @@ function Sidebar(props) {
 
                 <Link to="/inventory" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[3]}`} onClick={() => { handleIsActive(3) }}>
                     <i className="bi bi-box-seam"></i>
+                </Link>
+
+                <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
+                    <i className="bi bi-shield-lock"></i>
                 </Link>
             </nav>}
         </>

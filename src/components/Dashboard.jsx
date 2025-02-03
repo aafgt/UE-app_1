@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import { connect } from "react-redux";
 import { fetchBarn, fetchCow, fetchDashboardMetrics, fetchPerformanceMetrics } from "../redux/ActionCreators";
 import TotalCard from "./dashboard/TotalCard";

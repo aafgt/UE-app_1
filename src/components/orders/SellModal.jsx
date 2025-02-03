@@ -4,19 +4,6 @@ import SellModalOption2 from "./SellModalOption2";
 
 const SellModal = (props) => {
 
-    const [toggleModal, setToggleModal] = useState(false);
-
-    const handleToggleModal = () => {
-        // takes the cow, to add to list... (or selects the cow and ADD adds to list)
-        setToggleModal(!toggleModal);
-    };
-
-    const [toggleModal2, setToggleModal2] = useState(false);
-
-    const handleToggleModal2 = () => {
-        setToggleModal2(!toggleModal2);
-    };
-
     const [toggleSellModalOption1, setToggleSellModalOption1] = useState(false);
     const handleToggleSellModalOption1 = () => {
         setToggleSellModalOption1(prev => !prev);

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 // import { ORDERS } from "../Data/orders";
-import NewPieceModal from "./orders/NewPieceModal";
-import NewOrderModal1 from "./orders/NewOrderModal1";
+import NewPieceModal from "../orders/NewPieceModal";
+import NewOrderModal1 from "../orders/NewOrderModal1";
 
-import { SERVER_URL } from "../MetaData";
-import PrintModal from "./orders/PrintModal";
+import { SERVER_URL } from "../../MetaData";
+import PrintApproveModal from "./PrintApproveModal";
 
 function OrderRow({ order }) {
 
@@ -29,7 +29,7 @@ function OrderRow({ order }) {
                                 <img src="/vite.svg" alt="" />
                             </div> */}
                             <div className="flex items-center justify-center">
-                                <button type="button" className="text-xl ml-3" onClick={handleTogglePrintModal}><i className="bi bi-printer"></i></button>
+                                <button type="button" className="text-xl ml-3" onClick={handleTogglePrintModal}><i className="bi bi-printer"></i> <i className="bi bi-shield-check"></i></button>
                             </div>
                             <table className="w-full text-center text-green-700">
                                 <thead className="mb-7">
@@ -55,7 +55,7 @@ function OrderRow({ order }) {
                     ))}
                 </div>
 
-                {togglePrintModal && <PrintModal order={order} handleTogglePrintModal={handleTogglePrintModal} />}
+                {togglePrintModal && <PrintApproveModal order={order} handleTogglePrintModal={handleTogglePrintModal} />}
             </>
         )
     };
@@ -95,7 +95,7 @@ function OrderRow({ order }) {
     );
 };
 
-function Orders() {
+function AdminOrders() {
 
     const handleExportToExcelCSV = () => {
         let csv = "";
@@ -134,7 +134,7 @@ function Orders() {
         if (event.key === 'Enter') {
             fetchOrders();
 
-            if(orderTypeFilter !== "") {
+            if (orderTypeFilter !== "") {
                 setFilteredOrders(orders.filter((order) => (order.orderType === orderTypeFilter)));
             }
         }
@@ -142,7 +142,7 @@ function Orders() {
 
     const [orders, setOrders] = useState([]);
     const fetchOrders = async () => {
-        const response = await fetch(SERVER_URL + `/api/Front/GetAllOrdersWithApprove?orderCode=${search}`);
+        const response = await fetch(SERVER_URL + `/api/Front/GetAllOrders?orderCode=${search}`);
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;
@@ -248,4 +248,4 @@ function Orders() {
     )
 }
 
-export default Orders;
+export default AdminOrders;

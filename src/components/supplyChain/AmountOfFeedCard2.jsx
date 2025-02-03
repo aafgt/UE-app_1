@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { connect } from "react-redux";
-import { fetchFeedInfoByType } from "../../redux/ActionCreators";
+// import { fetchFeedInfoByType } from "../../redux/ActionCreators";
 
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
 
 const mapStateToProps = (state) => {
     return {

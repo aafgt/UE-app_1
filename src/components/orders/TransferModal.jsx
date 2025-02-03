@@ -258,6 +258,26 @@ const TransferModal = (props) => {
         }
     };
 
+    const [createOrderValid, setCreateOrderValid] = useState("");
+    const isCreateOrderValid = () => {
+        if(!selectedFromStore || !selectedToStore) {
+            setCreateOrderValid("Please select from and to stores.");
+            return false;
+        }
+
+        if(FromSelectedPiecesList.length <= 0) {
+            setCreateOrderValid("Please select pieces.");
+            return false;
+        }
+
+        setCreateOrderValid("valid");
+        return true;
+    };
+
+    useEffect(() => {
+      isCreateOrderValid();
+    }, [selectedFromStore, selectedToStore, FromSelectedPiecesList]);
+
 
     const handleDone = async () => {
         const r = {
@@ -266,7 +286,7 @@ const TransferModal = (props) => {
             "piecesList": FromSelectedPiecesList
         }
 
-        console.log(r);
+        // console.log(r);
 
         const response = await fetch(SERVER_URL + "/api/FlutterService/TransferPieces", {
             method: "POST",
@@ -281,6 +301,8 @@ const TransferModal = (props) => {
         }
 
         props.handleToggleTransferModal();
+
+        alert("Order created Successfully.");
     };
 
     // const getSelectedStorePieces = () => {
@@ -294,7 +316,7 @@ const TransferModal = (props) => {
     return (
         <>
             <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
-                <div className="bg-white max-w-xl w-full rounded-md">
+                <div className="bg-white max-w-xl w-full rounded-md max-h-96 overflow-y-auto">
                     <div className="p-3 flex items-center justify-end">
                         <span className="modal-close cursor-pointer" onClick={props.handleToggleTransferModal}>×</span>
                     </div>
@@ -324,8 +346,10 @@ const TransferModal = (props) => {
                         </div>
                     </div>
 
+                    <p className="text-red-600">{createOrderValid !== "valid" && createOrderValid}</p>
+
                     <div className="p-3 flex items-center justify-center">
-                        <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" onClick={handleDone}>Done</button>
+                        <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" onClick={handleDone} disabled={createOrderValid !== "valid"}>Done</button>
                     </div>
                 </div>
             </div>

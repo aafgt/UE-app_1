@@ -117,14 +117,11 @@
 
 
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import ImportModal from "./ImportModal";
-import ImportPieceModal from "./ImportPieceModal";
 
 import { SERVER_URL } from "../../MetaData";
 import ImportPieceModal2 from "./ImportPieceModal2";
 
-const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatches }) => {
+const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatches, setCreateOrderResValid }) => {
 
     const [toggleModal, setToggleModal] = useState(false);
 
@@ -156,7 +153,9 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
             "pieces": selectedCowsList
         };
 
-        handleCowBatches(cowBatch);
+        if(selectedCowsList.length > 0) {
+            handleCowBatches(cowBatch);
+        }
     };
 
     // useEffect(() => {
@@ -168,6 +167,19 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
     //     handleCowBatches(cowBatch);
     // }, [selectedCowsList]);
     
+    const isCreateOrderValid = () => {
+        if(selectedCowsList.length <= 0) {
+            setCreateOrderResValid("Please select Cows/Pieces.");
+            return false;
+        }
+
+        setCreateOrderResValid("valid");
+        return true;
+    };
+
+    useEffect(() => {
+      isCreateOrderValid();
+    }, [selectedCowsList]);
 
     return (
         <>
@@ -189,13 +201,39 @@ const SellModalOption2 = (props) => {
         orderType: "بيع لحم مشفي",
         code: "",
         clientName: "",
+        date: "",
         noOfBatches: ""
     });
+
+    const [createOrderValid, setCreateOrderValid] = useState("");
+    const isCreateOrderValid = () => {
+        const regex = /^\d+$/;
+
+        if(newOrderForm.code === "" || newOrderForm.clientName === "" || newOrderForm.date === "" || newOrderForm.noOfBatches === "") {
+            setCreateOrderValid("All fields are required.");
+            return false;
+        }
+
+        if(!regex.test(newOrderForm.noOfBatches)) {
+            setCreateOrderValid("No. Of Batches should be a number.");
+            return false;
+        }
+
+        setCreateOrderValid("valid");
+        return true;
+    };
+
+    useEffect(() => {
+      isCreateOrderValid();
+    }, [newOrderForm]);
+
+
+    const [createOrderResValid, setCreateOrderResValid] = useState("");
 
     const [createOrderRes, setCreateOrderRes] = useState(null);
 
     const handleOrderSubmit = async () => {
-        console.log(newOrderForm);
+        // console.log(newOrderForm);
 
         const response = await fetch(SERVER_URL+"/api/Front/create-order", {
             method: "POST",
@@ -206,12 +244,13 @@ const SellModalOption2 = (props) => {
         });
 
         if (!response.ok) {
-            alert("Order Code Already Exists.");
+            // alert("Order Code Already Exists.");
+            alert(`${await response.text()}`);
             return;
         }
 
         const res = await response.json();
-        console.log(res);
+        // console.log(res);
         setCreateOrderRes(res);
 
         // props.fetchOrders();
@@ -220,10 +259,11 @@ const SellModalOption2 = (props) => {
             orderType: "بيع لحم مشفي",
             code: "",
             clientName: "",
+            date: "",
             noOfBatches: ""
         });
 
-        console.log(createOrderRes);
+        // console.log(createOrderRes);
 
         // props.handleToggleSellModalOption2();
 
@@ -254,12 +294,12 @@ const SellModalOption2 = (props) => {
     //     <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} />
     // ));
     let batchesTable = createOrderRes && Array.from({ length: createOrderRes.batches.length }, (_, index) => (
-        <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} />
+        <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} setCreateOrderResValid={setCreateOrderResValid} />
     ));
 
     useEffect(() => {
         batchesTable = createOrderRes && Array.from({ length: createOrderRes.batches.length }, (_, index) => (
-            <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} />
+            <Batch key={index} index={index} handleToggleModal2={handleToggleModal2} batch={createOrderRes.batches[index]} createOrderRes={createOrderRes} handleCowBatches={handleCowBatches} setCreateOrderResValid={setCreateOrderResValid} />
         ));
     }, [createOrderRes]);
 
@@ -269,7 +309,7 @@ const SellModalOption2 = (props) => {
             "batches": cowBatches
         };
 
-        console.log("reqBody", reqBody);
+        // console.log("reqBody", reqBody);
 
         const response = await fetch(SERVER_URL+"/api/Front/AssignBatchesToPieces2", {
             method: "POST",
@@ -280,13 +320,15 @@ const SellModalOption2 = (props) => {
         });
 
         if (!response.ok) {
-            console.log(response);
+            // console.log(response);
             return;
         }
 
         props.handleToggleSellModalOption2();
 
         setCowBatches([]);
+
+        alert("Order created Successfully.");
     };
 
     return (
@@ -308,21 +350,27 @@ const SellModalOption2 = (props) => {
                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, clientName: e.target.value }) }} />
                         </div>
                         <div className="flex justify-between mt-3">
+                            <label className="mr-10 text-[#043912] font-medium text-lg">Date</label>
+                            <input className="border-2 w-7/12 p-1 rounded-lg" type="date" onChange={(e) => { setNewOrderForm({ ...newOrderForm, date: e.target.value }) }} />
+                        </div>
+                        <div className="flex justify-between mt-3">
                             <label className="mr-10 text-[#043912] font-medium text-lg w-full">No. Of Batches</label>
                             <div className="flex justify-end w-full">
                                 <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, noOfBatches: e.target.value }) }} />
-                                <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleOrderSubmit}>Enter</button>
+                                <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleOrderSubmit} disabled={createOrderValid !== "valid"}>Enter</button>
                             </div>
                         </div>
+                        <p className="text-red-600">{createOrderValid !== "valid" && !createOrderRes && createOrderValid}</p>
 
                         <div className="mt-3 border rounded-md">
                             {createOrderRes && batchesTable}
                         </div>
+                        <p className="text-red-600">{createOrderResValid !== "valid" && createOrderRes && createOrderResValid}</p>
                     </form>
                     <div className="p-3 flex items-center justify-end">
                         <div>
-                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleFinalOrderSubmit}>Confirm</button>
-                            <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleSlaughterModal}>Cancel</button>
+                            {createOrderRes && <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleFinalOrderSubmit} disabled={createOrderValid !== "valid" && createOrderResValid !== "valid"}>Confirm</button>}
+                            <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleToggleSellModalOption2}>Cancel</button>
                         </div>
                     </div>
                 </div>

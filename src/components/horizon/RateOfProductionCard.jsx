@@ -137,7 +137,7 @@ import ReactApexChart from "react-apexcharts";
 const RateOfProductionCard = (props) => {
 
     const [isRateOfProdOpen, setIsRateOfProdOpen] = useState(false);
-    const [selectedRateOfProdYear, setSelectedRateOfProdYear] = useState("Today");
+    const [selectedRateOfProdYear, setSelectedRateOfProdYear] = useState("");
 
     const [prodChartData, setProdChartData] = useState({
         series: [{
@@ -212,7 +212,7 @@ const RateOfProductionCard = (props) => {
 
     useEffect(() => {
         updateChartData();
-    }, [props.graph]);
+    }, [props.graph, props.graphDate]);
 
     useEffect(() => {
         props.setGraphDate(selectedRateOfProdYear);
@@ -248,7 +248,7 @@ const RateOfProductionCard = (props) => {
         <div className="bg-white rounded-lg shadow-md relative">
             <div className="px-5 py-4 flex justify-between">
                 <p className="font-semibold text-xl">Rate of Production</p>
-                <button className="border border-gray-500 text-gray-500 px-2 rounded-md" onClick={() => { setIsRateOfProdOpen(prev => !prev) }}>{selectedRateOfProdYear} <i className="bi bi-arrow-down-short"></i></button>
+                <button className="border border-gray-500 text-gray-500 px-2 rounded-md" onClick={() => { setIsRateOfProdOpen(prev => !prev) }}>{props.graphDate} <i className="bi bi-arrow-down-short"></i></button>
 
                 {isRateOfProdOpen && <div className="border absolute bg-white rounded-lg text-2xl leading-none text-green-800 font-semibold top-3 -right-32 z-10 w-fit">
                     {rateOfProdYears.map((item) => (

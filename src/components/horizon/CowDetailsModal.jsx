@@ -39,7 +39,7 @@ const CowDetailsModal = ({ cow, handleToggleModal }) => {
                         <p>{cow.typeOfCow}</p>
                         <p>-</p>
                         <p>{cow.worker}</p>
-                        <p>{cow.client}</p>
+                        <p>-</p>
                         <p>{cow.productionDate}</p>
                         <p>-</p>
                         <p>{cow.weight}</p>

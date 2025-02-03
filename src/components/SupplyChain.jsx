@@ -9,8 +9,7 @@ import NewSupplierModal from "./supplyChain/NewSupplierModal";
 import { fetchCommodities, fetchCows, fetchFeedInfoByType, fetchFeeds, fetchOrders, fetchTotalStoreFeedInfo, getScrapedData } from "../redux/ActionCreators";
 import { connect } from "react-redux";
 import AmountOfFeedCard from "./supplyChain/AmountOfFeedCard";
-import AmountOfFeedCard2 from "./supplyChain/AmountOfFeedCard2";
-import ScrapedData from "./supplyChain/ScrapedData";
+// import ScrapedData from "./supplyChain/ScrapedData";
 
 const mapStateToProps = (state) => {
   return {

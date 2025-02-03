@@ -12,7 +12,7 @@ const CowsModal = ({ cows, handleToggleModal, handleToggleModal2 }) => {
                 <div className="p-3">
                     <div className="grid grid-cols-4 gap-5">
                         {cows.map((cow, index) => (
-                            <button key={index} className="border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white" onClick={() => {handleToggleModal(cow.cowId);}}>{cow.cowId}</button>
+                            <button key={index} className="border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white" onClick={() => {handleToggleModal(cow.cowsId);}}>{cow.cowsId}</button>
                         ))}
                     </div>
                 </div>

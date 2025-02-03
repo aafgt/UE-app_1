@@ -1,5 +1,6 @@
 import App from "./App";
 import ErrorPage from "./ErrorPage";
+import Admin from "./components/Admin";
 import Client from "./components/Client";
 // import Dashboard from "./components/Dashboard";
 import Horizon from "./components/Horizon";
@@ -46,6 +47,10 @@ const routes = [
             {
                 path: "/inventory",
                 element: <Inventory />
+            },
+            {
+                path: "/admin",
+                element: <Admin />
             }
             // {
             //     path: "/reports",
