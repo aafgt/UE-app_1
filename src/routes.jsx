@@ -6,6 +6,7 @@ import Client from "./components/Client";
 import Horizon from "./components/Horizon";
 import Inventory from "./components/Inventory";
 import Orders from "./components/Orders";
+import Report from "./components/Report";
 // import SpeciesOfCows from "./components/SpeciesOfCows";
 // import Reports from "./components/Reports";
 // import SupplyChain from "./components/SupplyChain";
@@ -51,6 +52,10 @@ const routes = [
             {
                 path: "/admin",
                 element: <Admin />
+            },
+            {
+                path: "/report",
+                element: <Report />
             }
             // {
             //     path: "/reports",

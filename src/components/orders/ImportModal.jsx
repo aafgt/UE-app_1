@@ -24,7 +24,7 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
     };
 
     const getCowTypes = async () => {
-        const response = await fetch(SERVER_URL+"/api/Front/GetTypesWithCows");
+        const response = await fetch(SERVER_URL + "/api/Front/GetTypesWithCows");
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;
@@ -38,28 +38,45 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
     useEffect(() => {
         getCowTypes();
     }, []);
-    
+
     const handleAdd = () => {
         // handleSelectedCowType(selectedCowType);
-        handleSelectedCowType(cowTypesList[selectedCowType-1].typeName);
-        handleSelectedCowsListParent(selectedCowsList, cowTypesList[selectedCowType-1].typeName);
+        handleSelectedCowType(cowTypesList[selectedCowType - 1].typeName);
+        handleSelectedCowsListParent(selectedCowsList, cowTypesList[selectedCowType - 1].typeName);
 
         handleToggleModal22();
     };
 
+    const [checked, setChecked] = useState(false);
+    const handleSelectAllChange = () => {
+        setChecked(prevChecked => !prevChecked);
+    };
+
+    useEffect(() => {
+        if (checked) {
+            setSelectedCowType(cowTypesList[0]?.typeId);
+            setSelectedCowsList(cowTypesList.map(item => item.cows).flat());
+        }
+        else {
+            setSelectedCowType("");
+            setSelectedCowsList([]);
+        }
+    }, [checked]);
+
     return (
-        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50">
+        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
             {/* <div className="bg-white max-w-xl w-full rounded-md absolute top-1/2 -translate-y-1/2 translate-x-1/2"> */}
-            <div className="bg-white max-w-xl w-full rounded-md">
+            <div className="bg-white max-w-xl w-full rounded-md overflow-y-auto max-h-96">
                 <div className="p-3 flex items-center justify-between">
                     <h3 className="font-semibold text-xl text-green-600">Number Of Cows</h3>
+                    <p>Selected Cows: {selectedCowsList.length}</p>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal22}>×</span>
                 </div>
 
                 <div className="grid grid-cols-5 gap-3 mx-3 border-b-4 pb-3">
 
                     {cowTypesList && cowTypesList.map((cowType, index) => (
-                        <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedCowType === cowType.typeId ? "bg-[#76C18B] text-white" : ""}`} onClick={() => {setSelectedCowType(cowType.typeId); setCowsList(cowType.cows);}}>{cowType.typeName}</button>
+                        <button key={index} type="button" className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedCowType === cowType.typeId ? "bg-[#76C18B] text-white" : ""}`} onClick={() => { setSelectedCowType(cowType.typeId); setCowsList(cowType.cows); }}>{cowType.typeName}</button>
                     ))}
 
                     {/* <button className={`border-2 px-2 py-2 text-green-600 rounded-md hover:bg-[#76C18B] hover:text-white ${selectedCowType === "Type 1" ? "bg-[#76C18B] text-white" : ""}`} onClick={() => setSelectedCowType("Type 1")}>Type 1</button>
@@ -80,6 +97,11 @@ const ImportModal = ({ cows, handleToggleModal, handleToggleModal22, batchCode, 
 
                 <div className="flex justify-center my-2">
                     <button type="button" className="text-white bg-[#73C088] rounded-md px-4 py-1" onClick={handleAdd}>Add</button>
+                </div>
+
+                <div className="flex justify-end mr-5 gap-2">
+                    <input type="checkbox" checked={checked} onChange={handleSelectAllChange} />
+                    <label>Select All</label>
                 </div>
 
                 {/* <div className="p-3 flex items-center justify-end">

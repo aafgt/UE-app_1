@@ -2,9 +2,9 @@
 
 const CowsModal = ({ cows, handleToggleModal, handleToggleModal2 }) => {
     return (
-        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50">
+        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
             {/* <div className="bg-white max-w-xl w-full rounded-md absolute top-1/2 -translate-y-1/2 translate-x-1/2"> */}
-            <div className="bg-white max-w-xl w-full rounded-md">
+            <div className="bg-white max-w-xl w-full rounded-md overflow-y-auto h-5/6">
                 <div className="p-3 flex items-center justify-between">
                     <h3 className="font-semibold text-xl text-green-600">Number Of Cows</h3>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal2}>×</span>

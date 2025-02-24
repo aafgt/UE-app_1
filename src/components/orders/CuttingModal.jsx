@@ -35,7 +35,7 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
             "pieces": selectedCowsList
         };
 
-        if(selectedCowsList.length > 0) {
+        if (selectedCowsList.length > 0) {
             handleCowBatches(cowBatch);
         }
     };
@@ -48,9 +48,9 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
 
     //     handleCowBatches(cowBatch);
     // }, [selectedCowsList]);
-    
+
     const isCreateOrderValid = () => {
-        if(selectedCowsList.length <= 0) {
+        if (selectedCowsList.length <= 0) {
             setCreateOrderResValid("Please select Cows/Pieces.");
             return false;
         }
@@ -60,7 +60,7 @@ const Batch = ({ index, handleToggleModal2, batch, createOrderRes, handleCowBatc
     };
 
     useEffect(() => {
-      isCreateOrderValid();
+        isCreateOrderValid();
     }, [selectedCowsList]);
 
     return (
@@ -91,12 +91,12 @@ const CuttingModal = (props) => {
     const isCreateOrderValid = () => {
         const regex = /^\d+$/;
 
-        if(newOrderForm.code === "" || newOrderForm.clientName === "" || newOrderForm.date === "" || newOrderForm.noOfBatches === "") {
+        if (newOrderForm.code === "" || newOrderForm.clientName === "" || newOrderForm.date === "" || newOrderForm.noOfBatches === "") {
             setCreateOrderValid("All fields are required.");
             return false;
         }
 
-        if(!regex.test(newOrderForm.noOfBatches)) {
+        if (!regex.test(newOrderForm.noOfBatches)) {
             setCreateOrderValid("No. Of Batches should be a number.");
             return false;
         }
@@ -106,7 +106,7 @@ const CuttingModal = (props) => {
     };
 
     useEffect(() => {
-      isCreateOrderValid();
+        isCreateOrderValid();
     }, [newOrderForm]);
 
 
@@ -117,7 +117,7 @@ const CuttingModal = (props) => {
     const handleOrderSubmit = async () => {
         // console.log(newOrderForm);
 
-        const response = await fetch(SERVER_URL+"/api/Front/create-order", {
+        const response = await fetch(SERVER_URL + "/api/Front/create-order", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -169,7 +169,18 @@ const CuttingModal = (props) => {
 
     const [cowBatches, setCowBatches] = useState([]);
     const handleCowBatches = (cowBatch) => {
-        setCowBatches(prevItems => [...prevItems, cowBatch]);
+        let index = cowBatches.findIndex(item => item.batchCode === cowBatch.batchCode);
+
+        if (index !== -1) {
+            setCowBatches(prevItems => {
+                const updatedItems = [...prevItems];
+                updatedItems[index] = cowBatch;
+                return updatedItems;
+            });
+        }
+        else {
+            setCowBatches(prevItems => [...prevItems, cowBatch]);
+        }
     };
 
     // const batchesTable = Array.from({ length: newOrderForm.numberOfBatches }, (_, index) => (
@@ -193,7 +204,7 @@ const CuttingModal = (props) => {
 
         // console.log("reqBody", reqBody);
 
-        const response = await fetch(SERVER_URL+"/api/Front/AssignBatchesToPieces", {
+        const response = await fetch(SERVER_URL + "/api/Front/AssignBatchesToPieces", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -213,6 +224,37 @@ const CuttingModal = (props) => {
         alert("Order created Successfully.");
     };
 
+    const [selectedOption, setSelectedOption] = useState('');
+
+    const handleChange = (event) => {
+        setSelectedOption(event.target.value);
+
+        setNewOrderForm({ ...newOrderForm, clientName: event.target.value });
+    };
+
+    const [clients, setClients] = useState([]);
+    const fetchClients = async () => {
+        const response = await fetch(SERVER_URL + `/api/Front/get-client-orders`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setClients(data);
+    };
+
+    useEffect(() => {
+        fetchClients();
+    }, []);
+
+    const [filterText, setFilterText] = useState('');
+
+    const filteredClients = clients.filter(client =>
+        client.clientName.toLowerCase().includes(filterText.toLowerCase())
+    );
+
     return (
         <>
             <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
@@ -227,9 +269,26 @@ const CuttingModal = (props) => {
                             <label className="mr-10 text-[#043912] font-medium text-lg">Code</label>
                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, code: e.target.value }) }} />
                         </div>
-                        <div className="flex justify-between mt-3">
+                        {/* <div className="flex justify-between mt-3">
                             <label className="mr-10 text-[#043912] font-medium text-lg">Client</label>
                             <input className="border-2 w-7/12 p-1 rounded-lg" type="text" onChange={(e) => { setNewOrderForm({ ...newOrderForm, clientName: e.target.value }) }} />
+                        </div> */}
+                        <div className="flex justify-between mt-3">
+                            <label htmlFor="dropdown" className="mr-10 text-[#043912] font-medium text-lg">Client</label>
+                            <input
+                                type="text"
+                                id="dropdown"
+                                className="border-2 w-4/12 p-1 rounded-lg"
+                                placeholder="Search..."
+                                value={filterText}
+                                onChange={(e) => { setFilterText(e.target.value); }}
+                            />
+                            <select id="dropdown" className="border-2 w-7/12 p-1 rounded-lg" value={selectedOption} onChange={handleChange}>
+                                <option value="">Select...</option>
+                                {filteredClients && filteredClients.map((client, index) => (
+                                    <option key={index} value={client.clientName}>{client.clientName}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="flex justify-between mt-3">
                             <label className="mr-10 text-[#043912] font-medium text-lg">Date</label>

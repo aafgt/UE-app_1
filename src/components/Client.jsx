@@ -18,7 +18,7 @@ function Client() {
 
         //alert(csv);
 
-        const blob = new Blob([csv], { type: "text/csv" });
+        const blob = new Blob(['\uFEFF',csv], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement("a");

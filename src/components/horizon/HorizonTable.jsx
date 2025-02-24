@@ -25,7 +25,7 @@ const HorizonTable = (props) => {
 
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto m-3">
-            <table className="w-full min-w-max text-center">
+            <table className="w-full min-w-0 text-center">
                 <thead className="bg-gray-100 text-green-700">
                     <tr>
                         <th className="border border-gray-300 border-b-4 px-4 py-6">Order Id</th>

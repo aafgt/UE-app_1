@@ -275,6 +275,7 @@ import * as signalR from '@microsoft/signalr';
 
 import { SERVER_URL } from "../MetaData";
 import HorizonTableForSales from "./horizon/HorizonTableForSales";
+import HorizonTableForCutting from "./horizon/HorizonTableForCutting";
 
 const Horizon = (props) => {
 
@@ -464,8 +465,8 @@ const Horizon = (props) => {
             // console.log("Cow Scanned:", data);
             // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
             const today = new Date().toLocaleDateString();
-            const currDate = new Date(date).toLocaleDateString();
-            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            const currDate = date ? new Date(date).toLocaleDateString() : today;
+            const currGraphDate = graphDate ? new Date(graphDate).toLocaleDateString() : today;
             if (currDate === today && currGraphDate === today) {
                 setHorizonStats(data.value);
             }
@@ -477,8 +478,8 @@ const Horizon = (props) => {
             // console.log("Sale Scanned:", data);
             // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
             const today = new Date().toLocaleDateString();
-            const currDate = new Date(date).toLocaleDateString();
-            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            const currDate = date ? new Date(date).toLocaleDateString() : today;
+            const currGraphDate = graphDate ? new Date(graphDate).toLocaleDateString() : today;
             if (currDate === today && currGraphDate === today) {
                 setHorizonStatsForSales(data.value);
             }
@@ -490,8 +491,8 @@ const Horizon = (props) => {
             // console.log("Cutting Scanned:", data);
             // قم بتحديث واجهة المستخدم بناءً على البيانات الجديدة
             const today = new Date().toLocaleDateString();
-            const currDate = new Date(date).toLocaleDateString();
-            const currGraphDate = new Date(graphDate).toLocaleDateString();
+            const currDate = date ? new Date(date).toLocaleDateString() : today;
+            const currGraphDate = graphDate ? new Date(graphDate).toLocaleDateString() : today;
             if (currDate === today && currGraphDate === today) {
                 setHorizonStatsForCutting(data.value);
             }
@@ -514,9 +515,6 @@ const Horizon = (props) => {
 
     return (
         <>
-        {console.log("today", new Date().toLocaleDateString())}
-        {console.log("date", new Date(date).toLocaleDateString())}
-        {console.log("graphDate", new Date(graphDate).toLocaleDateString())}
             {selectedToTrack === "ذبح" && <>
                 <div className="flex justify-between m-2">
                     <div className="ml-5 space-x-5">
@@ -657,6 +655,7 @@ const Horizon = (props) => {
                     </div>
                 </div>
 
+                <HorizonTableForCutting tableData={horizonStatsForCutting?.cuttingPieces} date={date} />
                 <HorizonTableForSales tableData={horizonStatsForCutting?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
 
                 {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}

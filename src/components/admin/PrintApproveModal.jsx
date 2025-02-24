@@ -172,8 +172,8 @@ const PrintApproveModal = (props) => {
 
                     <div className="p-3 flex items-center justify-end">
                         <div>
-                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleApprove}>Approve</button>
-                            <button className="text-sm text-white bg-red-600 rounded-md px-4 py-1 ml-3" type="button" onClick={handleReject}>Reject</button>
+                            {props.order.approve === "pending" && <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleApprove}>Approve</button>}
+                            {props.order.approve === "pending" && <button className="text-sm text-white bg-red-600 rounded-md px-4 py-1 ml-3" type="button" onClick={handleReject}>Reject</button>}
                             <button className="text-sm text-white bg-yellow-600 rounded-md px-4 py-1 ml-3" type="button" onClick={handlePrint}>Print</button>
                             <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleTogglePrintModal}>Cancel</button>
                         </div>

@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ActiveSidebarTabs, toggleSidebar } from "../redux/ActionCreators";
+import { useEffect } from "react";
 
 const mapStateToProps = (state) => {
     return {
@@ -26,6 +27,21 @@ function Sidebar(props) {
         });
         props.ActiveSidebarTabs(new_isActive);
     };
+
+    useEffect(() => {
+      let flag = true;
+      for (let index = 0; index < props.sidebarTabsActive.length; index++) {
+        const element = props.sidebarTabsActive[index];
+        if (element !== "") {
+            handleIsActive(index);
+            flag = false;
+        }
+      }
+
+      if (flag) {
+        handleIsActive(0);
+      }
+    }, []);
 
     return (
         <>
@@ -79,6 +95,15 @@ function Sidebar(props) {
                     <i className="bi bi-shield-lock"></i>
                     <span className="ml-2">Admin</span>
                 </Link>
+
+                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
+                    <i className="bi bi-file-earmark"></i>
+                    <span className="ml-2">Report</span>
+                </Link>
+
+                <div className="flex items-end justify-center flex-auto">
+                    <img src="/ue-dt_logo.png" alt="ue-dt" width="35" height="35" />
+                </div>
             </nav>}
 
 
@@ -123,6 +148,14 @@ function Sidebar(props) {
                 <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-shield-lock"></i>
                 </Link>
+
+                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
+                    <i className="bi bi-file-earmark"></i>
+                </Link>
+
+                <div className="flex items-end justify-center flex-auto">
+                    <img src="/ue-dt_logo.png" alt="ue-dt" width="25" height="25" />
+                </div>
             </nav>}
         </>
     );

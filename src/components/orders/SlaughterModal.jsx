@@ -172,7 +172,18 @@ const SlaughterModal = (props) => {
 
     const [cowBatches, setCowBatches] = useState([]);
     const handleCowBatches = (cowBatch) => {
-        setCowBatches(prevItems => [...prevItems, cowBatch]);
+        let index = cowBatches.findIndex(item => item.batchCode === cowBatch.batchCode);
+
+        if (index !== -1) {
+            setCowBatches(prevItems => {
+                const updatedItems = [...prevItems];
+                updatedItems[index] = cowBatch;
+                return updatedItems;
+            });
+        }
+        else {
+            setCowBatches(prevItems => [...prevItems, cowBatch]);
+        }
     };
 
     // const batchesTable = Array.from({ length: newOrderForm.numberOfBatches }, (_, index) => (

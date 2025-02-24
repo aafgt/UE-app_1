@@ -53,11 +53,12 @@ const ImportPieceModal2 = ({ cows, handleToggleModal, handleToggleModal22, batch
     };
 
     return (
-        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50">
+        <div id="modal" className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
             {/* <div className="bg-white max-w-xl w-full rounded-md absolute top-1/2 -translate-y-1/2 translate-x-1/2"> */}
-            <div className="bg-white max-w-xl w-full rounded-md">
+            <div className="bg-white max-w-xl w-full rounded-md overflow-y-auto max-h-96">
                 <div className="p-3 flex items-center justify-between">
                     <h3 className="font-semibold text-xl text-green-600">Number Of Pieces</h3>
+                    <p>Selected Pieces: {selectedPiecesList.length}</p>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal22}>×</span>
                 </div>
 

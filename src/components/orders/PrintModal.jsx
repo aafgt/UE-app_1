@@ -1,5 +1,6 @@
 import { useRef } from "react";
 
+import { SERVER_URL } from "../../MetaData";
 
 const PrintModal = (props) => {
 
@@ -39,7 +40,33 @@ const PrintModal = (props) => {
         }, 500); // 500ms delay to allow styles to be applied
     };
 
-    const subTableRows2 = (numbers) => {
+    const handlePieceDelete = async (orderCode, batchCode, pieceId) => {
+        const reqBody = {
+            "orderCode": orderCode,
+            "batchCode": batchCode,
+            "pieceIds": [pieceId]
+        };
+
+        // console.log("reqBody", reqBody);
+
+        const response = await fetch(SERVER_URL+"/api/Front/EditeOrder", {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqBody)
+        });
+
+        if (!response.ok) {
+            // console.log(response);
+            alert(`${await response.text()}`);
+            return;
+        }
+
+        alert("Piece deleted Successfully.");
+    };
+
+    const subTableRows2 = (numbers, orderCode, batchCode) => {
         return (
             <div className="border-l-4 border-green-800 w-full">
                 {numbers && numbers?.map((row, index) => (
@@ -52,6 +79,7 @@ const PrintModal = (props) => {
                                     <th className="px-5">Type</th>
                                     <th className="px-5">Doctor</th>
                                     <th className="px-5">Technician</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody className="font-semibold">
@@ -61,6 +89,7 @@ const PrintModal = (props) => {
                                     <td>{row.type}</td>
                                     <td>{row.doctorId}</td>
                                     <td>{row.technician}</td>
+                                    <td><button type="button" onClick={() => { handlePieceDelete(orderCode, batchCode, row.number); }}><i className="bi bi-trash text-red-600"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -115,7 +144,7 @@ const PrintModal = (props) => {
 
                                             <tr>
                                                 <td colSpan={5}>
-                                                    {subTableRows2(row.numbers)}
+                                                    {subTableRows2(row.numbers, props.order.orderNumber, row.batchNumber)}
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -97,7 +97,7 @@ function OrderRow({ order }) {
 
 function Orders() {
 
-    const handleExportToExcelCSV = () => {
+    const handleExportToExcelCSV2 = () => {
         let csv = "";
 
         const headers = Object.keys(orders[0]);
@@ -110,7 +110,7 @@ function Orders() {
 
         //alert(csv);
 
-        const blob = new Blob([csv], { type: "text/csv" });
+        const blob = new Blob(['\uFEFF', csv], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement("a");
@@ -134,7 +134,7 @@ function Orders() {
         if (event.key === 'Enter') {
             fetchOrders();
 
-            if(orderTypeFilter !== "") {
+            if (orderTypeFilter !== "") {
                 setFilteredOrders(orders.filter((order) => (order.orderType === orderTypeFilter)));
             }
         }
@@ -166,6 +166,74 @@ function Orders() {
     useEffect(() => {
         handleOrderTypeFilter();
     }, [orderTypeFilter]);
+
+    const handleExportToExcelCSV = () => {
+        // Flatten the data
+        // const flattenedData = orders?.map(item => {
+        //     return item.batches.map(batch => {
+        //         return batch.numbers.map(number => ({
+        //             ...item,      // spreading the root-level properties
+        //             ...batch,     // spreading the batch-level properties
+        //             ...number,    // spreading the number-level properties
+        //         }));
+        //     }).flat(); // flatten the numbers array from the batches
+        // }).flat(); // flatten the batches array from the root-level data
+        const flattenedData = orders?.map(item => {
+            return item.batches.map(batch => {
+                return batch.numbers.map(number => ({
+                    "orderNumber": item.orderNumber,
+                    "totalCount": item.totalCount,
+                    "customer": item.customer,
+                    "orderType": item.orderType,
+                    "createDate": item.createDate,
+                    "deliverDate": item.deliverDate,
+                    "startDate": item.startDate,
+                    "status": item.status,
+                    "approve": item.approve,
+                    "batchNumber": batch.batchNumber,
+                    "batchCount": batch.count,
+                    "batchType": batch.batchType,
+                    "batchStartDate": batch.startDate,
+                    "batchEndDate": batch.endDate,
+                    "number": number.number,
+                    "weights": number.weights,
+                    "numberType": number.type,
+                    "doctorId": number.doctorId,
+                    "technician": number.technician
+                }));
+            }).flat(); // flatten the numbers array
+        }).flat(); // flatten the batches array                
+
+        const fields = Object.keys(flattenedData[0]);
+
+        // Convert the data to CSV format
+        const csv = [
+            '\uFEFF', // Add BOM to ensure correct encoding
+            fields.join(','), // Add header row
+            ...flattenedData.map(row => fields.map(field => JSON.stringify(row[field], replacer)).join(',')) // Add data rows
+        ].join('\r\n');
+
+        // Create a Blob and download it as a CSV file
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `orders - ${handleReportDate()}.csv`;
+        link.click();
+    };
+
+    function replacer(key, value) {
+        return value === null ? '' : value;
+    }
+
+    const handleReportDate = () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        return formattedDate;
+    }
 
     return (
         <>
