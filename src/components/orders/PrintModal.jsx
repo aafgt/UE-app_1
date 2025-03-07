@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { SERVER_URL } from "../../MetaData";
+import ImportPieceModal from "./ImportPieceModal";
 
 const PrintModal = (props) => {
 
@@ -40,17 +41,103 @@ const PrintModal = (props) => {
         }, 500); // 500ms delay to allow styles to be applied
     };
 
+    const handleApprove = async () => {
+        const response = await fetch(SERVER_URL + "/api/Front/ApproveOrder", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "orderCode": `${props.order.orderNumber}`, "approveStatus": "approve" })
+        });
+
+        if (!response.ok) {
+            alert(`${await response.text()}`);
+            return;
+        }
+
+        // const res = await response.json();
+        // console.log(res);
+
+        props.handleTogglePrintModal();
+
+        alert("Order approved Successfully.");
+    };
+
+    const handleReject = async () => {
+        const response = await fetch(SERVER_URL + "/api/Front/ApproveOrder", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "orderCode": `${props.order.orderNumber}`, "approveStatus": "rejected" })
+        });
+
+        if (!response.ok) {
+            alert(`${await response.text()}`);
+            return;
+        }
+
+        // const res = await response.json();
+        // console.log(res);
+
+        props.handleTogglePrintModal();
+
+        alert("Order rejected Successfully.");
+    };
+
     const handlePieceDelete = async (orderCode, batchCode, pieceId) => {
         const reqBody = {
             "orderCode": orderCode,
             "batchCode": batchCode,
-            "pieceIds": [pieceId]
+            "addPieceIds": [],
+            "removePieceIds": [pieceId]
         };
 
         // console.log("reqBody", reqBody);
 
-        const response = await fetch(SERVER_URL+"/api/Front/EditeOrder", {
-            method: "DELETE",
+        const response = await fetch(SERVER_URL + "/api/Front/EditOrder", {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqBody)
+        });
+
+        // handle cowId put check available pieces - not always 4
+        // 200 ok - check non removable
+        if (!response.ok) {
+            // console.log(response);
+            alert(`${await response.text()}`);
+            return;
+        }
+
+        const res = await response.json();
+        if (res?.nonRemovablePieces?.length > 0) {
+            alert("Piece cannot be removed.");
+        }
+        else {
+            alert("Piece removed Successfully.");
+        }
+        
+        setRemovePieceConfirmation(prev => !prev);
+    };
+
+    const [handlePieceAddData, setHandlePieceAddData] = useState({
+        "orderCode": "",
+        "batchCode": ""
+    });
+    const handlePieceAdd = async (pieceIds) => {
+        const reqBody = {
+            "orderCode": handlePieceAddData.orderCode,
+            "batchCode": handlePieceAddData.batchCode,
+            "addPieceIds": pieceIds.map((piece) => (piece.pieceId)),
+            "removePieceIds": []
+        };
+
+        // console.log("reqBody", reqBody);
+
+        const response = await fetch(SERVER_URL + "/api/Front/EditOrder", {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -63,8 +150,23 @@ const PrintModal = (props) => {
             return;
         }
 
-        alert("Piece deleted Successfully.");
+        alert("Piece(s) added Successfully.");
     };
+
+    const handleSelectedCowsList = (selectedCowsList, cowType) => {
+        if (selectedCowsList.length > 0) {
+            handlePieceAdd(selectedCowsList);
+        }
+    };
+
+    const [toggleAddPieceModal, setToggleAddPieceModal] = useState(false);
+
+    const [removePieceConfirmation, setRemovePieceConfirmation] = useState(false);
+    const [pieceToRemoveData, setPieceToRemoveData] = useState({
+        "orderCode": "",
+        "batchCode": "",
+        "pieceId": ""
+    });
 
     const subTableRows2 = (numbers, orderCode, batchCode) => {
         return (
@@ -89,7 +191,7 @@ const PrintModal = (props) => {
                                     <td>{row.type}</td>
                                     <td>{row.doctorId}</td>
                                     <td>{row.technician}</td>
-                                    <td><button type="button" onClick={() => { handlePieceDelete(orderCode, batchCode, row.number); }}><i className="bi bi-trash text-red-600"></i></button></td>
+                                    <td><button type="button" onClick={() => { setPieceToRemoveData({ "orderCode": orderCode, "batchCode": batchCode, "pieceId": row.number }); setRemovePieceConfirmation(prev => !prev); }}><i className="bi bi-trash text-red-600"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,7 +214,7 @@ const PrintModal = (props) => {
                             <p>Order ID: <span className="font-bold text-lg">{props.order.orderNumber}</span></p>
                             <p>No. Of Cows/Pieces: <span className="font-bold text-lg">{props.order.totalCount}</span></p>
                             <p>Customer: <span className="font-bold text-lg">{props.order.customer ? props.order.customer : "-----"}</span></p>
-                            <p>Type Of Cow: <span className="font-bold text-lg">{props.order.orderType}</span></p>
+                            <p>Order Type: <span className="font-bold text-lg">{props.order.orderType}</span></p>
                             <p>Create Date: <span className="font-bold text-lg">{props.order.createDate}</span></p>
                             <p>Delivery Date: <span className="font-bold text-lg">{props.order.deliverDate ? props.order.deliverDate : "-----"}</span></p>
                             <p>Start Date: <span className="font-bold text-lg">{props.order.startDate ? props.order.startDate : "-----"}</span></p>
@@ -148,6 +250,10 @@ const PrintModal = (props) => {
                                                 </td>
                                             </tr>
                                         </tbody>
+
+                                        {(props.order.orderType === "تشافي" || props.order.orderType === "بيع لحم بعضم") && <div className="ml-1 mt-1">
+                                            <button className="text-sm text-white bg-blue-500 rounded-md px-4 py-1" type="button" onClick={() => { setToggleAddPieceModal(prev => !prev); setHandlePieceAddData({ "orderCode": props.order.orderNumber, "batchCode": row.batchNumber }); }}>Add Piece(s)</button>
+                                        </div>}
                                     </table>
                                 </div>
                             ))}
@@ -156,11 +262,42 @@ const PrintModal = (props) => {
 
                     <div className="p-3 flex items-center justify-end">
                         <div>
-                            <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handlePrint}>Print</button>
+                            {props.order.approve === "pending" && <button className="text-sm text-white bg-[#73C088] rounded-md px-4 py-1" type="button" onClick={handleApprove}>Approve</button>}
+                            {props.order.approve === "pending" && <button className="text-sm text-white bg-red-600 rounded-md px-4 py-1 ml-3" type="button" onClick={handleReject}>Reject</button>}
+                            <button className="text-sm text-white bg-yellow-600 rounded-md px-4 py-1 ml-3" type="button" onClick={handlePrint}>Print</button>
                             <button className="modal-close text-sm text-[#73C088] border rounded-md px-4 py-1 ml-3" onClick={props.handleTogglePrintModal}>Cancel</button>
                         </div>
                     </div>
                 </div>
+
+                {toggleAddPieceModal && <ImportPieceModal handleToggleModal22={() => { setToggleAddPieceModal(prev => !prev); }} handleSelectedCowType={(selectedCowType) => { }} handleSelectedCowsListParent={handleSelectedCowsList} />}
+
+                {removePieceConfirmation &&
+                    <div className="flex items-center justify-center h-screen w-screen fixed inset-0 bg-black/50 overflow-auto">
+                        <div className="bg-white max-w-xl w-full rounded-md overflow-y-auto h-fit">
+                            <div className="p-3 flex items-center justify-end">
+                                <span className="modal-close cursor-pointer" onClick={() => { setRemovePieceConfirmation(prev => !prev); }}>×</span>
+                            </div>
+                            <div className="px-3 flex items-center justify-between">
+                                <h3 className="font-semibold text-xl text-green-600">Are you sure you want to remove this piece from the order?</h3>
+                                {/* <span className="modal-close cursor-pointer" onClick={() => { setRemovePieceConfirmation(prev => !prev); }}>×</span> */}
+                            </div>
+
+                            <div className="flex-col justify-center items-center">
+                                <p><span className="text-sm">Order Code:</span> {pieceToRemoveData.orderCode}</p>
+                                <p><span className="text-sm">Batch Code:</span> {pieceToRemoveData.batchCode}</p>
+                                <p><span className="text-sm">Piece ID:</span> {pieceToRemoveData.pieceId}</p>
+                            </div>
+
+                            <div className="p-3 flex items-center justify-end">
+                                <div>
+                                    <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-white font-semibold bg-red-500 h-fit" onClick={() => { handlePieceDelete(pieceToRemoveData.orderCode, pieceToRemoveData.batchCode, pieceToRemoveData.pieceId); }}>Remove Piece</button>
+                                    <button className="modal-close text-sm text-gray-400 border rounded-md px-4 py-2" onClick={() => { setRemovePieceConfirmation(prev => !prev); }}>Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
 
             {/* Hidden iframe to handle printing */}

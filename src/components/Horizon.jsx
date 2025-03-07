@@ -422,12 +422,15 @@ const Horizon = (props) => {
     useEffect(() => {
         if (selectedToTrack === "ذبح") {
             handleHorizonStats();
+            setIsRemainderOpen(false);
         }
         else if (selectedToTrack === "بيع") {
             handleHorizonStatsForSales();
+            setIsRemainderOpen(false);
         }
         else if (selectedToTrack === "تشافي") {
             handleHorizonStatsForCutting();
+            setIsRemainderOpen(false);
         }
 
         // // إنشاء اتصال
@@ -470,7 +473,7 @@ const Horizon = (props) => {
             if (currDate === today && currGraphDate === today) {
                 setHorizonStats(data.value);
             }
-            
+
             // setHorizonStats(data.value);
         });
 
@@ -513,6 +516,97 @@ const Horizon = (props) => {
     }, []);
 
 
+    const [isRemainderOpen, setIsRemainderOpen] = useState(false);
+    const [remainderCowIds, setRemainderCowIds] = useState(null);
+    const handleRemainderToggle = () => {
+        if (isRemainderOpen) {
+            setIsRemainderOpen(prev => !prev);
+        }
+        else {
+            if (selectedToTrack === "ذبح") {
+                getRemainderHorizon();
+                setIsRemainderOpen(prev => !prev);
+            }
+            else if (selectedToTrack === "بيع") {
+                getRemainderHorizonSales();
+                setIsRemainderOpen(prev => !prev);
+            }
+            else if (selectedToTrack === "تشافي") {
+                getRemainderHorizonCutting();
+                setIsRemainderOpen(prev => !prev);
+            }
+        }
+    };
+
+    const getRemainderHorizon = async () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        if (date === "") {
+            setDate(formattedDate);
+        }
+
+        const response = await fetch(SERVER_URL + `/api/Front/GetUnprocessedCowsByOrder?date=${date}`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            setRemainderCowIds(null);
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setRemainderCowIds(data);
+    };
+
+    const getRemainderHorizonSales = async () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        if (date === "") {
+            setDate(formattedDate);
+        }
+
+        const response = await fetch(SERVER_URL + `/api/Front/GetUnprocessedOrdersByType?orderType=بيع&date=${date}`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            setRemainderCowIds(null);
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setRemainderCowIds(data);
+    };
+
+    const getRemainderHorizonCutting = async () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        if (date === "") {
+            setDate(formattedDate);
+        }
+
+        const response = await fetch(SERVER_URL + `/api/Front/GetUnprocessedOrdersByType?orderType=تشافي&date=${date}`);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            setRemainderCowIds(null);
+            throw new Error(message);
+        }
+
+        const data = await response.json();
+        setRemainderCowIds(data);
+    };
+
     return (
         <>
             {selectedToTrack === "ذبح" && <>
@@ -531,7 +625,29 @@ const Horizon = (props) => {
                         <div className="flex gap-10 justify-around mb-5">
                             <MetricCard title={"Cows Request"} value={horizonStats?.cowRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
                             <MetricCard title={"Slaughtered Cows"} value={horizonStats?.killedCow} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
-                            <MetricCard title={"Remainder"} value={horizonStats?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                            <div className="w-full relative">
+                                <div className="hover:cursor-pointer" onClick={handleRemainderToggle}>
+                                    <MetricCard title={"Remainder"} value={horizonStats?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                                </div>
+                                {isRemainderOpen && <div className="absolute top-28 border border-black bg-white h-40 w-full p-3 rounded-md shadow-md overflow-auto">
+                                    {remainderCowIds?.map((data, index) => (
+                                        <div key={index}>
+                                            <p className="text-xs">Order Code: {data.orderCode}</p>
+                                            {data.batches.map((batch, index2) => (
+                                                <div key={index2}>
+                                                    <p className="text-xs">Batch: {batch.batchCode}</p>
+                                                    <div className="grid grid-cols-2">
+                                                        {batch?.cows?.map((cow, index3) => (
+                                                            <p key={index3} className="">{cow}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <hr />
+                                        </div>
+                                    ))}
+                                </div>}
+                            </div>
                         </div>
 
                         <div className="flex gap-10 justify-around">
@@ -557,7 +673,7 @@ const Horizon = (props) => {
                     </div>
                 </div>
 
-                <HorizonTable tableData={horizonStats?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+                <HorizonTable tableData={horizonStats?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} date={date} />
 
                 {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
 
@@ -580,7 +696,30 @@ const Horizon = (props) => {
                         <div className="flex gap-10 justify-around mb-5">
                             <MetricCard title={"Sales Request"} value={horizonStatsForSales?.piecesRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
                             <MetricCard title={"Sold"} value={horizonStatsForSales?.soldPieces} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
-                            <MetricCard title={"Remainder"} value={horizonStatsForSales?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                            <div className="w-full relative">
+                                <div className="hover:cursor-pointer" onClick={handleRemainderToggle}>
+                                    <MetricCard title={"Remainder"} value={horizonStatsForSales?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                                </div>
+                                {isRemainderOpen && <div className="absolute top-28 border border-black bg-white h-40 w-full p-3 rounded-md shadow-md overflow-auto">
+                                    {remainderCowIds?.map((data, index) => (
+                                        <div key={index}>
+                                            {console.log(remainderCowIds)}
+                                            <p className="text-xs">Order Code: {data.orderCode}</p>
+                                            {data.batches.map((batch, index2) => (
+                                                <div key={index2}>
+                                                    <p className="text-xs">Batch: {batch.batchCode}</p>
+                                                    <div className="grid grid-cols-2">
+                                                        {batch?.cowsPieces?.map((cowPiece, index3) => (
+                                                            <p key={index3} className="">{cowPiece?.pieceId}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <hr />
+                                        </div>
+                                    ))}
+                                </div>}
+                            </div>
                         </div>
 
                         <div className="flex gap-10 justify-around">
@@ -606,7 +745,7 @@ const Horizon = (props) => {
                     </div>
                 </div>
 
-                <HorizonTableForSales tableData={horizonStatsForSales?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+                <HorizonTableForSales tableData={horizonStatsForSales?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} date={date} />
 
                 {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
 
@@ -629,7 +768,29 @@ const Horizon = (props) => {
                         <div className="flex gap-10 justify-around mb-5">
                             <MetricCard title={"Cutting Request"} value={horizonStatsForCutting?.piecesRequest} arrow={"up"} icon={<div className="text-orange-400 text-2xl"><i className="bi bi-trophy-fill"></i></div>} />
                             <MetricCard title={"Cut Pieces"} value={horizonStatsForCutting?.soldPieces} arrow={"up"} icon={<div className="text-red-400 text-2xl"><i className="bi bi-handbag-fill"></i></div>} />
-                            <MetricCard title={"Remainder"} value={horizonStatsForCutting?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                            <div className="w-full relative">
+                                <div className="hover:cursor-pointer" onClick={handleRemainderToggle}>
+                                    <MetricCard title={"Remainder"} value={horizonStatsForCutting?.reminders} arrow={"down"} icon={<div className="text-blue-400 text-2xl"><i className="bi bi-tag-fill"></i></div>} />
+                                </div>
+                                {isRemainderOpen && <div className="absolute top-28 border border-black bg-white h-40 w-full p-3 rounded-md shadow-md overflow-auto">
+                                    {remainderCowIds?.map((data, index) => (
+                                        <div key={index}>
+                                            <p className="text-xs">Order Code: {data.orderCode}</p>
+                                            {data.batches.map((batch, index2) => (
+                                                <div key={index2}>
+                                                    <p className="text-xs">Batch: {batch.batchCode}</p>
+                                                    <div className="grid grid-cols-2">
+                                                        {batch?.cowsPieces?.map((cowPiece, index3) => (
+                                                            <p key={index3} className="">{cowPiece?.pieceId}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <hr />
+                                        </div>
+                                    ))}
+                                </div>}
+                            </div>
                         </div>
 
                         <div className="flex gap-10 justify-around">
@@ -656,7 +817,7 @@ const Horizon = (props) => {
                 </div>
 
                 <HorizonTableForCutting tableData={horizonStatsForCutting?.cuttingPieces} date={date} />
-                <HorizonTableForSales tableData={horizonStatsForCutting?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} />
+                <HorizonTableForSales tableData={horizonStatsForCutting?.table} handleToggleModal2={handleToggleModal2} handleCowsList={handleCowsList} date={date} />
 
                 {toggleModal2 && <CowsModal cows={cowsList} handleToggleModal={handleToggleModal} handleToggleModal2={handleToggleModal2} />}
 

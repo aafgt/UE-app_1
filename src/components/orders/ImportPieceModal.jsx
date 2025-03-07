@@ -19,7 +19,8 @@ const ImportPieceModal = ({ cows, handleToggleModal, handleToggleModal22, batchC
     const handleSelectedPiecesList = (piece) => {
         // if (selectedPiecesList.includes(piece)) {
         if (selectedPiecesList.some(item => item.pieceId === piece.pieceId)) {
-            setSelectedPiecesList(prevItems => prevItems.filter(item => item !== piece));
+            // setSelectedPiecesList(prevItems => prevItems.filter(item => item !== piece));
+            setSelectedPiecesList(prevItems => prevItems.filter(item => item.pieceId !== piece.pieceId));
         }
         else {
             setSelectedPiecesList(prevItems => [...prevItems, piece]);
@@ -151,9 +152,9 @@ const ImportPieceModal = ({ cows, handleToggleModal, handleToggleModal22, batchC
     const [cowID, setCowID] = useState("");
     const addCowPiecesUsingCowID = async () => {
 
-        // const allPiecesIds = arrayOfObjects.reduce((acc, obj) => {
-        //     return acc.concat(obj.piecesIds);
-        // }, []);
+        const allPiecesIds = piecesTypesList.reduce((acc, obj) => {
+            return acc.concat(obj.piecesIds);
+        }, []);
 
         const response = await fetch(SERVER_URL + `/api/Front/GetPiecesByCowId?CowId=${cowID}`);
 
@@ -167,9 +168,9 @@ const ImportPieceModal = ({ cows, handleToggleModal, handleToggleModal22, batchC
         const piecesToAdd = await response.json();
 
         piecesToAdd.map((piece) => {
-            // if (allPiecesIds.some(item => item.pieceId === piece.pieceId)) {
+            if (allPiecesIds.some(item => item.pieceId === piece.pieceId)) {
                 handleSelectedPiecesList({ "pieceId": piece.pieceId });
-            // }
+            }
         });     
     };
 

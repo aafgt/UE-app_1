@@ -29,18 +29,18 @@ function Sidebar(props) {
     };
 
     useEffect(() => {
-      let flag = true;
-      for (let index = 0; index < props.sidebarTabsActive.length; index++) {
-        const element = props.sidebarTabsActive[index];
-        if (element !== "") {
-            handleIsActive(index);
-            flag = false;
+        let flag = true;
+        for (let index = 0; index < props.sidebarTabsActive.length; index++) {
+            const element = props.sidebarTabsActive[index];
+            if (element !== "") {
+                handleIsActive(index);
+                flag = false;
+            }
         }
-      }
 
-      if (flag) {
-        handleIsActive(0);
-      }
+        if (flag) {
+            handleIsActive(0);
+        }
     }, []);
 
     return (
@@ -48,6 +48,12 @@ function Sidebar(props) {
             {props.isSidebarToggled && <nav className="w-full h-full   pt-3 flex flex-col bg-[#73C088] rounded-r-2xl text-white font-semibold">
                 <div className="flex justify-end">
                     <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
+                </div>
+
+                <div className="ml-2 mb-4">
+                    <p className="w-auto overflow-x-auto text-xs font-semibold">{props.userData?.displayName}</p>
+                    <p className="w-auto overflow-x-auto text-xs font-semibold">({props.userData?.email})</p>
+                    <button className="text-sm text-white bg-red-300 rounded-md px-4 py-1 mt-1" type="button" onClick={props.handleLogOut}><i className="bi bi-box-arrow-left"></i> <span className="ml-1">Logout</span></button>
                 </div>
 
                 {/* <Link to="/dashboard" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
@@ -91,12 +97,12 @@ function Sidebar(props) {
                     <span className="ml-2">Inventory</span>
                 </Link>
 
-                <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
+                {/* <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-shield-lock"></i>
                     <span className="ml-2">Admin</span>
-                </Link>
+                </Link> */}
 
-                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
+                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-file-earmark"></i>
                     <span className="ml-2">Report</span>
                 </Link>
@@ -110,6 +116,10 @@ function Sidebar(props) {
             {!props.isSidebarToggled && <nav className="w-fit h-full  pt-3 flex flex-col bg-[#73C088] rounded-r-2xl text-white font-semibold">
                 <div className="flex justify-end">
                     <i className="bi bi-list text-3xl text-white hover:cursor-pointer" onClick={handleSidebarToggle}></i>
+                </div>
+
+                <div className="ml-2 my-4">
+                    <button className="text-sm text-white bg-red-300 rounded-full w-8 h-8 mt-1" type="button" onClick={props.handleLogOut}><i className="bi bi-box-arrow-left"></i></button>
                 </div>
 
                 {/* <Link to="/dashboard" className={`ml-2 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[0]}`} onClick={() => { handleIsActive(0) }}>
@@ -145,11 +155,11 @@ function Sidebar(props) {
                     <i className="bi bi-box-seam"></i>
                 </Link>
 
-                <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
+                {/* <Link to="/admin" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-shield-lock"></i>
-                </Link>
+                </Link> */}
 
-                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[5]}`} onClick={() => { handleIsActive(5) }}>
+                <Link to="/report" className={`ml-1 mt-2 px-3 py-2 hover:ring-1 hover:ring-white hover:bg-blue-50 hover:text-black ${props.sidebarTabsActive[4]}`} onClick={() => { handleIsActive(4) }}>
                     <i className="bi bi-file-earmark"></i>
                 </Link>
 

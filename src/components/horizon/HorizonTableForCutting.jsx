@@ -40,38 +40,73 @@ const HorizonTableForCutting = (props) => {
         }
     }
 
+
+    const calculateTotalWeightIn = () => {
+        return props.tableData?.reduce((sum, row) => {
+            return sum + row.pieceWeight_In;
+        }, 0);
+    };
+    const calculateTotalWeightOut = () => {
+        return props.tableData?.reduce((sum, row) => {
+            return sum + row.pieceWeight_Out;
+        }, 0);
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto m-3">
             <div className="flex justify-end my-2">
                 <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-[#043912] font-semibold bg-white" onClick={exportToCSV}>Export To Excel</button>
             </div>
 
-            <table className="w-full min-w-max text-center">
-                <thead className="bg-gray-100 text-green-700">
-                    <tr>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Order Id</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Batch</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Piece Id</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Type</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Weight In</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Weight Out</th>
-                        <th className="border border-gray-300 border-b-4 px-4 py-6">Technician</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.tableData && props.tableData?.map((row, index) => (
-                        <tr key={index}>
-                            <td className="border border-gray-300 px-4 py-2">{row.orderCode}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-green-400 hover:cursor-pointer" onClick={() => { }}>{row.batchCode}</td>
-                            <td className="border border-gray-300 px-4 py-2">{row.pieceId}</td>
-                            <td className="border border-gray-300 px-4 py-2">{row.pieceTybe}</td>
-                            <td className="border border-gray-300 px-4 py-2">{row.pieceWeight_In}</td>
-                            <td className="border border-gray-300 px-4 py-2">{row.pieceWeight_Out}</td>
-                            <td className="border border-gray-300 px-4 py-2">{row.machien_Id_Device3}</td>
+            <div className="h-[30rem] overflow-auto">
+                <table className="w-full min-w-max text-center">
+                    <thead className="">
+                        <tr>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Order Id</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Batch</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Piece Id</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Type</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Weight In</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Weight Out</th>
+                            <th className="border border-gray-300 border-b-4 px-4 py-6 sticky top-0 bg-gray-100 text-green-700">Technician</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {props.tableData && props.tableData?.map((row, index) => (
+                            <tr key={index}>
+                                <td className="border border-gray-300 px-4 py-2">{row.orderCode}</td>
+                                <td className="border border-gray-300 px-4 py-2 text-green-400 hover:cursor-pointer" onClick={() => { }}>{row.batchCode}</td>
+                                <td className="border border-gray-300 px-4 py-2">{row.pieceId}</td>
+                                <td className="border border-gray-300 px-4 py-2">{row.pieceTybe}</td>
+                                <td className="border border-gray-300 px-4 py-2">{row.pieceWeight_In}</td>
+                                <td className="border border-gray-300 px-4 py-2">{row.pieceWeight_Out}</td>
+                                <td className="border border-gray-300 px-4 py-2">{row.machien_Id_Device3}</td>
+                            </tr>
+                        ))}
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td className="border-4 border-gray-300 px-4 py-2 text-xl">
+                                <p className="text-sm">Total Weight In</p>
+                                {calculateTotalWeightIn()?.toFixed(2)} KG
+                            </td>
+                            <td className="border-4 border-gray-300 px-4 py-2 text-xl">
+                                <p className="text-sm">Total Weight Out</p>
+                                {calculateTotalWeightOut()?.toFixed(2)} KG
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {/* <div className="flex justify-around">
+                <p>Total Weight In: <span className="text-xl">{calculateTotalWeightIn().toFixed(2)}</span> KG</p>
+                <p>Total Weight Out: <span className="text-xl">{calculateTotalWeightOut().toFixed(2)}</span> KG</p>
+            </div> */}
         </div>
     )
 }
