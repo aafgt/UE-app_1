@@ -6,7 +6,7 @@ const CowDetailsModal = ({ cow, handleToggleModal }) => {
             {/* <div className="bg-white max-w-xl w-full rounded-md absolute top-1/2 -translate-y-1/2 translate-x-1/2"> */}
             <div className="bg-white max-w-xl w-full rounded-md">
                 <div className="p-3 flex items-center justify-between border-b border-b-gray-300">
-                    <span className="modal-close cursor-pointer" onClick={handleToggleModal}>-</span>
+                    <span className="modal-close cursor-pointer" onClick={handleToggleModal}><i className="bi bi-arrow-left-short"></i></span>
                     <h3 className="font-semibold text-xl">Details Of Cow {cow.cowId}</h3>
                     <span className="modal-close cursor-pointer" onClick={handleToggleModal}>×</span>
                 </div>
@@ -37,9 +37,9 @@ const CowDetailsModal = ({ cow, handleToggleModal }) => {
                         <p>{cow.orderId}</p>
                         <p>{cow.batchCode}</p>
                         <p>{cow.typeOfCow}</p>
-                        <p>-</p>
+                        <p>{cow.supplier}</p>
                         <p>{cow.worker}</p>
-                        <p>-</p>
+                        <p>{cow.client}</p>
                         <p>{cow.productionDate}</p>
                         <p>-</p>
                         <p>{cow.weight}</p>
