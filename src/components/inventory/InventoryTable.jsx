@@ -1,7 +1,47 @@
 import { useEffect, useState } from "react";
 import { SERVER_URL } from "../../MetaData";
+import * as XLSX from 'xlsx';
 
 const InventoryTable = (props) => {
+
+    const exportToExcel = () => {
+        // Create a workbook and a worksheet
+        const wsData = [];
+
+        // Add the headers (the first row)
+        const headers = [
+            'Store', 'زند شمال', 'فخده شمال', 'زند يمين', 'فخده يمين',
+            ...CutNames.names, // Add dynamic headers (from CutNames.names)
+            'Total Pieces', 'Height Capacity', 'Total Weight'
+        ];
+        wsData.push(headers);
+
+        // Loop through the table data and extract row data
+        props.tableData.forEach((row) => {
+            const rowData = [
+                row.storeName,
+                getCountOfPieceTypeInStorePieces(row.pieces, "زند شمال"),
+                getCountOfPieceTypeInStorePieces(row.pieces, "فخده شمال"),
+                getCountOfPieceTypeInStorePieces(row.pieces, "زند يمين"),
+                getCountOfPieceTypeInStorePieces(row.pieces, "فخده يمين"),
+                ...CutNames.names.map((cutName) => getCountOfPieceTypeInStorePieces(row.pieces, cutName)),
+                row.totalPieces,
+                row.heightCapacity,
+                row.totalWeight
+            ];
+            wsData.push(rowData);
+        });
+
+        // Create a worksheet from the data
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+        // Create a new workbook with the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Inventory Data');
+
+        // Export the workbook to Excel
+        XLSX.writeFile(wb, `inventory - ${handleReportDate()}.xlsx`);
+    };
 
     const exportToCSV = () => {
         const fields = Object.keys(props.tableData[0]);
@@ -71,7 +111,7 @@ const InventoryTable = (props) => {
     return (
         <div className="bg-white rounded-lg shadow-md m-3 overflow-x-auto max-w-[77rem] mx-auto">
             <div className="flex justify-end my-2">
-                <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-[#043912] font-semibold bg-white" onClick={exportToCSV}>Export To Excel</button>
+                <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-[#043912] font-semibold bg-white" onClick={exportToExcel}>Export To Excel</button>
             </div>
 
             <div className="overflow-x-auto h-[30rem] max-w-full">
