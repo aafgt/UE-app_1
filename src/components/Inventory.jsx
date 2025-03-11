@@ -6,6 +6,7 @@ import { SERVER_URL } from "../MetaData";
 import DatePickerCard from "./inventory/DatePickerCard";
 import NewStoreModal from "./inventory/NewStoreModal";
 import InventoryTable from "./inventory/InventoryTable";
+import PieceSearchModal from "./inventory/PieceSearchModal";
 
 const Inventory = () => {
 
@@ -58,7 +59,9 @@ const Inventory = () => {
     });
     const getTotalPiecesData = () => {
         const allPieces = storesData?.map(store => {
-            return store.pieces;
+            return store.pieces.map(piece => {
+                return { ...piece, "store": store.storeName };
+            });
         }).flat();
 
         const pieces = allPieces?.filter(piece => {
@@ -67,6 +70,7 @@ const Inventory = () => {
             }
         });
 
+        setAllPieces(allPieces);
         setTotalPiecesData({ "total": allPieces?.length, "pieces": pieces?.length, "pieces2": allPieces?.length - pieces?.length });
     };
 
@@ -76,21 +80,48 @@ const Inventory = () => {
 
     const [piecesTypeFilter, setPiecesTypeFilter] = useState("");
 
+    const [allPieces, setAllPieces] = useState([]);
+    const [search, setSearch] = useState("");
+    const [isSearchEnter, setIsSearchEnter] = useState(false);
+    const handleSearchKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            if (search) {
+                setIsSearchEnter(true);
+            }
+            else {
+                setIsSearchEnter(false);
+            }
+        }
+    };
+
     return (
         <div className="m-2">
             {selectedStorePieces.length > 0 && <div className="ml-5 my-5 text-3xl hover:cursor-pointer w-fit" onClick={() => { setSelectedStorePieces([]) }}><i className="bi bi-arrow-left"></i></div>}
 
-            {selectedStorePieces.length === 0 && <div className="text-[#043912] font-semibold my-5 flex justify-end">
-                <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white" onClick={() => { setIsFilterClicked(prev => !prev); }}><i className="bi bi-funnel"></i> Filter</button>
-                {isFilterClicked && <div className="relative">
-                    <div className="absolute top-10 right-0 bg-white rounded-md shadow-md">
-                        <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white flex" onClick={() => { setSortBy("asc"); setIsFilterClicked(prev => !prev); }}><i className="bi bi-arrow-up-short"></i> ASC</button>
-                        <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white flex" onClick={() => { setSortBy("desc"); setIsFilterClicked(prev => !prev); }}><i className="bi bi-arrow-down-short"></i> DESC</button>
+            {selectedStorePieces.length === 0 && isSearchEnter &&
+                <PieceSearchModal handleToggleModal={() => {setIsSearchEnter(false);}} allPieces={allPieces} search={search} />
+            }
+
+            {selectedStorePieces.length === 0 && <div className="text-[#043912] font-semibold my-5 flex justify-between">
+                <div className="relative bg-slate-100 rounded-lg z-20">
+                    <input className="pl-10 pr-4 py-2 border rounded-lg" type="text" placeholder="Search, Piece ID" onChange={(e) => { setSearch(e.target.value); }} onKeyDown={handleSearchKeyDown} />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i className="bi bi-search text-gray-400"></i>
                     </div>
-                </div>}
-                {/* <button className="mx-2 px-3 py-1 rounded-md bg-[#76C18B] text-white"><i className="bi bi-calendar3"></i> 2/8/2024</button> */}
-                <DatePickerCard setDate={setDate} />
-                <button type="button" className="mx-2 px-3 py-1 rounded-md bg-[#76C18B] text-white" onClick={handleToggleNewOrderModal}><i className="bi bi-plus-lg"></i> New Store</button>
+                </div>
+
+                <div className="flex">
+                    <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white" onClick={() => { setIsFilterClicked(prev => !prev); }}><i className="bi bi-funnel"></i> Filter</button>
+                    {isFilterClicked && <div className="relative">
+                        <div className="absolute top-10 right-0 bg-white rounded-md shadow-md">
+                            <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white flex" onClick={() => { setSortBy("asc"); setIsFilterClicked(prev => !prev); }}><i className="bi bi-arrow-up-short"></i> ASC</button>
+                            <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white flex" onClick={() => { setSortBy("desc"); setIsFilterClicked(prev => !prev); }}><i className="bi bi-arrow-down-short"></i> DESC</button>
+                        </div>
+                    </div>}
+                    {/* <button className="mx-2 px-3 py-1 rounded-md bg-[#76C18B] text-white"><i className="bi bi-calendar3"></i> 2/8/2024</button> */}
+                    <DatePickerCard setDate={setDate} />
+                    <button type="button" className="mx-2 px-3 py-1 rounded-md bg-[#76C18B] text-white" onClick={handleToggleNewOrderModal}><i className="bi bi-plus-lg"></i> New Store</button>
+                </div>
             </div>}
 
             {selectedStorePieces.length === 0 && <div className="flex justify-between mb-5">

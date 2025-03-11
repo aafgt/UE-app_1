@@ -159,7 +159,7 @@ const Report = () => {
                 const day = today.getDate();
                 const year = today.getFullYear();
                 const formattedDate = `${month}-${day}-${year}`;
-                
+
                 const [dday, mmonth, yyear] = formattedDate.split('-');
                 const newFormattedDate = `${mmonth.padStart(2, '0')}-${dday.padStart(2, '0')}-${yyear}`;
 
@@ -169,6 +169,19 @@ const Report = () => {
                 setDevicesLastPieceDate("");
             }
         }
+    };
+
+    const getDateNowInDevicesLastPieceDateF = () => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const day = today.getDate();
+        const year = today.getFullYear();
+        const formattedDate = `${month}-${day}-${year}`;
+
+        const [dday, mmonth, yyear] = formattedDate.split('-');
+        const newFormattedDate = `${dday.padStart(2, '0')}-${mmonth.padStart(2, '0')}-${yyear}`;
+
+        return newFormattedDate;
     };
 
     return (
@@ -298,12 +311,12 @@ const Report = () => {
                         </div>
 
                         <div className="flex justify-center items-center">
-                            {(lastPiece && date === devicesLastPieceDate) ? <PieceCard piece={lastPiece} /> : <p>Last Piece was at {devicesLastPieceDate}. Please go to this date.</p>}
+                            {(lastPiece && (date === devicesLastPieceDate || (!date && (getDateNowInDevicesLastPieceDateF() === devicesLastPieceDate)))) ? <PieceCard piece={lastPiece} /> : <p>Last Piece was at {devicesLastPieceDate}. Please go to this date.</p>}
                         </div>
 
                         <div className="p-3 flex items-center justify-end">
                             <div>
-                                <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-white font-semibold bg-red-500 h-fit" onClick={handleLastPieceDelete} disabled={!(lastPiece && date === devicesLastPieceDate)}>Delete Last Piece</button>
+                                <button className="mx-2 px-3 py-1 rounded-md border border-green-500 text-white font-semibold bg-red-500 h-fit" onClick={handleLastPieceDelete} disabled={!(lastPiece && (date === devicesLastPieceDate || (!date && (getDateNowInDevicesLastPieceDateF() === devicesLastPieceDate))))}>Delete Last Piece</button>
                                 <button className="modal-close text-sm text-gray-400 border rounded-md px-4 py-2" onClick={() => { setDeleteLastPieceConfirmation(prev => !prev); }}>Cancel</button>
                             </div>
                         </div>
