@@ -7,6 +7,7 @@ import DatePickerCard from "./inventory/DatePickerCard";
 import NewStoreModal from "./inventory/NewStoreModal";
 import InventoryTable from "./inventory/InventoryTable";
 import PieceSearchModal from "./inventory/PieceSearchModal";
+import BigPiecesWeightOutModal from "./inventory/BigPiecesWeightOutModal";
 
 const Inventory = () => {
 
@@ -71,6 +72,7 @@ const Inventory = () => {
         });
 
         setAllPieces(allPieces);
+        setBigPieces(pieces);
         setTotalPiecesData({ "total": allPieces?.length, "pieces": pieces?.length, "pieces2": allPieces?.length - pieces?.length });
     };
 
@@ -94,12 +96,15 @@ const Inventory = () => {
         }
     };
 
+    const [bigPieces, setBigPieces] = useState([]);
+    const [bigPiecesWeightOutModal, setBigPiecesWeightOutModal] = useState(false);
+
     return (
         <div className="m-2">
             {selectedStorePieces.length > 0 && <div className="ml-5 my-5 text-3xl hover:cursor-pointer w-fit" onClick={() => { setSelectedStorePieces([]) }}><i className="bi bi-arrow-left"></i></div>}
 
             {selectedStorePieces.length === 0 && isSearchEnter &&
-                <PieceSearchModal handleToggleModal={() => {setIsSearchEnter(false);}} allPieces={allPieces} search={search} />
+                <PieceSearchModal handleToggleModal={() => { setIsSearchEnter(false); }} allPieces={allPieces} search={search} />
             }
 
             {selectedStorePieces.length === 0 && <div className="text-[#043912] font-semibold my-5 flex justify-between">
@@ -111,6 +116,7 @@ const Inventory = () => {
                 </div>
 
                 <div className="flex">
+                    <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white" onClick={() => { setBigPiecesWeightOutModal(prev => !prev); }}><i className="bi bi-box-arrow-up-left"></i> Edit</button>
                     <button type="button" className="mx-2 px-3 py-1 rounded-md bg-white" onClick={() => { setIsFilterClicked(prev => !prev); }}><i className="bi bi-funnel"></i> Filter</button>
                     {isFilterClicked && <div className="relative">
                         <div className="absolute top-10 right-0 bg-white rounded-md shadow-md">
@@ -171,6 +177,7 @@ const Inventory = () => {
             </div>}
 
             {toggleNewOrderModal && <NewStoreModal handleToggleNewOrderModal={handleToggleNewOrderModal} />}
+            {bigPiecesWeightOutModal && <BigPiecesWeightOutModal handleToggleModal={() => { setBigPiecesWeightOutModal(false); }} pieces={bigPieces} />}
         </div>
     )
 }

@@ -505,13 +505,13 @@ const Horizon = (props) => {
 
         // بدء الاتصال
         connection.start()
-            .then(() => console.log("SignalR Connected"))
-            .catch(err => console.error("Error connecting to SignalR:", err));
+            .then(() => {})
+            .catch(err => {});
 
         return () => {
             connection.stop().then(() => {
-                console.log("Disconnected from SignalR hub");
-            }).catch(err => console.error("Error Disconnecting from SignalR hub: ", err));
+                // console.log("Disconnected from SignalR hub");
+            }).catch(err => {});
         }
     }, []);
 

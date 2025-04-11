@@ -24,10 +24,12 @@ const PieceCard = (props) => {
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Type: <span className="text-[#098329]">{props.piece?.pieceType}</span></p>
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Weight: <span className="text-[#098329]">{props.piece?.weight} KG</span></p>
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Technician: <span className="text-[#098329]">{props.piece?.techDevice}</span></p>
+                        <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Status: <span className="text-[#098329]">{props.piece?.status}</span></p>
                         {/* <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Doctor: <span className="text-[#098329]">510 Piece</span></p>
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Supplier: <span className="text-[#098329]">510 Piece</span></p> */}
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Batch Code: <span className="text-[#098329]">{props.piece?.batchNumber}</span></p>
                         <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Order Code: <span className="text-[#098329]">{props.piece?.orderNumber}</span></p>
+                        <p className="text-[#043912]"><span className="text-3xl text-[#19C747]">•</span> Date: <span className="text-[#098329]">{props.piece?.create_At_Divece2}</span></p>
                     </div>
                 </>
             }

@@ -154,14 +154,17 @@ const Report = () => {
             const match = data?.message.match(datePattern);
             if (match) {
                 // console.log("Date found:", match[0]);
-                const today = new Date(match[0]);
-                const month = today.getMonth() + 1; // Months are zero-based, so add 1
-                const day = today.getDate();
-                const year = today.getFullYear();
-                const formattedDate = `${month}-${day}-${year}`;
+                // const today = new Date(match[0]);
+                // const month = today.getMonth() + 1; // Months are zero-based, so add 1
+                // const day = today.getDate();
+                // const year = today.getFullYear();
+                // const formattedDate = `${month}-${day}-${year}`;
 
-                const [dday, mmonth, yyear] = formattedDate.split('-');
-                const newFormattedDate = `${mmonth.padStart(2, '0')}-${dday.padStart(2, '0')}-${yyear}`;
+                // const [dday, mmonth, yyear] = formattedDate.split('-');
+                // const newFormattedDate = `${mmonth.padStart(2, '0')}-${dday.padStart(2, '0')}-${yyear}`;
+
+                const [day, month, year] = match[0].split("/");
+                const newFormattedDate = `${month.padStart(2, '0')}-${day.padStart(2, '0')}-${year.padStart(4, '20')}`;
 
                 setDevicesLastPieceDate(newFormattedDate);
             } else {

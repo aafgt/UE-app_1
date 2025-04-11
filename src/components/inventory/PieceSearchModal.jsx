@@ -28,31 +28,39 @@ const PieceSearchModal = (props) => {
                         <span className="modal-close cursor-pointer" onClick={props.handleToggleModal}>×</span>
                     </div>
 
-                    <div className="flex justify-around">
-                        <p className="text-[#043912]">Piece ID - Type - Weight - Technician - Batch Code - Order Code - Store</p>
+                    {/* <div className="flex justify-around"> */}
+                        {/* <p className="text-[#043912]">Piece ID - Type - Weight - Technician - Batch Code - Order Code - Store</p> */}
                         {/* <p className="text-[#043912]">Type</p>
                         <p className="text-[#043912]">Weight</p>
                         <p className="text-[#043912]">Technician</p>
                         <p className="text-[#043912]">Batch Code</p>
                         <p className="text-[#043912]">Order Code</p>
                         <p className="text-[#043912]">Store</p> */}
-                    </div>
-                    <div className="m-5 h-64 overflow-auto space-y-5">
+                    {/* </div> */}
+                    <div className="m-5 h-72 overflow-auto space-y-5">
                         {filteredPieces.map((piece, index) => (
-                            <div key={index} className="flex justify-between text-center border border-green-500 bg-green-50 rounded-md">
-                                <p className="text-[#043912]">{piece.pieceNumber}</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.pieceType}</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.weight} KG</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.techDevice}</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.batchNumber}</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.orderNumber}</p>
-                                <p>-</p>
-                                <p className="text-[#043912]">{piece.store}</p>
+                            <div key={index} className="px-3 text-center border border-green-500 bg-green-50 rounded-md">
+                                <div className="flex justify-between">
+                                    <p className="text-[#043912]">Piece ID: {piece.pieceNumber}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Type: {piece.pieceType}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Weight: {piece.weight} KG</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p className="text-[#043912]">Tech: {piece.techDevice}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Status: {piece.status}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Batch: {piece.batchNumber}</p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p className="text-[#043912]">Order: {piece.orderNumber}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Store: {piece.store}</p>
+                                    <p>-</p>
+                                    <p className="text-[#043912]">Date: {piece.create_At_Divece2}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

@@ -20,6 +20,22 @@ function OrderRow({ order }) {
         setTogglePrintModal(prev => !prev);
     };
 
+    const handleOrderDelete = async (orderCode) => {
+        const response = await fetch(SERVER_URL + `/api/Front/${orderCode}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            alert(`${await response.text()}`);
+            return;
+        }
+
+        alert("Order deleted Successfully.");
+    };
+
     const subTableRows2 = () => {
         return (
             <>
@@ -64,7 +80,11 @@ function OrderRow({ order }) {
     return (
         <>
             <tr className="border-b-2 hover:cursor-pointer" onClick={toggleSubTable}>
-                <td className="py-3 border border-x-2 text-green-500">{order.orderNumber}</td>
+                <td><button type="button" className="hover:bg-red-950 hover:rounded-full p-2" onClick={() => { handleOrderDelete(order.orderNumber); }}><i className="bi bi-trash text-red-600"></i></button></td>
+                <td className="py-3 border border-x-2 text-green-500">
+                    {/* <button type="button" className="hover:bg-black hover:rounded-full p-1 absolute top-0 left-0" onClick={() => { handleOrderDelete(order.orderNumber); }}><i className="bi bi-trash text-red-600"></i></button> */}
+                    {order.orderNumber}
+                </td>
                 <td className="py-3 border border-x-2">{order.totalCount}</td>
                 <td className="py-3 border border-x-2">{order.customer ? order.customer : "-----"}</td>
                 <td className="py-3 border border-x-2">{order.orderType}</td>
@@ -88,7 +108,7 @@ function OrderRow({ order }) {
                 {/* <td className="bg-slate-200 rounded-full"><i className="bi bi-arrow-down-short"></i></td> */}
             </tr>
             {subTableOpen && <tr>
-                <td colSpan={9}>
+                <td colSpan={10}>
                     {subTableRows2()}
                 </td>
             </tr>}
@@ -364,6 +384,7 @@ function Orders() {
                         <table className="w-full text-center text-green-700 font-semibold">
                             <thead className="text-[20px] font-extralight bg-green-50">
                                 <tr>
+                                    <th></th>
                                     <th className="px-5 border border-x-2">Order ID</th>
                                     <th className="px-5 border border-x-2">No. Of Cows/Pieces</th>
                                     <th className="px-5 border border-x-2">Customer</th>
